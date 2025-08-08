@@ -2,24 +2,20 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const articles = [
   {
     title: "Introduction au Deep Learning: Comment fonctionnent les réseaux de neurones?",
     description: "Une explication accessible des principes fondamentaux du deep learning et du fonctionnement des réseaux de neurones artificiels.",
     image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80",
-    date: "12 Juin 2023",
-    author: "Marie Dupont",
     category: "Deep Learning",
     href: "/blog/introduction-deep-learning"
   },
   {
-    title: "Les meilleures bibliothèques Python pour la visualisation de données en 2023",
+    title: "Les meilleures bibliothèques Python pour la visualisation de données",
     description: "Découvrez les outils de visualisation de données les plus performants et comment les utiliser efficacement dans vos projets.",
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80",
-    date: "28 Mai 2023",
-    author: "Lucas Moreau",
     category: "Visualisation",
     href: "/blog/python-visualization-libraries"
   },
@@ -27,8 +23,6 @@ const articles = [
     title: "Comment optimiser vos modèles de Machine Learning pour de meilleures performances",
     description: "Techniques avancées pour améliorer la précision et réduire le temps d'entraînement de vos modèles ML.",
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80",
-    date: "15 Mai 2023",
-    author: "Sarah Bernard",
     category: "Optimisation",
     href: "/blog/ml-model-optimization"
   },

@@ -35,23 +35,13 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="text-lg font-bold mb-4">Restez informé</h3>
-            <p className="text-muted-foreground mb-4">
-              Inscrivez-vous à notre newsletter pour recevoir les dernières actualités et tutoriels.
-            </p>
-            <form className="flex gap-2">
-              <input 
-                type="email" 
-                placeholder="Votre email" 
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              />
-              <button 
-                type="submit" 
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 bg-primary text-primary-foreground"
-              >
-                S'inscrire
-              </button>
-            </form>
+            <h3 className="text-lg font-bold mb-4">Informations</h3>
+            <ul className="space-y-2">
+              <li><Link to="/about" className="text-muted-foreground hover:text-primary">À propos</Link></li>
+              <li><Link to="/privacy" className="text-muted-foreground hover:text-primary">Politique de confidentialité</Link></li>
+              <li><Link to="/terms" className="text-muted-foreground hover:text-primary">Conditions d'utilisation</Link></li>
+              <li><Link to="/contact" className="text-muted-foreground hover:text-primary">Contact</Link></li>
+            </ul>
           </div>
         </div>
         
@@ -60,10 +50,8 @@ const Footer = () => {
             <p>© {new Date().getFullYear()} DataScienceExplorer. Tous droits réservés.</p>
             <p>Créé et développé par Geoffroy Streit</p>
           </div>
-          <div className="flex gap-4 mt-4 md:mt-0">
-            <Link to="/privacy" className="text-muted-foreground text-sm hover:text-primary">Politique de confidentialité</Link>
-            <Link to="/terms" className="text-muted-foreground text-sm hover:text-primary">Conditions d'utilisation</Link>
-            <Link to="/contact" className="text-muted-foreground text-sm hover:text-primary">Contact</Link>
+          <div className="text-sm text-muted-foreground mt-4 md:mt-0">
+            <p>Projet personnel et éducatif - Contenu libre d'accès</p>
           </div>
         </div>
       </div>

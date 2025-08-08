@@ -16,6 +16,7 @@ import Community from "./pages/Community";
 import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
 import Glossary from "./pages/Glossary";
+import About from "./pages/About";
 import MathStats from "./pages/fundamentals/MathStats";
 import Programming from "./pages/fundamentals/Programming";
 import Databases from "./pages/fundamentals/Databases";
@@ -78,6 +79,7 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<Blog />} />
               <Route path="/glossary" element={<Glossary />} />
+              <Route path="/about" element={<About />} />
               
               {/* Normalized Course Routes */}
               <Route path="/courses" element={<CoursesIndex />} />

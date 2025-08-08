@@ -186,22 +186,36 @@ const DataPreparationRefactored = () => {
         <meta name="keywords" content="préparation données, data cleaning, data preprocessing, data science, machine learning" />
       </Helmet>
       
-      <ContentLayout sidebarItems={sidebarItems}>
+      <ContentLayout
+        title="Préparation des Données"
+        backLink={{
+          href: "/fundamentals",
+          label: "Retour aux Fondamentaux"
+        }}
+        sidebar={{
+          items: sidebarItems
+        }}
+      >
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
           {/* Hero Section */}
           <UnifiedHeroSection
-            badge="Fondamentaux"
+            variant="course"
             title="Préparation des Données"
             subtitle="Maîtrisez l'art de transformer des données brutes en insights exploitables"
             description="La préparation des données représente 80% du travail en data science. Découvrez les techniques, outils et bonnes pratiques pour nettoyer, transformer et valider vos données efficacement."
-            stats={[
-              { label: "du temps projet", value: "80%", description: "consacré à la préparation" },
-              { label: "d'amélioration", value: "40%", description: "de performance des modèles" },
-              { label: "techniques", value: "15+", description: "de nettoyage couvertes" }
+            courseInfo={{
+              level: "Fondamentaux",
+              duration: "3h",
+              modules: 9,
+              totalHours: "3h"
+            }}
+            actions={[
+              {
+                label: "Commencer l'apprentissage",
+                to: "#introduction",
+                variant: "default"
+              }
             ]}
-            ctaText="Commencer l'apprentissage"
-            ctaHref="#introduction"
-            imageUrl="/images/data-preparation-hero.svg"
           />
 
           {/* Progress Bar - Sticky */}

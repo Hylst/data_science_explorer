@@ -1,6 +1,51 @@
 
 # Changelog - Data Science Explorer
 
+## Phase 4: Content Personalization & Commercial Content Removal ✅ COMPLETED
+
+### 🎯 Content Strategy Changes
+- **DONE**: Removed commercial communications from homepage:
+  - Removed `Testimonials` component with fictional user testimonials
+  - Removed `NewsletterSignup` component from main page
+- **DONE**: Updated website tone to be more humble and personal:
+  - Adapted content to reflect Geoffroy Streit as the sole creator and learner
+  - Emphasized the personal learning journey aspect
+  - Removed corporate language in favor of personal, educational tone
+
+### 📝 Content Updates
+- **DONE**: Removed author and date information from articles:
+  - Updated `LatestArticles.tsx` to remove `date` and `author` fields
+  - Cleaned up article display to focus on content rather than metadata
+- **DONE**: Updated footer to reflect personal project nature:
+  - Removed newsletter signup section
+  - Added "À propos" (About) link in new "Informations" section
+  - Updated bottom text to "Projet personnel et éducatif - Contenu libre d'accès"
+  - Simplified footer structure while maintaining essential links
+
+### 🏠 New Pages
+- **DONE**: Created comprehensive About page (`About.tsx`):
+  - Personal introduction of Geoffroy Streit as creator and learner
+  - Explanation of the website's educational and personal nature
+  - Description of learning journey and knowledge sharing approach
+  - Humble tone emphasizing ongoing learning process
+- **DONE**: Added About page routing in `App.tsx`
+- **DONE**: Updated `about.md` documentation to reflect personal project nature:
+  - Rewrote content from corporate tone to personal learning journey
+  - Emphasized Geoffroy's role as both creator and learner
+  - Updated all sections to reflect humble, educational approach
+  - Removed commercial language and business-oriented content
+
+### 🔧 Technical Implementation
+- **DONE**: Maintained all existing functionality while updating content
+- **DONE**: Preserved responsive design and user experience
+- **DONE**: Ensured proper routing and navigation for new About page
+- **DONE**: Updated imports and component structure as needed
+
+### 📚 Documentation
+- **DONE**: Updated project documentation to reflect personal nature
+- **DONE**: Maintained technical documentation while updating project description
+- **DONE**: Ensured consistency between code comments and project vision
+
 ## Phase 3: Code Cleanup & Dependencies Management ✅ COMPLETED
 
 ### 🐛 Bug Fixes
@@ -8,6 +53,10 @@
   - `TransformationSection.tsx` - corrected named import to default import
   - `CleaningSection.tsx` - corrected named import to default import
   - `VisualExplorationSection.tsx` - corrected named import to default import
+- **DONE**: Fixed TypeScript errors in `DataPreparationRefactored.tsx`:
+  - Corrected `ContentLayoutProps` - changed `sidebarItems` to `sidebar.items`
+  - Fixed `UnifiedHeroSectionProps` - replaced `badge` with proper `variant` and `courseInfo`
+  - Updated component props to match interface definitions
 - **DONE**: Verified application functionality after dependency removal
 
 ### ✅ Verification
