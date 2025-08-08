@@ -1,0 +1,53 @@
+[
+  {
+    "id": "data-science-jobs",
+    "title": "Les différents métiers de la Data Science : guide complet",
+    "excerpt": "Du Data Analyst au Machine Learning Engineer, découvrez les différentes carrières possibles dans l'univers de la data et les compétences requises pour chacune.",
+    "author": "Marie Dupont",
+    "date": "12 avril 2024",
+    "readTime": "15 min",
+    "categories": ["Carrières", "Guide"],
+    "featured": true,
+    "likes": 42
+  },
+  {
+    "id": "data-analysis-journey",
+    "title": "Confession d'un Data Scientist : l'histoire d'une analyse qui a failli mal tourner",
+    "excerpt": "Quand les données racontent une histoire trompeuse et qu'une simple vérification sauve la mise. Récit d'une expérience professionnelle marquante.",
+    "author": "Thomas Laurent",
+    "date": "3 mai 2024",
+    "readTime": "16 min",
+    "categories": ["Témoignage", "Anecdote"],
+    "likes": 37
+  },
+  {
+    "id": "correlation-causation",
+    "title": "Corrélation n'est pas causalité : les pièges qui nous guettent tous",
+    "excerpt": "Comment j'ai failli tirer des conclusions erronées d'un jeu de données et les leçons que j'en ai tirées sur l'interprétation des corrélations.",
+    "author": "Sophie Martin",
+    "date": "20 avril 2024",
+    "readTime": "14 min",
+    "categories": ["Méthodologie", "Erreurs communes"],
+    "likes": 29
+  },
+  {
+    "id": "data-visualization-story",
+    "title": "Comment une visualisation a changé la perception d'un projet",
+    "excerpt": "Le jour où j'ai compris que la présentation des données est aussi importante que leur analyse. Une histoire sur l'art de communiquer les résultats.",
+    "author": "Paul Dubois",
+    "date": "15 avril 2024",
+    "readTime": "13 min",
+    "categories": ["Visualisation", "Communication"],
+    "likes": 25
+  },
+  {
+    "id": "data-cleaning-nightmare",
+    "title": "Mon cauchemar de nettoyage de données - et comment j'en suis sorti",
+    "excerpt": "Quand un jeu de données censé être 'propre' se révèle être un véritable champ de mines. L'histoire d'une bataille épique contre les valeurs manquantes et aberrantes.",
+    "author": "Lucas Moreau",
+    "date": "28 mars 2024",
+    "readTime": "17 min",
+    "categories": ["Data Cleaning", "Aventure"],
+    "likes": 53
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Data.gouv.fr",
+    "url": "https://www.data.gouv.fr/fr/datasets/recent.atom",
+    "description": "Le portail officiel des données publiques en France",
+    "language": "Français",
+    "category": "Données publiques"
+  },
+  {
+    "name": "DataScientest Blog",
+    "url": "https://datascientest.com/feed/",
+    "description": "Articles, tutoriels et analyses sur la data science, expliqués en français",
+    "language": "Français",
+    "category": "Formation"
+  },
+  {
+    "name": "Le Big Data",
+    "url": "https://www.lebigdata.fr/feed",
+    "description": "Actualités et analyses autour du big data et de la data science",
+    "language": "Français",
+    "category": "Actualités"
+  },
+  {
+    "name": "KDnuggets",
+    "url": "https://www.kdnuggets.com/feed",
+    "description": "Articles sur le machine learning et la data science par des experts du secteur",
+    "language": "Anglais",
+    "category": "Expertise"
+  },
+  {
+    "name": "OpenAI Blog",
+    "url": "https://openai.com/index.xml",
+    "description": "Les dernières nouveautés et recherches d'OpenAI",
+    "language": "Anglais",
+    "category": "IA"
+  },
+  {
+    "name": "Towards Data Science",
+    "url": "https://towardsdatascience.com/feed",
+    "description": "Plateforme de partage d'idées et expériences en data science",
+    "language": "Anglais",
+    "category": "Communauté"
+  }
+]

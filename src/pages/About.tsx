@@ -2,7 +2,6 @@
  * About page component - Presents information about the Data Science Explorer project
  * and its creator Geoffroy Streit
  */
-import React from "react";
 import { Helmet } from "react-helmet-async";
 import Layout from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

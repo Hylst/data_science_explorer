@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Lancement du hub de données satellitaires pour la recherche environnementale",
+    "source": "Data.gouv.fr",
+    "date": "1 avril 2025",
+    "url": "https://www.data.gouv.fr/fr/satellite-hub-2025",
+    "excerpt": "Nouveau portail centralisant toutes les données satellitaires françaises avec API ouverte pour les chercheurs et développeurs.",
+    "category": "Données publiques"
+  },
+  {
+    "title": "Comment optimiser vos pipelines ML pour réduire l'empreinte carbone",
+    "source": "DataScientest Blog",
+    "date": "30 mars 2025",
+    "url": "https://datascientest.com/ml-carbon-footprint",
+    "excerpt": "Techniques pratiques pour réduire jusqu'à 60% la consommation énergétique de vos modèles d'apprentissage sans sacrifier la performance.",
+    "category": "Durabilité"
+  },
+  {
+    "title": "L'UE adopte de nouvelles normes pour les modèles d'IA à usage critique",
+    "source": "Le Big Data",
+    "date": "29 mars 2025",
+    "url": "https://www.lebigdata.fr/ue-normes-ia-2025",
+    "excerpt": "La Commission Européenne a adopté de nouvelles normes pour les modèles d'IA dans les secteurs sensibles comme la santé et la justice.",
+    "category": "Réglementation"
+  },
+  {
+    "title": "OpenAI dévoile GPT-5 avec des capacités multimodales avancées",
+    "source": "OpenAI Blog",
+    "date": "28 mars 2025",
+    "url": "https://openai.com/blog/gpt-5",
+    "excerpt": "GPT-5 établit de nouveaux records sur tous les benchmarks et introduit des capacités inédites de raisonnement visuel et spatial.",
+    "category": "IA"
+  },
+  {
+    "title": "AWS lance de nouveaux outils pour la data science collaborative",
+    "source": "DataScientest Blog",
+    "date": "22 mars 2025",
+    "url": "https://datascientest.com/aws-tools-data-science-2025",
+    "excerpt": "Amazon Web Services propose de nouvelles fonctionnalités pour faciliter la collaboration des équipes data en environnement cloud.",
+    "category": "Outils"
+  },
+  {
+    "title": "Les modèles multimodaux transforment l'analyse prédictive en 2025",
+    "source": "KDnuggets",
+    "date": "18 mars 2025",
+    "url": "https://www.kdnuggets.com/multimodal-models-2025",
+    "excerpt": "L'intégration de données de différentes natures (texte, image, audio) dans les modèles prédictifs révolutionne les performances analytiques.",
+    "category": "Tendances"
+  }
+]

@@ -1,14 +1,9 @@
 
-import React from "react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { Clock, User, ChevronRight, Heart } from "lucide-react";
+import React, { useState } from "react";
+import BlogPostCard from "./BlogPostCard";
 
-// Nous utilisons les mêmes données que dans BlogSection
-// mais nous exportons ce tableau pour qu'il soit accessible par d'autres composants
-export const blogPosts = [
+// Legacy export for backward compatibility
+export const legacyBlogPosts = [
   {
     id: "data-science-jobs",
     title: "Les différents métiers de la Data Science : guide complet",
@@ -495,56 +490,56 @@ export const blogPosts = [
   }
 ];
 
+/**
+ * BlogList component displays a list of blog posts using the BlogPostCard component
+ * @returns JSX element containing the blog post list
+ */
 const BlogList = () => {
+  const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
+
+  /**
+   * Handle reading more about a blog post
+   * @param postId - ID of the post to read
+   */
+  const handleReadMore = (postId: string) => {
+    // Navigate to blog post detail page
+    window.location.href = `/blog/${postId}`;
+  };
+
+  /**
+   * Handle liking a blog post
+   * @param postId - ID of the post to like
+   */
+  const handleLike = (postId: string) => {
+    setLikedPosts(prev => {
+      const newLiked = new Set(prev);
+      if (newLiked.has(postId)) {
+        newLiked.delete(postId);
+      } else {
+        newLiked.add(postId);
+      }
+      return newLiked;
+    });
+  };
+
   return (
     <div className="space-y-6">
-      {blogPosts.map((post, index) => (
-        <Card 
-          key={index} 
-          className={`hover:shadow-lg transition-all ${
-            post.featured ? "border-2 border-ds-purple-500" : ""
-          }`}
-        >
-          {post.featured && (
-            <div className="bg-ds-purple-500 text-white text-xs py-1 px-3 text-center">
-              Article à la une
-            </div>
-          )}
-          <CardHeader>
-            <CardTitle className="text-xl font-bold hover:text-ds-purple-600 transition-colors">
-              <Link to={`/blog/${post.id}`}>{post.title}</Link>
-            </CardTitle>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {post.categories.map((category, i) => (
-                <Badge 
-                  key={i} 
-                  variant="secondary" 
-                  className="bg-ds-purple-100 text-ds-purple-800 hover:bg-ds-purple-200"
-                >
-                  {category}
-                </Badge>
-              ))}
-            </div>
-          </CardHeader>
-          
-          <CardContent>
-            <p className="text-gray-600 mb-4">{post.excerpt}</p>
-            <div className="flex items-center text-sm text-gray-500 gap-4">
-            </div>
-          </CardContent>
-          
-          <CardFooter className="flex justify-end">
-            <Button variant="ghost" className="text-ds-purple-600 hover:text-ds-purple-700 hover:bg-ds-purple-50" asChild>
-              <Link to={`/blog/${post.id}`} className="flex items-center gap-1">
-                Lire l'article
-                <ChevronRight className="h-4 w-4" />
-              </Link>
-            </Button>
-          </CardFooter>
-        </Card>
+      {legacyBlogPosts.map((post) => (
+        <BlogPostCard
+          key={post.id}
+          post={{
+            ...post,
+            likes: likedPosts.has(post.id) ? post.likes + 1 : post.likes
+          }}
+          onReadMore={handleReadMore}
+          onLike={handleLike}
+        />
       ))}
     </div>
   );
 };
 
-export default BlogList;
+export default React.memo(BlogList);
+
+// Export blogPosts for backward compatibility
+export const blogPosts = legacyBlogPosts;

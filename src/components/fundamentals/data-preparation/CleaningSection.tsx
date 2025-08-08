@@ -11,11 +11,7 @@ import {
   Copy, 
   CheckCircle, 
   XCircle, 
-  Code, 
-  TrendingUp,
-  Users,
-  Calendar,
-  MapPin
+  Code
 } from 'lucide-react';
 
 /**

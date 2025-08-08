@@ -27,7 +27,6 @@ import CourseHighlight from "@/components/courses/CourseHighlight";
  */
 export const AutomationSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("etl");
-  const [pipelineStatus, setPipelineStatus] = useState<string>("idle");
   const [monitoringData, setMonitoringData] = useState<any>(null);
 
   /**
