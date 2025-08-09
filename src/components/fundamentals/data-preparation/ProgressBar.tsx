@@ -33,7 +33,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ currentSection }) => {
   useEffect(() => {
     // Track section completion based on scroll position
     const handleScroll = () => {
-      const newCompleted = new Set(completedSections);
+      const newCompleted = new Set<string>();
       
       sections.forEach(section => {
         const element = document.getElementById(section.id);
@@ -47,7 +47,14 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ currentSection }) => {
         }
       });
       
-      setCompletedSections(newCompleted);
+      setCompletedSections(prev => {
+        // Only update if there's a change to prevent unnecessary re-renders
+        if (prev.size !== newCompleted.size || 
+            [...newCompleted].some(id => !prev.has(id))) {
+          return newCompleted;
+        }
+        return prev;
+      });
       setProgress((newCompleted.size / sections.length) * 100);
     };
 
@@ -55,7 +62,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ currentSection }) => {
     handleScroll(); // Initial check
     
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [completedSections]);
+  }, []); // Remove completedSections from dependencies
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);

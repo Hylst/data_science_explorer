@@ -212,6 +212,11 @@ export default {
 				'spin-slow': {
 					'from': { transform: 'rotate(0deg)' },
 					'to': { transform: 'rotate(360deg)' }
+				},
+				// Slow pulse animation
+				'pulse-slow': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.7' }
 				}
 			},
 			animation: {
@@ -248,7 +253,8 @@ export default {
 				
 				// Special effects
 				'typewriter': 'typewriter 3s steps(20) infinite',
-				'spin-slow': 'spin-slow 3s linear infinite'
+				'spin-slow': 'spin-slow 3s linear infinite',
+				'pulse-slow': 'pulse-slow 4s ease-in-out infinite'
 			},
 			fontFamily: {
 				'code': ['Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', 'monospace'],

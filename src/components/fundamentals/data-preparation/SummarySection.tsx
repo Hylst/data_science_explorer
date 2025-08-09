@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { GlossaryTerm } from '@/components/ui/glossary-term';
+import { dataPreparationEnhancedDefinitions } from '@/data/data-preparation-enhanced-definitions';
 import { Eye, FileText, Workflow } from 'lucide-react';
 
 /**
@@ -26,7 +28,19 @@ const SummarySection: React.FC = () => {
               </div>
               <h4 className="font-semibold text-green-700">Comprendre avant d'Agir</h4>
               <p className="text-sm text-green-600">
-                Toujours auditer et explorer vos données avant de commencer le nettoyage
+                Toujours <GlossaryTerm 
+                  definition={dataPreparationEnhancedDefinitions['pandasProfiling']}
+                  variant="hover"
+                  highlightStyle="underline"
+                >
+                  auditer
+                </GlossaryTerm> et explorer vos données avant de commencer le <GlossaryTerm 
+                  definition={dataPreparationEnhancedDefinitions['nettoyage']}
+                  variant="hover"
+                  highlightStyle="underline"
+                >
+                  nettoyage
+                </GlossaryTerm>
               </p>
             </div>
             <div className="text-center space-y-3">
@@ -44,7 +58,13 @@ const SummarySection: React.FC = () => {
               </div>
               <h4 className="font-semibold text-purple-700">Automatiser les Processus</h4>
               <p className="text-sm text-purple-600">
-                Créer des pipelines reproductibles pour industrialiser le traitement
+                Créer des <GlossaryTerm 
+                  definition={dataPreparationEnhancedDefinitions['etl']}
+                  variant="hover"
+                  highlightStyle="underline"
+                >
+                  pipelines
+                </GlossaryTerm> reproductibles pour industrialiser le traitement
               </p>
             </div>
           </div>

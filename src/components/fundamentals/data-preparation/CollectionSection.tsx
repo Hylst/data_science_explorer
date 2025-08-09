@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle2, Database, Globe, Shield } from 'lucide-react';
+import { GlossaryTerm } from '@/components/ui/glossary-term';
+import { dataPreparationEnhancedDefinitions } from '../../../data/data-preparation-enhanced-definitions';
 import CourseHighlight from '@/components/courses/CourseHighlight';
 
 /**
@@ -65,7 +67,15 @@ const CollectionSection: React.FC = () => {
           <CardContent className="space-y-6">
             {dataSources.map((category, catIndex) => (
               <div key={catIndex} className="space-y-4">
-                <h4 className="font-semibold text-lg text-primary border-b pb-2">{category.category}</h4>
+                <h4 className="font-semibold text-lg text-primary border-b pb-2">
+                  <GlossaryTerm 
+                    definition={dataPreparationEnhancedDefinitions['collecte']}
+                    variant="hover"
+                    highlightStyle="glow"
+                  >
+                    {category.category}
+                  </GlossaryTerm>
+                </h4>
                 <div className="space-y-3">
                   {category.sources.map((source, index) => (
                     <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
@@ -91,6 +101,15 @@ const CollectionSection: React.FC = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             <CourseHighlight type="info" title="Framework SMART pour la collecte">
+              <div className="mb-2">
+                <GlossaryTerm 
+                  definition={dataPreparationEnhancedDefinitions['smartFramework']}
+                  variant="hover"
+                  highlightStyle="underline"
+                >
+                  Framework SMART
+                </GlossaryTerm>
+              </div>
               <ul className="space-y-2 text-sm">
                 <li><strong>Spécifique :</strong> Quelles données exactement ?</li>
                 <li><strong>Mesurable :</strong> Comment quantifier la qualité ?</li>

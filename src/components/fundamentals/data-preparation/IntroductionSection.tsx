@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, Database, TrendingUp } from 'lucide-react';
+import { GlossaryTerm } from '@/components/ui/glossary-term';
+import { dataPreparationEnhancedDefinitions } from '../../../data/data-preparation-enhanced-definitions';
 import CourseHighlight from '@/components/courses/CourseHighlight';
 
 /**
@@ -25,7 +27,15 @@ const IntroductionSection: React.FC = () => {
         <div className="grid md:grid-cols-3 gap-6 mt-4">
           <div className="text-center p-4">
             <Database className="h-12 w-12 mx-auto mb-3 text-blue-500" />
-            <h4 className="font-semibold mb-2">Qualité des données</h4>
+            <h4 className="font-semibold mb-2">
+              <GlossaryTerm 
+                definition={dataPreparationEnhancedDefinitions['exactitude']}
+                variant="hover"
+                highlightStyle="glow"
+              >
+                Qualité des données
+              </GlossaryTerm>
+            </h4>
             <p className="text-sm text-muted-foreground">
               Des données de qualité garantissent des résultats fiables et des décisions éclairées.
             </p>
@@ -34,7 +44,13 @@ const IntroductionSection: React.FC = () => {
             <TrendingUp className="h-12 w-12 mx-auto mb-3 text-green-500" />
             <h4 className="font-semibold mb-2">Performance des modèles</h4>
             <p className="text-sm text-muted-foreground">
-              Un preprocessing optimal améliore significativement les performances des algorithmes.
+              Un <GlossaryTerm 
+                definition={dataPreparationEnhancedDefinitions['nettoyage']}
+                variant="hover"
+                highlightStyle="underline"
+              >
+                preprocessing
+              </GlossaryTerm> optimal améliore significativement les performances des algorithmes.
             </p>
           </div>
           <div className="text-center p-4">

@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import CourseHighlight from '@/components/courses/CourseHighlight';
+import { GlossaryTerm } from '@/components/ui/glossary-term';
+import { typedDataPreparationDefinitions } from '../../../data/data-preparation-enhanced-definitions';
 import { 
   Trash2, 
   AlertTriangle, 
@@ -45,7 +47,15 @@ const CleaningSection: React.FC = () => {
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
               <XCircle className="h-8 w-8 text-red-500" />
             </div>
-            <h4 className="font-semibold text-red-700">Données Manquantes</h4>
+            <h4 className="font-semibold text-red-700">
+              <GlossaryTerm 
+                definition={typedDataPreparationDefinitions['donneesManquantes']}
+                variant="hover"
+                highlightStyle="glow"
+              >
+                Données Manquantes
+              </GlossaryTerm>
+            </h4>
             <p className="text-sm text-red-600">
               15-30% des datasets contiennent des valeurs manquantes qui peuvent biaiser l'analyse
             </p>
@@ -54,7 +64,15 @@ const CleaningSection: React.FC = () => {
             <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto">
               <AlertTriangle className="h-8 w-8 text-orange-500" />
             </div>
-            <h4 className="font-semibold text-orange-700">Valeurs Aberrantes</h4>
+            <h4 className="font-semibold text-orange-700">
+              <GlossaryTerm 
+                definition={typedDataPreparationDefinitions['outliers']}
+                variant="hover"
+                highlightStyle="glow"
+              >
+                Valeurs Aberrantes
+              </GlossaryTerm>
+            </h4>
             <p className="text-sm text-orange-600">
               Les outliers peuvent représenter des erreurs ou des cas exceptionnels à traiter différemment
             </p>
@@ -63,7 +81,15 @@ const CleaningSection: React.FC = () => {
             <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto">
               <Copy className="h-8 w-8 text-yellow-500" />
             </div>
-            <h4 className="font-semibold text-yellow-700">Doublons</h4>
+            <h4 className="font-semibold text-yellow-700">
+              <GlossaryTerm 
+                definition={typedDataPreparationDefinitions['doublons']}
+                variant="hover"
+                highlightStyle="glow"
+              >
+                Doublons
+              </GlossaryTerm>
+            </h4>
             <p className="text-sm text-yellow-600">
               Les duplicatas faussent les statistiques et peuvent créer des biais dans les modèles
             </p>
@@ -111,14 +137,22 @@ const CleaningSection: React.FC = () => {
                   <h4 className="font-semibold text-slate-700">⚡ Stratégies de Traitement</h4>
                   <div className="space-y-3">
                     {[
-                      { strategy: "Suppression", pros: "Simple, rapide", cons: "Perte d'information", when: "< 5% manquant" },
-                      { strategy: "Imputation", pros: "Conserve les données", cons: "Peut introduire des biais", when: "5-20% manquant" },
-                      { strategy: "Modélisation", pros: "Précision élevée", cons: "Complexe", when: "> 20% manquant" }
+                      { strategy: "Suppression", pros: "Simple, rapide", cons: "Perte d'information", when: "< 5% manquant", key: "suppression" },
+                      { strategy: "Imputation", pros: "Conserve les données", cons: "Peut introduire des biais", when: "5-20% manquant", key: "imputation" },
+                      { strategy: "Modélisation", pros: "Précision élevée", cons: "Complexe", when: "> 20% manquant", key: "modelisation" }
                     ].map((strat, index) => (
                       <Card key={index} className="p-3">
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <h5 className="font-medium text-slate-700">{strat.strategy}</h5>
+                            <h5 className="font-medium text-slate-700">
+                              <GlossaryTerm 
+                                definition={typedDataPreparationDefinitions[strat.key === 'suppression' ? 'suppression' : strat.key === 'modelisation' ? 'modelisation' : 'imputation']}
+                                variant="hover"
+                                highlightStyle="underline"
+                              >
+                                {strat.strategy}
+                              </GlossaryTerm>
+                            </h5>
                             <Badge variant="outline" className="text-xs">{strat.when}</Badge>
                           </div>
                           <div className="grid grid-cols-2 gap-2 text-xs">
@@ -185,27 +219,43 @@ print(f"Données manquantes après imputation: {df.isnull().sum().sum()}")`}</pr
                     description: "Q3 + 1.5 × IQR",
                     pros: "Robuste, simple",
                     cons: "Assume distribution normale",
-                    code: "Q1, Q3 = df.quantile([0.25, 0.75])\nIQR = Q3 - Q1\noutliers = (df < Q1 - 1.5*IQR) | (df > Q3 + 1.5*IQR)"
+                    code: "Q1, Q3 = df.quantile([0.25, 0.75])\nIQR = Q3 - Q1\noutliers = (df < Q1 - 1.5*IQR) | (df > Q3 + 1.5*IQR)",
+                    key: "iqr"
                   },
                   {
                     method: "Z-Score",
                     description: "|z| > 3",
                     pros: "Précis pour données normales",
                     cons: "Sensible aux outliers",
-                    code: "from scipy import stats\nz_scores = np.abs(stats.zscore(df))\noutliers = z_scores > 3"
+                    code: "from scipy import stats\nz_scores = np.abs(stats.zscore(df))\noutliers = z_scores > 3",
+                    key: "zscore"
                   },
                   {
                     method: "Isolation Forest",
                     description: "ML pour détection",
                     pros: "Multidimensionnel",
                     cons: "Plus complexe",
-                    code: "from sklearn.ensemble import IsolationForest\niso = IsolationForest(contamination=0.1)\noutliers = iso.fit_predict(df) == -1"
+                    code: "from sklearn.ensemble import IsolationForest\niso = IsolationForest(contamination=0.1)\noutliers = iso.fit_predict(df) == -1",
+                    key: "isolationForest"
                   }
                 ].map((method, index) => (
                   <Card key={index} className="p-4">
                     <div className="space-y-3">
                       <div className="text-center">
-                        <h4 className="font-semibold text-orange-700">{method.method}</h4>
+                        <h4 className="font-semibold text-orange-700">
+                          <GlossaryTerm 
+                          definition={typedDataPreparationDefinitions[method.key] || {
+                            term: method.method,
+                            shortDefinition: method.description,
+                            definition: method.description,
+                            examples: []
+                          }}
+                          variant="hover"
+                          highlightStyle="glow"
+                        >
+                            {method.method}
+                          </GlossaryTerm>
+                        </h4>
                         <p className="text-sm text-orange-600">{method.description}</p>
                       </div>
                       <div className="space-y-2 text-xs">
@@ -269,13 +319,26 @@ print(f"Données manquantes après imputation: {df.isnull().sum().sum()}")`}</pr
                   <h4 className="font-semibold text-slate-700">⚡ Stratégies de Déduplication</h4>
                   <div className="space-y-3">
                     {[
-                      { method: "drop_duplicates()", use: "Doublons exacts", params: "subset=['col1', 'col2']" },
-                      { method: "fuzzy matching", use: "Similarité textuelle", params: "fuzzywuzzy.ratio() > 90" },
-                      { method: "Record Linkage", use: "Entités complexes", params: "recordlinkage.Index()" }
+                      { method: "drop_duplicates()", use: "Doublons exacts", params: "subset=['col1', 'col2']", key: "doublons" },
+                      { method: "fuzzy matching", use: "Similarité textuelle", params: "fuzzywuzzy.ratio() > 90", key: "fuzzyMatching" },
+                      { method: "Record Linkage", use: "Entités complexes", params: "recordlinkage.Index()", key: "recordLinkage" }
                     ].map((strat, index) => (
                       <div key={index} className="p-3 bg-yellow-50 rounded-lg">
                         <div className="space-y-2">
-                          <code className="text-sm font-mono text-yellow-700">{strat.method}</code>
+                          <code className="text-sm font-mono text-yellow-700">
+                            <GlossaryTerm 
+                              definition={typedDataPreparationDefinitions[strat.key] || {
+                                term: strat.method,
+                                shortDefinition: strat.use,
+                                definition: strat.use,
+                                examples: []
+                              }}
+                              variant="hover"
+                              highlightStyle="underline"
+                            >
+                              {strat.method}
+                            </GlossaryTerm>
+                          </code>
                           <p className="text-xs text-yellow-600">{strat.use}</p>
                           <code className="text-xs text-slate-500">{strat.params}</code>
                         </div>

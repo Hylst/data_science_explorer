@@ -2,6 +2,8 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { GlossaryTerm } from '@/components/ui/glossary-term';
+import { dataPreparationEnhancedDefinitions } from '../../../data/data-preparation-enhanced-definitions';
 import { RefreshCw, ArrowRight } from 'lucide-react';
 
 /**
@@ -52,7 +54,21 @@ const LifecycleSection: React.FC = () => {
                     {step.icon}
                   </div>
                   <div>
-                    <h4 className="font-semibold text-slate-700">{step.title}</h4>
+                    <h4 className="font-semibold text-slate-700">
+                      <GlossaryTerm 
+                        definition={dataPreparationEnhancedDefinitions[
+                          step.title === 'Collecte' ? 'collecte' :
+                          step.title === 'Nettoyage' ? 'nettoyage' :
+                          step.title === 'Transformation' ? 'transformation' :
+                          step.title === 'Validation' ? 'validation' :
+                          'exploitation'
+                        ]}
+                        variant="hover"
+                        highlightStyle="glow"
+                      >
+                        {step.title}
+                      </GlossaryTerm>
+                    </h4>
                     <p className="text-sm text-slate-500">{step.desc}</p>
                   </div>
                 </div>
@@ -75,7 +91,21 @@ const LifecycleSection: React.FC = () => {
             <Card key={index} className="relative overflow-hidden group hover:shadow-lg transition-all duration-300">
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">{phase.phase}</CardTitle>
+                  <CardTitle className="text-lg">
+                    <GlossaryTerm 
+                      definition={dataPreparationEnhancedDefinitions[
+                        phase.phase === 'Collecte' ? 'collecte' :
+                        phase.phase === 'Nettoyage' ? 'nettoyage' :
+                        phase.phase === 'Transformation' ? 'transformation' :
+                        phase.phase === 'Validation' ? 'validation' :
+                        'exploitation'
+                      ]}
+                      variant="hover"
+                      highlightStyle="underline"
+                    >
+                      {phase.phase}
+                    </GlossaryTerm>
+                  </CardTitle>
                   <Badge variant="secondary" className="text-lg font-bold">{phase.percentage}%</Badge>
                 </div>
               </CardHeader>

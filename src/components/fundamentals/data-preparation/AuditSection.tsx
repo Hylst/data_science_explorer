@@ -2,6 +2,8 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { GlossaryTerm } from '@/components/ui/glossary-term';
+import { dataPreparationEnhancedDefinitions } from '@/data/data-preparation-enhanced-definitions';
 import { Search, Code, BarChart3, Lightbulb } from 'lucide-react';
 
 /**
@@ -110,7 +112,22 @@ const AuditSection: React.FC = () => {
             {dataQualityDimensions.map((dimension, index) => (
               <Card key={index} className="border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg text-blue-700">{dimension.name}</CardTitle>
+                  <CardTitle className="text-lg text-blue-700">
+                    <GlossaryTerm 
+                      definition={dataPreparationEnhancedDefinitions[
+                        dimension.name === 'Exactitude' ? 'exactitude' :
+                        dimension.name === 'Complétude' ? 'complétude' :
+                        dimension.name === 'Cohérence' ? 'cohérence' :
+                        dimension.name === 'Fraîcheur' ? 'fraîcheur' :
+                        dimension.name === 'Validité' ? 'validité' :
+                        'unicité'
+                      ]}
+                      variant="hover"
+                      highlightStyle="glow"
+                    >
+                      {dimension.name}
+                    </GlossaryTerm>
+                  </CardTitle>
                   <p className="text-sm text-muted-foreground">{dimension.description}</p>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -153,7 +170,19 @@ const AuditSection: React.FC = () => {
               {auditTools.map((item, index) => (
                 <div key={index} className="p-4 border rounded-lg space-y-2">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-semibold text-purple-700">{item.tool}</h4>
+                    <h4 className="font-semibold text-purple-700">
+                      <GlossaryTerm 
+                        definition={dataPreparationEnhancedDefinitions[
+                          item.tool.toLowerCase().includes('pandas') ? 'pandasProfiling' :
+                          item.tool.toLowerCase().includes('great') ? 'greatExpectations' :
+                          'deequ'
+                        ]}
+                        variant="hover"
+                        highlightStyle="underline"
+                      >
+                        {item.tool}
+                      </GlossaryTerm>
+                    </h4>
                     <Badge variant="outline">Python</Badge>
                   </div>
                   <p className="text-sm text-muted-foreground">{item.description}</p>
@@ -190,7 +219,15 @@ const AuditSection: React.FC = () => {
                 <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
                   <div className="flex items-center gap-3">
                     <div className={`w-3 h-3 rounded-full ${kpi.color === 'green' ? 'bg-green-500' : 'bg-orange-500'}`} />
-                    <span className="font-medium">{kpi.metric}</span>
+                    <span className="font-medium">
+                      <GlossaryTerm 
+                        definition={dataPreparationEnhancedDefinitions['qualityKPIs']}
+                        variant="hover"
+                        highlightStyle="underline"
+                      >
+                        {kpi.metric}
+                      </GlossaryTerm>
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-bold">{kpi.value}</span>

@@ -15,6 +15,7 @@ import { ValidationSection } from '@/components/fundamentals/data-preparation/Va
 import { AutomationSection } from '@/components/fundamentals/data-preparation/AutomationSection';
 import SummarySection from '@/components/fundamentals/data-preparation/SummarySection';
 import ProgressBar from '@/components/fundamentals/data-preparation/ProgressBar';
+import EnhancedDataQualitySection from '@/components/fundamentals/data-preparation/EnhancedDataQualitySection';
 
 import { 
   Database, 
@@ -40,6 +41,7 @@ const MemoizedValidationSection = React.memo(ValidationSection);
 const MemoizedAutomationSection = React.memo(AutomationSection);
 const MemoizedSummarySection = React.memo(SummarySection);
 const MemoizedProgressBar = React.memo(ProgressBar);
+const MemoizedEnhancedDataQualitySection = React.memo(EnhancedDataQualitySection);
 
 /**
  * DataPreparationRefactored Component
@@ -78,6 +80,12 @@ const DataPreparationRefactored = () => {
       href: "#audit",
       icon: <Search className="h-4 w-4" />,
       isActive: currentSection === 'audit'
+    },
+    {
+      title: "Qualité Avancée",
+      href: "#enhanced-quality",
+      icon: <Database className="h-4 w-4" />,
+      isActive: currentSection === 'enhanced-quality'
     },
     {
       title: "Nettoyage",
@@ -239,6 +247,9 @@ const DataPreparationRefactored = () => {
 
               {/* Audit Section */}
               <MemoizedAuditSection />
+
+              {/* Enhanced Data Quality Section */}
+              <MemoizedEnhancedDataQualitySection />
 
               {/* Cleaning Section */}
               <MemoizedCleaningSection />

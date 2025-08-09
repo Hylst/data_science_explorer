@@ -1,5 +1,7 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
+import { GlossaryTerm } from '@/components/ui/glossary-term';
+import { dataPreparationEnhancedDefinitions } from '../../../data/data-preparation-enhanced-definitions';
 import CourseHighlight from '@/components/courses/CourseHighlight';
 import { Settings } from 'lucide-react';
 
@@ -54,7 +56,20 @@ const TransformationSection: React.FC = () => {
             <div key={index} className="p-4 bg-muted/30 rounded-lg">
               <div className="text-center mb-3">
                 <div className="text-3xl mb-2">{transfo.icon}</div>
-                <h4 className="font-semibold text-purple-700">{transfo.type}</h4>
+                <h4 className="font-semibold text-purple-700">
+                  <GlossaryTerm 
+                    definition={dataPreparationEnhancedDefinitions[
+                      transfo.type === 'Structurelle' ? 'transformation' :
+                      transfo.type === 'Format' ? 'transformation' :
+                      transfo.type === 'Calculée' ? 'transformation' :
+                      'transformation'
+                    ]}
+                    variant="hover"
+                    highlightStyle="glow"
+                  >
+                    {transfo.type}
+                  </GlossaryTerm>
+                </h4>
               </div>
               <p className="text-sm text-muted-foreground mb-3">{transfo.description}</p>
               <div className="space-y-1">

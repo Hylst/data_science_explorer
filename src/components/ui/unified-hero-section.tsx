@@ -3,9 +3,9 @@ import { ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { LucideIcon, Sparkles, ArrowRight, Zap } from "lucide-react";
+import { LucideIcon, Sparkles, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
-import { AnimatedEntrance, StaggeredAnimation } from "./animated-entrance";
+import { AnimatedEntrance } from "./animated-entrance";
 
 type HeroVariant = "home" | "page" | "course";
 
@@ -150,9 +150,19 @@ const UnifiedHeroSection = ({
                     <span className="block mb-2">
                       Explorez le monde de la
                     </span>
-                    <span className="block bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent animate-gradient-x relative">
-                      <span className="relative z-10">Data Science</span>
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-accent/30 to-secondary/30 blur-2xl animate-float"></div>
+                    <span className="block relative">
+                      {/* Strong background for better contrast */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-accent/30 to-secondary/30 blur-2xl opacity-50"></div>
+                      {/* Main text with high contrast and solid fallback */}
+                      <span className="relative z-10 font-black tracking-tight">
+                        <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] filter contrast-125">
+                          DATA SCIENCE
+                        </span>
+                        {/* Solid fallback text for better readability */}
+                        <span className="absolute inset-0 text-slate-800 dark:text-slate-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          DATA SCIENCE
+                        </span>
+                      </span>
                     </span>
                   </>
                 ) : (
