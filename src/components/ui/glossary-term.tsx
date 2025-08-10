@@ -1,5 +1,6 @@
 
 import React from "react";
+import ReactMarkdown from "react-markdown";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -132,7 +133,9 @@ export const GlossaryTerm: React.FC<GlossaryTermProps> = ({
               </p>
             )}
             
-            <p className="text-sm text-gray-600">{definition.shortDefinition}</p>
+            <div className="text-sm text-gray-600 prose prose-sm max-w-none">
+              <ReactMarkdown>{definition.shortDefinition}</ReactMarkdown>
+            </div>
             
             {definition.synonyms && definition.synonyms.length > 0 && (
               <div className="text-xs text-gray-500">
@@ -166,7 +169,9 @@ export const GlossaryTerm: React.FC<GlossaryTermProps> = ({
             </span>
           </TooltipTrigger>
           <TooltipContent>
-            <p className="text-sm">{definition.shortDefinition}</p>
+            <div className="text-sm prose prose-sm max-w-none">
+              <ReactMarkdown>{definition.shortDefinition}</ReactMarkdown>
+            </div>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -209,7 +214,9 @@ export const GlossaryTerm: React.FC<GlossaryTermProps> = ({
             </div>
             
             {definition.longDefinition && (
-              <p className="text-sm text-gray-700">{definition.longDefinition}</p>
+              <div className="text-sm text-gray-700 prose prose-sm max-w-none">
+                <ReactMarkdown>{definition.longDefinition}</ReactMarkdown>
+              </div>
             )}
             
             {definition.synonyms && definition.synonyms.length > 0 && (
@@ -302,7 +309,9 @@ export const GlossaryTerm: React.FC<GlossaryTermProps> = ({
               </p>
             )}
             
-            <p className="text-sm text-gray-600">{definition.shortDefinition}</p>
+            <div className="text-sm text-gray-600 prose prose-sm max-w-none">
+              <ReactMarkdown>{definition.shortDefinition}</ReactMarkdown>
+            </div>
             <p className="text-xs text-ds-blue-600">Cliquez pour en savoir plus</p>
           </div>
         </HoverCardContent>
@@ -331,7 +340,9 @@ export const GlossaryTerm: React.FC<GlossaryTermProps> = ({
           </div>
           
           {definition.longDefinition && (
-            <p className="text-sm text-gray-700">{definition.longDefinition}</p>
+            <div className="text-sm text-gray-700 prose prose-sm max-w-none">
+              <ReactMarkdown>{definition.longDefinition}</ReactMarkdown>
+            </div>
           )}
           
           {definition.synonyms && definition.synonyms.length > 0 && (

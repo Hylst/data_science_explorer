@@ -1,5 +1,5 @@
 
-import { CustomCard } from "@/components/ui/custom-card";
+import GlossaryCard from "./GlossaryCard";
 import { GlossaryEntry } from "./types";
 
 interface GlossaryGridProps {
@@ -7,28 +7,22 @@ interface GlossaryGridProps {
   category?: string;
 }
 
+/**
+ * Grid component for displaying glossary entries with enhanced cards
+ * Features responsive layout and improved visual design
+ */
 const GlossaryGrid = ({ entries, category }: GlossaryGridProps) => {
   const filteredEntries = category 
     ? entries.filter(entry => entry.category === category)
     : entries;
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 sm:gap-8">
+    <div className="grid gap-8 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
       {filteredEntries.map((entry, idx) => (
-        <CustomCard
+        <GlossaryCard
           key={`${entry.term}-${idx}`}
-          cardTitle={
-            <span className="flex items-center gap-3 group">
-              {entry.icon}
-              <span className="transition-colors group-hover:text-primary">
-                {entry.term}
-              </span>
-            </span>
-          }
-          description={entry.description}
-          className="transition-all duration-300 hover:shadow-lg hover:-translate-y-1 card-surface"
-          contentClassName="py-0"
-          headerClassName="space-y-3"
+          entry={entry}
+          index={idx}
         />
       ))}
     </div>
