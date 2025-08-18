@@ -1,10 +1,9 @@
 
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { Calculator, ChartBar, Grid3X3, TrendingUp, Clock, Users, BookOpen } from "lucide-react";
+import { Calculator, ChartBar, Grid3X3, TrendingUp, Users, BookOpen } from "lucide-react";
 
 const MathStatsLayout = () => {
   const courses = [
@@ -112,10 +111,6 @@ const MathStatsLayout = () => {
                   <Badge variant="secondary" className="flex items-center gap-1">
                     <Users className="h-3 w-3" />
                     {course.level}
-                  </Badge>
-                  <Badge variant="outline" className="flex items-center gap-1">
-                    <Clock className="h-3 w-3" />
-                    {course.duration}
                   </Badge>
                   <Badge variant="outline" className="flex items-center gap-1">
                     <BookOpen className="h-3 w-3" />

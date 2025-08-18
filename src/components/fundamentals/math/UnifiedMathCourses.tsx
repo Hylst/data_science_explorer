@@ -1,10 +1,8 @@
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
-import { Calculator, ChartBar, Brain, Target, Clock, Users, Star, BookOpen, Play, CheckCircle, Lock } from "lucide-react";
+import { Calculator, ChartBar, Brain, Target, Clock, BookOpen, Play, CheckCircle, Lock } from "lucide-react";
 
 const UnifiedMathCourses = () => {
   const courses = [
@@ -307,7 +305,6 @@ const UnifiedMathCourses = () => {
                     {course.icon}
                     <div>
                       <CardTitle className="text-xl">{course.title}</CardTitle>
-                      <p className="text-sm text-gray-600 mt-1">Par {course.instructor}</p>
                     </div>
                   </div>
                   <div className="flex flex-col gap-2 items-end">
@@ -324,25 +321,11 @@ const UnifiedMathCourses = () => {
               </CardHeader>
               
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    <span>{course.duration}</span>
-                  </div>
+                <div className="grid grid-cols-1 gap-4 text-sm text-gray-600">
                   <div className="flex items-center gap-2">
                     <BookOpen className="h-4 w-4" />
                     <span>{course.modules} modules</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4" />
-                    <span>{course.students.toLocaleString()} étudiants</span>
-                  </div>
-                  {course.rating > 0 && (
-                    <div className="flex items-center gap-2">
-                      <Star className="h-4 w-4 text-yellow-500" />
-                      <span>{course.rating}/5</span>
-                    </div>
-                  )}
                 </div>
 
                 <div>
@@ -400,7 +383,6 @@ const UnifiedMathCourses = () => {
                     {course.icon}
                     <div>
                       <CardTitle className="text-xl">{course.title}</CardTitle>
-                      <p className="text-sm text-gray-600 mt-1">Par {course.instructor}</p>
                     </div>
                   </div>
                   <div className="flex flex-col gap-2 items-end">
@@ -417,11 +399,7 @@ const UnifiedMathCourses = () => {
               </CardHeader>
               
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    <span>{course.duration}</span>
-                  </div>
+                <div className="grid grid-cols-1 gap-4 text-sm text-gray-600">
                   <div className="flex items-center gap-2">
                     <BookOpen className="h-4 w-4" />
                     <span>{course.modules} modules</span>
@@ -469,7 +447,7 @@ const UnifiedMathCourses = () => {
           Suivez cette progression logique pour construire vos bases mathématiques solides :
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 gap-4">
-          {availableCourses.map((course, index) => (
+          {availableCourses.map((course) => (
             <div key={course.id} className="bg-white p-4 rounded-lg border border-blue-200 text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <div className="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">

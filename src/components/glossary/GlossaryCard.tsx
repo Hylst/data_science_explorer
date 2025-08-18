@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
+
 import { 
   Brain, Database, BarChart3, Zap, Users, Shield, Eye, Network, 
   Code, Activity, TrendingUp, Lightbulb, Target, Search, Hash, 
@@ -9,9 +9,11 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { GlossaryEntry } from './types';
+import { GlossaryEntry } from "@/data/glossary/types";
 import TechnicalTooltip from './TechnicalTooltip';
 import ConceptDiagram from './ConceptDiagram';
+import TruncatedText from '@/components/ui/truncated-text';
+import CollapsibleSection from '@/components/ui/collapsible-section';
 
 interface GlossaryCardProps {
   entry: GlossaryEntry;
@@ -447,52 +449,165 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({ entry }) => {
   };
 
   /**
-   * Format description text with ReactMarkdown for proper markdown rendering
-   * - Supports **bold** and *italic* formatting
-   * - Technical tooltips for complex concepts
-   * - Structured paragraphs with proper line breaks
+   * Format description text with enhanced truncation and collapsible sections
+   * - Automatic truncation for descriptions over 100 words
+   * - Collapsible sections for very long content (500+ words)
+   * - Technical tooltips and diagrams integration
+   * - Improved markdown rendering with proper formatting
    */
   const formatDescription = (text: string): JSX.Element => {
     const tooltipData = getTechnicalTooltipData(entry.term);
     
-    // Ensure text is properly formatted as string and handle line breaks
+    // Ensure text is properly formatted as string
     const formattedText = typeof text === 'string' ? text : String(text || '');
     
-    // Convert single line breaks to double line breaks for proper markdown paragraph rendering
-    const markdownText = formattedText
-      .replace(/\. ([A-Z])/g, '.\n\n$1') // Add paragraph breaks after sentences starting with capital letters
-      .replace(/: ([A-Z])/g, ': $1') // Ensure proper spacing after colons
-      .replace(/\*\*([^*]+)\*\*/g, '**$1**') // Ensure bold formatting is preserved
-      .trim();
+    // Calculate word count to determine display strategy
+    const wordCount = formattedText.trim().split(/\s+/).length;
+    const isVeryLong = wordCount > 500;
+    const isLong = wordCount > 100;
+    
+    // Split very long descriptions into logical sections
+    const createSections = (text: string) => {
+      const sections = [];
+      
+      // Try to split by common section indicators
+      const sectionPatterns = [
+        /\n\n\*\*([^*]+)\*\*:/g, // **Section Title:**
+        /\n\n([A-Z][^\n]*):(?=\s)/g, // Title: (at start of line)
+        /\n\n(\d+\.)\s/g, // 1. Numbered lists
+        /\n\n([A-Z][a-z]+\s[a-z]+)\s*:/g // Multi-word titles
+      ];
+      
+      interface MatchResult {
+         index: number;
+         title: string;
+         fullMatch: string;
+       }
+       
+       const matches: MatchResult[] = [];
+      
+      // Find all section breaks
+      sectionPatterns.forEach(pattern => {
+        let match;
+        while ((match = pattern.exec(text)) !== null) {
+          matches.push({
+            index: match.index,
+            title: match[1],
+            fullMatch: match[0]
+          });
+        }
+      });
+      
+      // Sort matches by position
+      matches.sort((a, b) => a.index - b.index);
+      
+      if (matches.length > 1) {
+         // Create sections based on matches
+         matches.forEach((match, i) => {
+          if (i === 0 && match.index > 100) {
+            // Add introduction section
+            sections.push({
+              title: "Introduction",
+              content: text.substring(0, match.index).trim(),
+              defaultOpen: true
+            });
+          }
+          
+          const nextMatch = matches[i + 1];
+          const endIndex = nextMatch ? nextMatch.index : text.length;
+          const content = text.substring(match.index, endIndex)
+            .replace(match.fullMatch, '')
+            .trim();
+          
+          if (content.length > 50) {
+            sections.push({
+              title: match.title,
+              content: content,
+              defaultOpen: i === 0 // First section open by default
+            });
+          }
+        });
+      }
+      
+      // If no good sections found, split by paragraphs
+      if (sections.length === 0) {
+        const paragraphs = text.split('\n\n').filter(p => p.trim().length > 0);
+        if (paragraphs.length > 3) {
+          const midPoint = Math.ceil(paragraphs.length / 2);
+          sections.push(
+            {
+              title: "Définition principale",
+              content: paragraphs.slice(0, midPoint).join('\n\n'),
+              defaultOpen: true
+            },
+            {
+              title: "Détails et applications",
+              content: paragraphs.slice(midPoint).join('\n\n'),
+              defaultOpen: false
+            }
+          );
+        }
+      }
+      
+      return sections;
+    };
     
     return (
       <div className="space-y-4">
         {/* Technical tooltip for enhanced explanation */}
         {tooltipData && (
-          <div className="mb-4">
+          <CollapsibleSection 
+            title="Explication technique détaillée" 
+            variant="subtle"
+            defaultOpen={false}
+          >
             <TechnicalTooltip data={tooltipData} />
-          </div>
+          </CollapsibleSection>
         )}
         
         {/* SVG Diagram if available */}
         {tooltipData?.diagram && (
-          <div className="my-4 flex justify-center">
-            <ConceptDiagram type={tooltipData.diagram as 'data-science-process' | 'machine-learning-types' | 'big-data-5v' | 'neural-network' | 'classification-vs-regression' | 'supervised-vs-unsupervised' | 'clustering-example' | 'overfitting-underfitting' | 'cross-validation' | 'gradient-descent'} />
-          </div>
+          <CollapsibleSection 
+            title="Diagramme conceptuel" 
+            variant="subtle"
+            defaultOpen={!isVeryLong}
+          >
+            <div className="flex justify-center py-2">
+              <ConceptDiagram type={tooltipData.diagram as 'data-science-process' | 'machine-learning-types' | 'big-data-5v' | 'neural-network' | 'classification-vs-regression' | 'supervised-vs-unsupervised' | 'clustering-example' | 'overfitting-underfitting' | 'cross-validation' | 'gradient-descent'} />
+            </div>
+          </CollapsibleSection>
         )}
         
-        {/* Original description with ReactMarkdown and improved formatting */}
-        <div className="text-sm leading-relaxed text-gray-700 dark:text-gray-300 prose prose-sm max-w-none prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-em:text-gray-600 dark:prose-em:text-gray-400">
-          <ReactMarkdown 
-            components={{
-              p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,
-              strong: ({ children }) => <strong className="font-semibold text-gray-900 dark:text-gray-100">{children}</strong>,
-              em: ({ children }) => <em className="italic text-gray-600 dark:text-gray-400">{children}</em>
-            }}
-          >
-            {markdownText}
-          </ReactMarkdown>
-        </div>
+        {/* Main description with smart truncation */}
+        {isVeryLong ? (
+          // Very long descriptions: use collapsible sections
+          <div className="space-y-3">
+            {createSections(formattedText).map((section, index) => (
+              <CollapsibleSection
+                key={index}
+                title={section.title}
+                defaultOpen={section.defaultOpen}
+                variant="outlined"
+              >
+                <TruncatedText
+                  text={section.content}
+                  wordLimit={150}
+                  showWordCount={false}
+                  enableMarkdown={true}
+                />
+              </CollapsibleSection>
+            ))}
+          </div>
+        ) : (
+          // Regular descriptions: use truncated text
+          <TruncatedText
+            text={formattedText}
+            wordLimit={isLong ? 100 : 200}
+            showWordCount={isLong}
+            enableMarkdown={true}
+            className=""
+          />
+        )}
       </div>
     );
   };

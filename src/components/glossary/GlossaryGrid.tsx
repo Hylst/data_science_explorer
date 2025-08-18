@@ -1,6 +1,6 @@
 
 import GlossaryCard from "./GlossaryCard";
-import { GlossaryEntry } from "./types";
+import { GlossaryEntry } from "@/data/glossary/types";
 
 interface GlossaryGridProps {
   entries: GlossaryEntry[];

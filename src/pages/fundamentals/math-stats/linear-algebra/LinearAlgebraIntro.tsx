@@ -1,9 +1,15 @@
 
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CourseHighlight from "@/components/courses/CourseHighlight";
-import { Lightbulb, Zap, Brain, Target } from "lucide-react";
+import { Brain, Target, Zap } from "lucide-react";
+import VectorsSection from "./VectorsSection";
+import MatricesSection from "./MatricesSection";
+import MatrixTypesSection from "./MatrixTypesSection";
+import OperationsSection from "./OperationsSection";
+import ApplicationsSection from "./ApplicationsSection";
+import DecompositionsSection from "./DecompositionsSection";
+import InteractiveExercises from "./InteractiveExercises";
 
 const LinearAlgebraIntro = () => {
   return (
@@ -108,6 +114,14 @@ const LinearAlgebraIntro = () => {
           </div>
         </div>
       </div>
+      
+      <VectorsSection />
+      <MatricesSection />
+      <MatrixTypesSection />
+      <OperationsSection />
+      <ApplicationsSection />
+      <DecompositionsSection />
+      <InteractiveExercises />
     </section>
   );
 };
