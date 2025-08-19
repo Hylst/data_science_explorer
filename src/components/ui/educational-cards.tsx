@@ -1,5 +1,5 @@
 
-import React from "react";
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Lightbulb, BookOpen, Zap, Eye, AlertCircle, CheckCircle, Brain, TrendingUp, Users, Target } from "lucide-react";

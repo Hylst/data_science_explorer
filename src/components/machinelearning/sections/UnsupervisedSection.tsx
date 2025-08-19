@@ -1,5 +1,4 @@
 
-import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { GlossaryTerm } from "@/components/ui/glossary-term";
 import { mlDefinitions } from "@/data/glossary/ml-definitions";

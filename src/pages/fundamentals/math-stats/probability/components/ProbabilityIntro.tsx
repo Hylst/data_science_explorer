@@ -1,5 +1,4 @@
 
-import React from "react";
 import { Lightbulb, Target, Eye, Zap } from "lucide-react";
 import CourseHighlight from "@/components/courses/CourseHighlight";
 

@@ -1,26 +1,16 @@
-import React from "react";
 import Layout from "@/components/layout/Layout";
 import UnifiedHeroSection from "@/components/ui/unified-hero-section";
-import { Calculator, Dice1, TrendingUp, AlertCircle, Target, Brain, Lightbulb } from "lucide-react";
+// Supprimer cette ligne : import { Calculator, Dice1, TrendingUp, AlertCircle, Target, Brain, Lightbulb } from "lucide-react";
 
 // Import des nouveaux composants
 import ProbabilityIntro from "./probability/components/ProbabilityIntro";
 import ProbabilityBasics from "./probability/components/ProbabilityBasics";
 import RandomVariables from "./probability/components/RandomVariables";
 
+// Supprimer complètement la variable sidebar non utilisée
 const ProbabilityTheory = () => {
-  const sidebar = {
-    items: [
-      { title: "Introduction intuitive", href: "#intro", icon: <Lightbulb className="h-4 w-4" />, isActive: true },
-      { title: "Bases des probabilités", href: "#basics", icon: <Calculator className="h-4 w-4" /> },
-      { title: "Variables aléatoires", href: "#random-variables", icon: <Dice1 className="h-4 w-4" /> },
-      { title: "Distributions", href: "#distributions", icon: <TrendingUp className="h-4 w-4" /> },
-      { title: "Théorème de Bayes", href: "#bayes", icon: <AlertCircle className="h-4 w-4" /> },
-      { title: "Applications pratiques", href: "#applications", icon: <Target className="h-4 w-4" /> },
-      { title: "Approfondissement", href: "#advanced", icon: <Brain className="h-4 w-4" /> }
-    ]
-  };
-
+  // Supprimer les lignes 11-19 qui définissent la variable sidebar
+  
   return (
     <Layout>
       <div className="min-h-screen">

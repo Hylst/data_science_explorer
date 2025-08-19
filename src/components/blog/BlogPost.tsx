@@ -1,6 +1,5 @@
 
-import React from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Calendar, User, Heart } from "lucide-react";
 import { blogPosts } from "./BlogList";
@@ -12,7 +11,7 @@ interface BlogPostProps {
   content?: string;
 }
 
-const BlogPost: React.FC<BlogPostProps> = ({ id, title, content }) => {
+const BlogPost: React.FC<BlogPostProps> = ({ id }) => {
   // Si title et content ne sont pas fournis, trouvez l'article par id
   const post = blogPosts.find(post => post.id === id);
   

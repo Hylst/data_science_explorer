@@ -1,5 +1,4 @@
 
-import React from "react";
 import { ArrowUp } from "lucide-react";
 import { Button } from "./button";
 

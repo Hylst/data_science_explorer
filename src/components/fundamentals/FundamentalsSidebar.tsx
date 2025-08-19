@@ -1,6 +1,5 @@
 
-import React from "react";
-import { BookOpen, Brain, LightbulbIcon, History, ChartBar, Code } from "lucide-react";
+import { Brain, LightbulbIcon, History, ChartBar, Code } from "lucide-react";
 
 export type FundamentalsSectionType = "statistics" | "programming" | "dataviz" | "dataprocessing" | "mathvisuals";
 

@@ -132,12 +132,10 @@ const PythonBasics = () => {
 
   // Handlers avec useCallback pour optimiser les performances
   const handleModuleStart = useCallback((moduleId: string) => {
-    console.log(`Starting module: ${moduleId}`);
     // Logique de démarrage du module
   }, []);
 
   const handleModuleNotes = useCallback((moduleId: string) => {
-    console.log(`Opening notes for module: ${moduleId}`);
     // Logique d'ouverture des notes
   }, []);
 

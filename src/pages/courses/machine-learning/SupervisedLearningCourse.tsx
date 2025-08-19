@@ -158,17 +158,14 @@ const SupervisedLearningCourse = () => {
 
   // Handlers avec useCallback
   const handleModuleStart = useCallback((moduleId: string) => {
-    console.log(`Starting ML module: ${moduleId}`);
     // Logique de démarrage du module ML
   }, []);
 
   const handleModuleNotes = useCallback((moduleId: string) => {
-    console.log(`Opening ML notes for: ${moduleId}`);
     // Logique d'ouverture des notes
   }, []);
 
   const handleProjectStart = useCallback((projectTitle: string) => {
-    console.log(`Starting project: ${projectTitle}`);
     // Logique de démarrage de projet
   }, []);
 

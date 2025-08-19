@@ -1,5 +1,4 @@
 
-import React from "react";
 import { useMachineLearning } from "./MachineLearningContext";
 import IntroSection from "./sections/IntroSection";
 import SupervisedSection from "./sections/SupervisedSection";

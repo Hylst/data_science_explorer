@@ -1,5 +1,4 @@
 
-import React from "react";
 import ProgrammingIntro from "./programming/ProgrammingIntro";
 import PythonMasterclass from "./programming/PythonMasterclass";
 import LanguageComparison from "./programming/LanguageComparison";

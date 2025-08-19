@@ -1,8 +1,7 @@
 
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Lightbulb, Code, Brain, Target } from "lucide-react";
+import { Code, Brain, Target } from "lucide-react";
 import CourseHighlight from "@/components/courses/CourseHighlight";
 
 const ProgrammingIntro = () => {

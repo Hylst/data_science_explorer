@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import { Link } from "react-router-dom";
-import { BarChart3, Brain } from "lucide-react";
+import { BarChart3 } from "lucide-react";
 
 interface AnimatedLogoProps {
   className?: string;

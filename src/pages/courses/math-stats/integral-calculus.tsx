@@ -1,8 +1,7 @@
 
-import React from "react";
 import ContentLayout from "@/components/layout/ContentLayout";
 import IntegralCalculusContent from "@/pages/fundamentals/math-stats/integral-calculus/IntegralCalculusContent";
-import { BookOpen, Calculator, Target, TrendingUp, Lightbulb, Settings } from "lucide-react";
+import { BookOpen, Calculator, Target, Lightbulb, Settings } from "lucide-react";
 
 const IntegralCalculusCourse = () => {
   const sidebar = {

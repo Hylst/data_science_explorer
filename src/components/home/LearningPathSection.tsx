@@ -1,4 +1,3 @@
-import React from "react";
 import DataScienceMap from "./DataScienceMap";
 
 /**

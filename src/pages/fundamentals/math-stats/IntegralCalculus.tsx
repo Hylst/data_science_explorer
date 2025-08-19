@@ -1,5 +1,4 @@
 
-import React from "react";
 import Layout from "@/components/layout/Layout";
 import IntegralCalculusContent from "./integral-calculus/IntegralCalculusContent";
 import UnifiedHeroSection from "@/components/ui/unified-hero-section";

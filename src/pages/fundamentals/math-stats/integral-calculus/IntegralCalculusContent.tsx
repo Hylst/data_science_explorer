@@ -1,5 +1,4 @@
-import React from "react";
-import { Calculator, Settings, Target, BookOpen, Lightbulb, TrendingUp } from "lucide-react";
+import { Calculator, Settings, Target, BookOpen, Lightbulb } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CourseHighlight from "@/components/courses/CourseHighlight";

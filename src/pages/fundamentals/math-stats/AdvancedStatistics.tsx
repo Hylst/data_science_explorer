@@ -1,8 +1,7 @@
 
-import React from "react";
 import Layout from "@/components/layout/Layout";
 import UnifiedHeroSection from "@/components/ui/unified-hero-section";
-import { ChartBar, Target, Brain, TestTube, Zap, Calculator } from "lucide-react";
+// Supprimer cette ligne : import { ChartBar, Target, Brain, TestTube, Zap, Calculator } from "lucide-react";
 import AdvancedStatsIntro from "./advanced-statistics/AdvancedStatsIntro";
 import HypothesisTestingSection from "./advanced-statistics/HypothesisTestingSection";
 import ConfidenceIntervalsSection from "./advanced-statistics/ConfidenceIntervalsSection";
@@ -12,18 +11,8 @@ import BayesianStatisticsSection from "./advanced-statistics/BayesianStatisticsS
 import PracticalApplicationsSection from "./advanced-statistics/PracticalApplicationsSection";
 
 const AdvancedStatistics = () => {
-  const sidebar = {
-    items: [
-      { title: "Introduction", href: "#intro", icon: <ChartBar className="h-4 w-4" />, isActive: true },
-      { title: "Tests d'hypothèses", href: "#hypothesis-testing", icon: <TestTube className="h-4 w-4" /> },
-      { title: "Intervalles de confiance", href: "#confidence-intervals", icon: <Target className="h-4 w-4" /> },
-      { title: "ANOVA", href: "#anova", icon: <Calculator className="h-4 w-4" /> },
-      { title: "Régression avancée", href: "#regression", icon: <Brain className="h-4 w-4" /> },
-      { title: "Statistiques bayésiennes", href: "#bayesian", icon: <Zap className="h-4 w-4" /> },
-      { title: "Applications", href: "#applications", icon: <Target className="h-4 w-4" /> }
-    ]
-  };
-
+  // Supprimer les lignes 13-22 qui définissent la variable sidebar
+  
   return (
     <Layout>
       <div className="min-h-screen">

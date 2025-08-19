@@ -1,5 +1,4 @@
 
-import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, Cell } from "recharts";
 import { GlossaryTerm } from "@/components/ui/glossary-term";
@@ -124,7 +123,8 @@ const EvaluationSection = () => {
               <Tooltip />
               <Legend />
               <Bar dataKey="value" fill="#8884d8">
-                {confusionMatrixData.map((entry, index) => (
+                // Vérifier et garder seulement les imports utilisés de recharts
+                {confusionMatrixData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Bar>

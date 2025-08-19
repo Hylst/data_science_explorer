@@ -1,5 +1,4 @@
 
-import React from "react";
 import ContentLayout from "@/components/layout/ContentLayout";
 import PageHeader from "@/components/layout/PageHeader";
 import { ChartBar, TrendingUp, Calculator, BarChart3 } from "lucide-react";

@@ -1,36 +1,8 @@
 
-import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Puzzle } from "lucide-react";
 
-interface PillarCardProps {
-  title: string;
-  description: string;
-  color: string;
-  skills: string[];
-}
-
-const PillarCard = ({ title, description, color, skills }: PillarCardProps) => {
-  return (
-    <Card className={`border-t-4 ${color} hover:shadow-lg transition-all duration-300`}>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-xl">{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-gray-700">{description}</p>
-        <div className="mt-4 pt-4 border-t border-dashed">
-          <span className="text-sm font-medium">Compétences clés:</span>
-          <ul className="mt-2 space-y-1 text-sm">
-            {skills.map((skill, index) => (
-              <li key={index}>• {skill}</li>
-            ))}
-          </ul>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
+// Supprimer PillarCardProps interface et PillarCard component
 
 const PillarsSection = () => {
   const pillars = [

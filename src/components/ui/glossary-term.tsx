@@ -1,5 +1,5 @@
 
-import React from "react";
+import React from 'react';
 import ReactMarkdown from "react-markdown";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";

@@ -1,4 +1,3 @@
-import React from "react";
 import { Globe, Plus, ExternalLink } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -108,4 +107,5 @@ const RSSSourceCard: React.FC<RSSSourceCardProps> = ({ source, onSubscribe, onVi
   );
 };
 
-export default React.memo(RSSSourceCard);
+import { memo } from 'react';
+export default memo(RSSSourceCard);

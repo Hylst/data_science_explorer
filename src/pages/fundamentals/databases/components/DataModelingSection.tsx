@@ -1,7 +1,6 @@
 
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Brain, Lightbulb, AlertTriangle } from "lucide-react";
+import { Brain, Lightbulb } from "lucide-react";
 
 const DataModelingSection = () => {
   return (

@@ -261,7 +261,8 @@ export function withApiErrorHandling<P extends object>(
     errorVariant?: 'inline' | 'card' | 'alert';
   } = {}
 ) {
-  const { showNetworkStatus = true, errorVariant = 'alert' } = options;
+  // Ligne 264 - supprimer errorVariant si non utilisé
+  const { showNetworkStatus = true } = options;
   
   return function WrappedComponent(props: P) {
     return (

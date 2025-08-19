@@ -1,5 +1,4 @@
 
-import React from "react";
 import MathIntroHero from "./MathIntroHero";
 import LinearAlgebraFoundations from "./LinearAlgebraFoundations";
 import StatisticsProbabilityFoundations from "./StatisticsProbabilityFoundations";

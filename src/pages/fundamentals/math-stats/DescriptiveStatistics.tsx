@@ -1,8 +1,7 @@
 
-import React from "react";
 import Layout from "@/components/layout/Layout";
 import UnifiedHeroSection from "@/components/ui/unified-hero-section";
-import { ChartBar, TrendingUp, Calculator, BarChart3, Target, Eye } from "lucide-react";
+// Supprimer cette ligne : import { ChartBar, TrendingUp, Calculator, BarChart3, Target, Eye } from "lucide-react";
 
 // Import des nouveaux composants modulaires
 import DescriptiveStatsIntro from "./descriptive-statistics/components/DescriptiveStatsIntro";
@@ -12,17 +11,8 @@ import CorrelationSection from "./descriptive-statistics/components/CorrelationS
 import PracticalApplicationsSection from "./descriptive-statistics/components/PracticalApplicationsSection";
 
 const DescriptiveStatistics = () => {
-  const sidebar = {
-    items: [
-      { title: "Introduction", href: "#intro", icon: <ChartBar className="h-4 w-4" />, isActive: true },
-      { title: "Tendance centrale", href: "#central", icon: <Calculator className="h-4 w-4" /> },
-      { title: "Dispersion", href: "#dispersion", icon: <BarChart3 className="h-4 w-4" /> },
-      { title: "Corrélation", href: "#correlation", icon: <TrendingUp className="h-4 w-4" /> },
-      { title: "Applications", href: "#applications", icon: <Target className="h-4 w-4" /> },
-      { title: "Visualisation", href: "#visualization", icon: <Eye className="h-4 w-4" /> }
-    ]
-  };
-
+  // Supprimer les lignes 13-22 qui définissent sidebarItems
+  
   return (
     <Layout>
       <div className="min-h-screen">

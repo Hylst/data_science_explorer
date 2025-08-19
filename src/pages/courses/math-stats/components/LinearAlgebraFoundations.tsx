@@ -1,5 +1,4 @@
 
-import React from "react";
 import { Calculator } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CourseEquation from "@/components/courses/CourseEquation";

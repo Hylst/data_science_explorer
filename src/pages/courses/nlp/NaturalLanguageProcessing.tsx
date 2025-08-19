@@ -156,17 +156,14 @@ const NaturalLanguageProcessing = () => {
 
   // Handlers avec useCallback
   const handleModuleStart = useCallback((moduleId: string) => {
-    console.log(`Starting NLP module: ${moduleId}`);
     // Logique de démarrage du module NLP
   }, []);
 
   const handleModuleNotes = useCallback((moduleId: string) => {
-    console.log(`Opening NLP notes for: ${moduleId}`);
     // Logique d'ouverture des notes
   }, []);
 
   const handleProjectStart = useCallback((projectTitle: string) => {
-    console.log(`Starting NLP project: ${projectTitle}`);
     // Logique de démarrage de projet
   }, []);
 

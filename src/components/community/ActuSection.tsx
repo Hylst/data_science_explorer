@@ -75,7 +75,7 @@ const ActuSection = () => {
    */
   const handleSubscribeToRss = (source: RSSSource) => {
     // In a complete version, this would handle actual RSS subscription
-    console.log(`Subscribing to ${source.name}`);
+    // TODO: Implement actual RSS subscription logic
   };
 
   return (

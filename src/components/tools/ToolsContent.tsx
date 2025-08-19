@@ -1,5 +1,4 @@
 
-import React from "react";
 import ProgrammingTools from "./sections/ProgrammingTools";
 import DataProcessingTools from "./sections/DataProcessingTools";
 import MLFrameworks from "./sections/MLFrameworks";

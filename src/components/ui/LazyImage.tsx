@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface LazyImageProps {

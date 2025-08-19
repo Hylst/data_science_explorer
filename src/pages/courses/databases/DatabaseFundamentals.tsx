@@ -137,17 +137,14 @@ const DatabaseFundamentals = () => {
 
   // Handlers avec useCallback
   const handleModuleStart = useCallback((moduleId: string) => {
-    console.log(`Starting database module: ${moduleId}`);
     // Logique de démarrage du module database
   }, []);
 
   const handleModuleNotes = useCallback((moduleId: string) => {
-    console.log(`Opening database notes for: ${moduleId}`);
     // Logique d'ouverture des notes
   }, []);
 
   const handleProjectStart = useCallback((projectTitle: string) => {
-    console.log(`Starting database project: ${projectTitle}`);
     // Logique de démarrage de projet
   }, []);
 

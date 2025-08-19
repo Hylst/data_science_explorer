@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface ConceptDiagramProps {
   type: 'data-science-process' | 'machine-learning-types' | 'big-data-5v' | 'neural-network' | 'classification-vs-regression' | 'supervised-vs-unsupervised' | 'clustering-example' | 'overfitting-underfitting' | 'cross-validation' | 'gradient-descent';
   className?: string;

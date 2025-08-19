@@ -1,5 +1,4 @@
 
-import React from "react";
 import { useMachineLearning } from "./MachineLearningContext";
 import IntroSectionRefactored from "./sections/IntroSectionRefactored";
 import CourseAccessSection from "./sections/CourseAccessSection";

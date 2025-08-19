@@ -1,5 +1,4 @@
 
-import React from 'react';
 import CourseHighlight from '@/components/courses/CourseHighlight';
 import CourseImageBlock from '@/components/courses/CourseImageBlock';
 import { Card } from '@/components/ui/card';

@@ -135,17 +135,14 @@ const AppliedStatistics = () => {
 
   // Handlers optimisés avec useCallback
   const handleModuleStart = useCallback((moduleId: string) => {
-    console.log(`Starting statistics module: ${moduleId}`);
     // Logique spécifique aux statistiques
   }, []);
 
   const handleModuleNotes = useCallback((moduleId: string) => {
-    console.log(`Opening statistics notes for: ${moduleId}`);
     // Logique d'ouverture des notes
   }, []);
 
   const handleCaseStudyStart = useCallback((studyTitle: string) => {
-    console.log(`Starting case study: ${studyTitle}`);
     // Logique de démarrage d'étude de cas
   }, []);
 

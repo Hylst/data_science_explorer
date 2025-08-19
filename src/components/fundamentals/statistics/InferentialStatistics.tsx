@@ -1,5 +1,4 @@
 
-import React from "react";
 import { ChevronRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -63,7 +62,7 @@ const InferentialStatistics = () => {
               <Tooltip formatter={(value: number) => [`${value}%`, 'Taux de conversion']} />
               <Legend verticalAlign="top" wrapperStyle={{ paddingBottom: '20px' }} />
               <Bar dataKey="value" name="Taux de conversion (%)">
-                {hypothesisData.map((entry, index) => (
+                {hypothesisData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Bar>

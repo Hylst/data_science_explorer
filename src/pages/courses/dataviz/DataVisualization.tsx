@@ -147,17 +147,14 @@ const DataVisualization = () => {
 
   // Handlers avec useCallback
   const handleModuleStart = useCallback((moduleId: string) => {
-    console.log(`Starting dataviz module: ${moduleId}`);
     // Logique de démarrage du module dataviz
   }, []);
 
   const handleModuleNotes = useCallback((moduleId: string) => {
-    console.log(`Opening dataviz notes for: ${moduleId}`);
     // Logique d'ouverture des notes
   }, []);
 
   const handleProjectStart = useCallback((projectTitle: string) => {
-    console.log(`Starting dataviz project: ${projectTitle}`);
     // Logique de démarrage de projet
   }, []);
 

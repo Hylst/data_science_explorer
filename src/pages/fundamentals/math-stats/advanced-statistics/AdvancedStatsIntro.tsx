@@ -1,8 +1,7 @@
 
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TestTube, Target, Brain, Zap, Users, Clock } from "lucide-react";
+import { TestTube, Target, Brain, Zap, Clock } from "lucide-react";
 
 const AdvancedStatsIntro = () => {
   const courseInfo = {
