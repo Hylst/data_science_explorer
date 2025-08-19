@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import AnimatedLogo from "@/components/ui/animated-logo";
+import { PWAInstallButton } from "@/components/ui/pwa-install-button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,8 +59,8 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation - Optimized spacing */}
-          <div className="hidden md:flex items-center ml-8">
-            <div className="flex items-center space-x-1">
+          <div className="hidden md:flex items-center ml-8 flex-1">
+            <div className="flex items-center space-x-1 flex-1">
               {navItems.map((item) => (
                 <div key={item.name} className="relative">
                   {item.subItems ? (
@@ -113,6 +114,10 @@ const Navbar = () => {
                   )}
                 </div>
               ))}
+            </div>
+            {/* PWA Install Button */}
+            <div className="ml-4">
+              <PWAInstallButton />
             </div>
           </div>
           {/* Mobile menu button */}

@@ -10,6 +10,15 @@ import RSSSourceCard from "./RSSSourceCard";
 import rssSourcesData from "@/data/rss-sources.json";
 import rssArticlesData from "@/data/rss-articles.json";
 
+// Interface for RSS source structure
+interface RSSSource {
+  name: string;
+  url: string;
+  description: string;
+  language: string;
+  category: string;
+}
+
 const ActuSection = () => {
   const [newsFilter, setNewsFilter] = useState("all");
   const [selectedRssSource, setSelectedRssSource] = useState("all");
@@ -64,7 +73,7 @@ const ActuSection = () => {
    * Handle RSS source subscription
    * @param source - RSS source to subscribe to
    */
-  const handleSubscribeToRss = (source: any) => {
+  const handleSubscribeToRss = (source: RSSSource) => {
     // In a complete version, this would handle actual RSS subscription
     console.log(`Subscribing to ${source.name}`);
   };

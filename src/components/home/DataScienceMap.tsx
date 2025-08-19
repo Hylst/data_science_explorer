@@ -127,7 +127,7 @@ const DataScienceMap: React.FC<DataScienceMapProps> = ({ className }) => {
       icon: <LayoutDashboard className="w-6 h-6" />,
       title: "Visualisation",
       subtitle: "Dashboards & Storytelling",
-      link: "/fundamentals/dataviz",
+      link: "/courses/dataviz/data-visualization",
       color: "from-amber-500 to-amber-600",
       bgColor: "bg-amber-500/10",
       borderColor: "border-amber-500/30",
@@ -333,6 +333,8 @@ const DataScienceMap: React.FC<DataScienceMapProps> = ({ className }) => {
               }}
               onMouseEnter={() => setHoveredTopic(step.id)}
               onMouseLeave={() => setHoveredTopic(null)}
+              onClick={() => setHoveredTopic(hoveredTopic === step.id ? null : step.id)} // Mobile touch toggle
+              onTouchStart={() => setHoveredTopic(step.id)} // Touch interaction
             >
               {/* Step number badge */}
               <div className="absolute -top-3 -left-3 z-20">

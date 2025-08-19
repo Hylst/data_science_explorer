@@ -413,5 +413,21 @@ export const mlDefinitions: Record<string, GlossaryTermDefinition> = {
     domain: "machinelearning",
     level: "advanced",
     englishTerm: "LSTM (Long Short-Term Memory)"
+  },
+  "modèle": {
+    term: "Modèle",
+    shortDefinition: "Représentation mathématique d'un processus réel utilisée pour faire des prédictions ou des classifications.",
+    longDefinition: "Un modèle de machine learning est une représentation mathématique qui capture les patterns et relations dans les données d'entraînement. Il s'agit d'un ensemble de règles, paramètres et algorithmes qui permettent de transformer des données d'entrée en prédictions ou classifications. Le modèle est créé pendant la phase d'entraînement et peut ensuite être utilisé pour faire des inférences sur de nouvelles données.",
+    examples: [
+      "Un modèle de régression linéaire pour prédire les prix immobiliers",
+      "Un réseau de neurones pour la reconnaissance d'images",
+      "Un arbre de décision pour la classification de clients"
+    ],
+    relatedTerms: ["Algorithme", "Entraînement", "Prédiction", "Paramètres"],
+    source: "Fundamentals of Machine Learning",
+    domain: "machinelearning",
+    level: "beginner",
+    synonyms: ["Modèle prédictif", "Modèle statistique"],
+    englishTerm: "Model"
   }
 };

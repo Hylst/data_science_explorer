@@ -1,11 +1,12 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback, memo } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
+import OptimizedImage from "@/components/ui/optimized-image";
 import { 
   Clock, 
   Users, 
@@ -14,11 +15,7 @@ import {
   Code,
   Database,
   BarChart3,
-  Brain,
-  Image,
-  Globe,
-  TrendingUp,
-  Zap
+  Brain
 } from "lucide-react";
 
 interface Project {
@@ -45,9 +42,61 @@ interface ProjectGridProps {
   level: string;
 }
 
-export function ProjectGrid({ filter, level }: ProjectGridProps) {
+/**
+ * Optimized ProjectGrid component with memoization for better performance
+ * Uses React.memo, useMemo, and useCallback to prevent unnecessary re-renders
+ */
+export const ProjectGrid = memo(function ProjectGrid({ filter, level }: ProjectGridProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  /**
+   * Memoized helper function to generate difficulty stars
+   * Prevents recreation on every render
+   */
+  const getDifficultyStars = useCallback((difficulty: number) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <Star 
+        key={i} 
+        className={`h-3 w-3 ${i < difficulty ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
+      />
+    ));
+  }, []);
+
+  /**
+   * Memoized helper function to generate status badges
+   * Uses static configuration to avoid object recreation
+   */
+  const getStatusBadge = useCallback((status?: string) => {
+    if (!status) return null;
+    
+    const statusConfig = {
+      new: { label: "✨ Nouveau", className: "bg-green-100 text-green-800" },
+      popular: { label: "🔥 Populaire", className: "bg-red-100 text-red-800" },
+      trending: { label: "📈 Tendance", className: "bg-purple-100 text-purple-800" },
+      updated: { label: "🔄 Mis à jour", className: "bg-blue-100 text-blue-800" }
+    };
+    
+    const config = statusConfig[status as keyof typeof statusConfig];
+    return config ? (
+      <Badge className={config.className}>{config.label}</Badge>
+    ) : null;
+  }, []);
+
+  /**
+   * Memoized helper function to get level information
+   * Prevents icon recreation on every render
+   */
+  const getLevelInfo = useMemo(() => {
+    const levelConfig = {
+      beginner: { label: "Débutant", color: "bg-green-100 text-green-800", icon: <Code className="h-4 w-4" /> },
+      intermediate: { label: "Intermédiaire", color: "bg-yellow-100 text-yellow-800", icon: <BarChart3 className="h-4 w-4" /> },
+      advanced: { label: "Avancé", color: "bg-red-100 text-red-800", icon: <Brain className="h-4 w-4" /> },
+      collaborative: { label: "Collaboratif", color: "bg-blue-100 text-blue-800", icon: <Users className="h-4 w-4" /> }
+    };
+    
+    return (level: string) => levelConfig[level as keyof typeof levelConfig] || levelConfig.beginner;
+  }, []);
   
   useEffect(() => {
     setIsLoading(true);
@@ -355,42 +404,6 @@ export function ProjectGrid({ filter, level }: ProjectGridProps) {
     );
   }
 
-  const getDifficultyStars = (difficulty: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star 
-        key={i} 
-        className={`h-3 w-3 ${i < difficulty ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
-      />
-    ));
-  };
-
-  const getStatusBadge = (status?: string) => {
-    if (!status) return null;
-    
-    const statusConfig = {
-      new: { label: "✨ Nouveau", className: "bg-green-100 text-green-800" },
-      popular: { label: "🔥 Populaire", className: "bg-red-100 text-red-800" },
-      trending: { label: "📈 Tendance", className: "bg-purple-100 text-purple-800" },
-      updated: { label: "🔄 Mis à jour", className: "bg-blue-100 text-blue-800" }
-    };
-    
-    const config = statusConfig[status as keyof typeof statusConfig];
-    return config ? (
-      <Badge className={config.className}>{config.label}</Badge>
-    ) : null;
-  };
-
-  const getLevelInfo = (level: string) => {
-    const levelConfig = {
-      beginner: { label: "Débutant", color: "bg-green-100 text-green-800", icon: <Code className="h-4 w-4" /> },
-      intermediate: { label: "Intermédiaire", color: "bg-yellow-100 text-yellow-800", icon: <BarChart3 className="h-4 w-4" /> },
-      advanced: { label: "Avancé", color: "bg-red-100 text-red-800", icon: <Brain className="h-4 w-4" /> },
-      collaborative: { label: "Collaboratif", color: "bg-blue-100 text-blue-800", icon: <Users className="h-4 w-4" /> }
-    };
-    
-    return levelConfig[level as keyof typeof levelConfig] || levelConfig.beginner;
-  };
-  
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {projects.map((project) => {
@@ -399,10 +412,11 @@ export function ProjectGrid({ filter, level }: ProjectGridProps) {
         return (
           <Card key={project.id} className="overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
             <div className="h-48 w-full relative overflow-hidden">
-              <img 
+              <OptimizedImage 
                 src={project.image} 
                 alt={project.title}
-                className="w-full h-full object-cover transition-transform duration-300 hover:scale-110" 
+                className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                lazy={true}
               />
               <div className="absolute top-2 left-2 flex gap-2">
                 <Badge className={levelInfo.color}>
@@ -497,4 +511,4 @@ export function ProjectGrid({ filter, level }: ProjectGridProps) {
       })}
     </div>
   );
-}
+});

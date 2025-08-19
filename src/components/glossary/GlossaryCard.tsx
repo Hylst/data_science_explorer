@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 
 import { 
   Brain, Database, BarChart3, Zap, Users, Shield, Eye, Network, 
@@ -23,31 +23,32 @@ interface GlossaryCardProps {
 /**
  * Enhanced glossary card component with notebook-style design
  * Features rich typography, structured content, and visual enhancements
+ * Optimized with React.memo and useMemo for better performance
  */
-const GlossaryCard: React.FC<GlossaryCardProps> = ({ entry }) => {
+const GlossaryCard: React.FC<GlossaryCardProps> = memo(({ entry }) => {
   /**
+   * Memoized icon mapping to prevent recreation on every render
    * Convert icon name string to JSX component
    */
-  const getIconComponent = (iconName: string) => {
-    const iconMap: Record<string, React.ComponentType<any>> = {
-      BookOpen,
-      Brain,
-      Database,
-      Cpu,
-      BarChart3,
-      Target,
-      TrendingUp,
-      Users,
-      Search,
-      Layers,
-      AlertTriangle,
-      TrendingDown,
-      Network,
-      MessageSquare,
-      Eye,
-      Wrench,
-      CheckCircle,
-      TreePine,
+  const iconMap = useMemo(() => ({
+    BookOpen,
+    Brain,
+    Database,
+    Cpu,
+    BarChart3,
+    Target,
+    TrendingUp,
+    Users,
+    Search,
+    Layers,
+    AlertTriangle,
+    TrendingDown,
+    Network,
+    MessageSquare,
+    Eye,
+    Wrench,
+    CheckCircle,
+    TreePine,
       Divide,
       Shuffle,
       Settings,
@@ -63,11 +64,15 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({ entry }) => {
       Shield,
       Lightbulb,
       Code
-    };
+    } as Record<string, React.ComponentType<{ className?: string }>>), []);
     
-    const IconComponent = iconMap[iconName] || BookOpen;
-    return <IconComponent className="w-6 h-6 text-blue-600 dark:text-blue-400" />;
-  };
+    /**
+     * Get icon component from memoized icon map
+     */
+    const getIconComponent = (iconName: string) => {
+      const IconComponent = iconMap[iconName] || BookOpen;
+      return <IconComponent className="w-6 h-6 text-blue-600 dark:text-blue-400" />;
+    };
   /**
    * Get technical tooltip data for specific terms
    */
@@ -706,6 +711,6 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({ entry }) => {
       </CardContent>
     </Card>
   );
-};
+});
 
 export default GlossaryCard;

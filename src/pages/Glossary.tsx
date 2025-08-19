@@ -7,6 +7,7 @@ import Layout from '@/components/layout/Layout';
 import UnifiedHeroSection from '@/components/ui/unified-hero-section';
 import GlossaryGrid from '@/components/glossary/GlossaryGrid';
 import { glossaryTerms } from '@/data/glossary-terms';
+import { GlossaryEntry, GlossaryCategory } from '@/data/glossary/types';
 
 const Glossary = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,7 +27,7 @@ const Glossary = () => {
 
   // Filter and sort entries
   const filteredEntries = useMemo(() => {
-    let filtered = glossaryTerms.filter(entry => {
+    const filtered = glossaryTerms.filter(entry => {
       const matchesSearch = entry.term.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            entry.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === "all" || entry.category === selectedCategory;

@@ -35,7 +35,11 @@ const Tooltip: React.FC<TooltipProps> = ({ content, children, position = 'top' }
         onMouseLeave={() => setIsVisible(false)}
         onFocus={() => setIsVisible(true)}
         onBlur={() => setIsVisible(false)}
+        onClick={() => setIsVisible(!isVisible)} // Mobile touch support
+        onTouchStart={() => setIsVisible(true)} // Touch interaction
         tabIndex={0}
+        role="button"
+        aria-label="Show tooltip"
       >
         {children}
       </div>

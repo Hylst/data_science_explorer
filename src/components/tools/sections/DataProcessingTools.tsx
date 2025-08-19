@@ -1,8 +1,8 @@
 
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { 
   Database, 
   ArrowRight, 
@@ -591,7 +591,7 @@ extraction >> transformation >> chargement`}</pre>
             
             <div className="bg-white p-6 rounded-lg border shadow-sm">
               <h3 className="font-bold text-lg mb-4">Évolution des pipelines de données</h3>
-              <div className="relative overflow-x-auto">
+              <ResponsiveTable stickyHeader={true}>
                 <table className="w-full text-sm text-left text-gray-700">
                   <thead className="text-xs uppercase bg-gray-50">
                     <tr>
@@ -652,7 +652,7 @@ extraction >> transformation >> chargement`}</pre>
                     </tr>
                   </tbody>
                 </table>
-              </div>
+              </ResponsiveTable>
             </div>
           </div>
         </TabsContent>

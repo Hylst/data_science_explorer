@@ -1,9 +1,8 @@
 
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, BookOpen, Video, Code, Users, Star, Clock } from "lucide-react";
+import { ExternalLink, BookOpen, Video, Code, Users, Star } from "lucide-react";
 import CourseHighlight from "@/components/courses/CourseHighlight";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -163,7 +162,29 @@ const ResourcesSection = () => {
     ]
   };
 
-  const ResourceCard = ({ ressource, type }: { ressource: any, type: string }) => {
+  // Interface for resource object structure
+  interface Resource {
+    title?: string;
+    nom?: string;
+    chaine?: string;
+    description: string;
+    url: string;
+    auteur?: string;
+    rating?: number;
+    niveau?: string;
+    prix?: string;
+    specialite?: string[] | string;
+    specialites?: string[];
+    avantages?: string[];
+    mustWatch?: string[];
+    subscribers?: string;
+    membres?: string;
+    type?: string;
+    pourquoi?: string;
+    competitions?: string;
+  }
+
+  const ResourceCard = ({ ressource, type }: { ressource: Resource, type: string }) => {
     const getTypeIcon = () => {
       switch (type) {
         case 'livre': return <BookOpen className="h-5 w-5" />;

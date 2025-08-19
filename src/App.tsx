@@ -5,59 +5,81 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/hooks/use-theme";
 import { HelmetProvider } from "react-helmet-async";
-import Index from "./pages/Index";
-import Introduction from "./pages/Introduction";
-import Fundamentals from "./pages/Fundamentals";
-import MachineLearning from "./pages/MachineLearning";
-import Tools from "./pages/Tools";
-import Projects from "./pages/Projects";
-import Resources from "./pages/Resources";
-import Community from "./pages/Community";
-import Blog from "./pages/Blog";
-import NotFound from "./pages/NotFound";
-import Glossary from "./pages/Glossary";
-import About from "./pages/About";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import Contact from "./pages/Contact";
-import MathStats from "./pages/fundamentals/MathStats";
-import Programming from "./pages/fundamentals/Programming";
-import Databases from "./pages/fundamentals/Databases";
-import DataPreparationRefactored from "./pages/fundamentals/DataPreparationRefactored";
+import { Suspense, lazy } from "react";
 
-// Import course pages
-import MathIntroCourse from "./pages/courses/math-stats/math-intro";
-import IntegralCalculusCourse from "./pages/courses/math-stats/integral-calculus";
+import ErrorBoundary from "@/components/ui/error-boundary";
+import { PageLoading } from "@/components/ui/loading-states";
 
-// Import new math-stats pages
-import { ProbabilityTheory, DescriptiveStatistics, LinearAlgebra, DifferentialCalculus, AdvancedStatistics, IntegralCalculus } from "./pages/fundamentals/math-stats";
+// Lazy load main pages for better performance
+const Index = lazy(() => import("./pages/Index"));
+const Introduction = lazy(() => import("./pages/Introduction"));
+const Fundamentals = lazy(() => import("./pages/Fundamentals"));
+const MachineLearning = lazy(() => import("./pages/MachineLearning"));
+const Tools = lazy(() => import("./pages/Tools"));
+const Projects = lazy(() => import("./pages/Projects"));
+const Resources = lazy(() => import("./pages/Resources"));
+const Community = lazy(() => import("./pages/Community"));
+const Blog = lazy(() => import("./pages/Blog"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Glossary = lazy(() => import("./pages/Glossary"));
+const About = lazy(() => import("./pages/About"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const Contact = lazy(() => import("./pages/Contact"));
+// Lazy load fundamentals pages
+const MathStats = lazy(() => import("./pages/fundamentals/MathStats"));
+const Programming = lazy(() => import("./pages/fundamentals/Programming"));
+const Databases = lazy(() => import("./pages/fundamentals/Databases"));
+const DataPreparationRefactored = lazy(() => import("./pages/fundamentals/DataPreparationRefactored"));
 
-// Import ML course pages
-import SupervisedLearning from "./pages/machine-learning/SupervisedLearning";
-import UnsupervisedLearning from "./pages/machine-learning/UnsupervisedLearning";
-import ReinforcementLearning from "./pages/machine-learning/ReinforcementLearning";
+// Lazy load course imports
+const MathIntroCourse = lazy(() => import("./pages/courses/math-stats/math-intro"));
+const IntegralCalculusCourse = lazy(() => import("./pages/courses/math-stats/integral-calculus"));
 
-// Import new course pages with normalized routes
-import CoursesIndex from "./pages/courses/CoursesIndex";
-import PythonBasics from "./pages/courses/programming/PythonBasics";
-import AppliedStatistics from "./pages/courses/statistics/AppliedStatistics";
-import SupervisedLearningCourse from "./pages/courses/machine-learning/SupervisedLearningCourse";
-import DatabaseFundamentals from "./pages/courses/databases/DatabaseFundamentals";
-import DataVisualization from "./pages/courses/dataviz/DataVisualization";
-import NaturalLanguageProcessing from "./pages/courses/nlp/NaturalLanguageProcessing";
-import DataVisualizationTools from "./pages/tools/DataVisualization";
+// Lazy load math-stats subpages
+const ProbabilityTheory = lazy(() => import("./pages/fundamentals/math-stats/ProbabilityTheory"));
+const DescriptiveStatistics = lazy(() => import("./pages/fundamentals/math-stats/DescriptiveStatistics"));
+const LinearAlgebra = lazy(() => import("./pages/fundamentals/math-stats/LinearAlgebra"));
+const DifferentialCalculus = lazy(() => import("./pages/fundamentals/math-stats/DifferentialCalculus"));
+const AdvancedStatistics = lazy(() => import("./pages/fundamentals/math-stats/AdvancedStatistics"));
+const IntegralCalculus = lazy(() => import("./pages/fundamentals/math-stats/IntegralCalculus"));
+
+// Lazy load Machine Learning imports
+const SupervisedLearning = lazy(() => import("./pages/machine-learning/SupervisedLearning"));
+const UnsupervisedLearning = lazy(() => import("./pages/machine-learning/UnsupervisedLearning"));
+const ReinforcementLearning = lazy(() => import("./pages/machine-learning/ReinforcementLearning"));
+
+// Lazy load Course pages
+const CoursesIndex = lazy(() => import("./pages/courses/CoursesIndex"));
+const PythonBasics = lazy(() => import("./pages/courses/programming/PythonBasics"));
+const AppliedStatistics = lazy(() => import("./pages/courses/statistics/AppliedStatistics"));
+const SupervisedLearningCourse = lazy(() => import("./pages/courses/machine-learning/SupervisedLearningCourse"));
+const DatabaseFundamentals = lazy(() => import("./pages/courses/databases/DatabaseFundamentals"));
+const DataVisualization = lazy(() => import("./pages/courses/dataviz/DataVisualization"));
+const NaturalLanguageProcessing = lazy(() => import("./pages/courses/nlp/NaturalLanguageProcessing"));
+const DataVisualizationTools = lazy(() => import("./pages/tools/DataVisualization"));
 
 const queryClient = new QueryClient();
 
+/**
+ * Loading fallback component for lazy-loaded routes
+ * Provides a consistent loading experience across the application
+ */
+const PageLoadingFallback = () => (
+  <PageLoading message="Chargement de la page..." />
+);
+
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="light">
-      <HelmetProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
+  <ErrorBoundary showDetails={process.env.NODE_ENV === 'development'}>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="light">
+        <HelmetProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Suspense fallback={<PageLoadingFallback />}>
+              <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/introduction" element={<Introduction />} />
               <Route path="/fundamentals" element={<Fundamentals />} />
@@ -117,12 +139,14 @@ const App = () => (
               <Route path="/ml/supervised" element={<Navigate to="/courses/machine-learning/supervised-learning" replace />} />
               
               <Route path="*" element={<NotFound />} />
-            </Routes>
+              </Routes>
+            </Suspense>
           </BrowserRouter>
         </TooltipProvider>
       </HelmetProvider>
     </ThemeProvider>
   </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

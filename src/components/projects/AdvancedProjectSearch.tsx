@@ -60,7 +60,7 @@ export function AdvancedProjectSearch({ onSearchChange }: AdvancedProjectSearchP
 
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  const handleFilterChange = (key: keyof SearchFilters, value: any) => {
+  const handleFilterChange = (key: keyof SearchFilters, value: string | string[]) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
     onSearchChange(newFilters);

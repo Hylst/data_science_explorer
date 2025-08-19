@@ -1,11 +1,10 @@
 
-import React from "react";
 import Layout from "@/components/layout/Layout";
 import UnifiedHeroSection from "@/components/ui/unified-hero-section";
-import { Brain, Calculator, ChartBar, BookOpen, Users, Trophy, Clock, Target, TrendingUp, Lightbulb } from "lucide-react";
+import { Brain, Calculator, ChartBar, Trophy, Target, TrendingUp, Lightbulb } from "lucide-react";
 import MathVisualsSection from "@/components/fundamentals/MathVisualsSection";
 import BackToTop from "@/components/ui/back-to-top";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 // Import des nouveaux composants modulaires
 import MathLearningPaths from "@/components/fundamentals/math/MathLearningPaths";
@@ -14,41 +13,6 @@ import MathResourcesTools from "@/components/fundamentals/math/MathResourcesTool
 import UnifiedMathCourses from "@/components/fundamentals/math/UnifiedMathCourses";
 
 const MathStats = () => {
-  const sidebar = {
-    items: [
-      { 
-        title: "Cours Disponibles", 
-        href: "#available-courses",
-        icon: <BookOpen className="h-4 w-4" />,
-        isActive: true
-      },
-      { 
-        title: "Cours à Venir", 
-        href: "#upcoming-courses",
-        icon: <Clock className="h-4 w-4" />
-      },
-      { 
-        title: "Parcours d'Apprentissage", 
-        href: "#learning-paths",
-        icon: <Target className="h-4 w-4" />
-      },
-      { 
-        title: "Applications Pratiques", 
-        href: "#practical-applications",
-        icon: <TrendingUp className="h-4 w-4" />
-      },
-      { 
-        title: "Ressources & Outils", 
-        href: "#resources-tools",
-        icon: <Calculator className="h-4 w-4" />
-      },
-      { 
-        title: "Visualisations", 
-        href: "#math-visuals",
-        icon: <ChartBar className="h-4 w-4" />
-      }
-    ]
-  };
 
   const fundamentalConcepts = [
     {

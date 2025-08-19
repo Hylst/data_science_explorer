@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useFormErrorHandling, useAsyncOperation } from "@/hooks/use-error-handling";
+import { LoadingSpinner } from "@/components/ui/loading-states";
 import { Mail, MessageSquare, User, Send, Github, Linkedin, Globe } from "lucide-react";
 
 /**
@@ -24,7 +26,15 @@ const Contact = () => {
     subject: "",
     message: ""
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Use new error handling hooks
+  const formErrorHandling = useFormErrorHandling();
+  const submitOperation = useAsyncOperation({
+    showToast: true,
+    onError: (error) => {
+      console.error('Form submission error:', error);
+    }
+  });
 
   /**
    * Handles form input changes
@@ -39,38 +49,79 @@ const Contact = () => {
   };
 
   /**
-   * Handles form submission
+   * Validates form data
+   * @returns boolean indicating if form is valid
+   */
+  const validateForm = (): boolean => {
+    formErrorHandling.clearAllErrors();
+    let isValid = true;
+
+    if (!formData.name.trim()) {
+      formErrorHandling.setFieldError('name', 'Le nom est requis');
+      isValid = false;
+    }
+
+    if (!formData.email.trim()) {
+      formErrorHandling.setFieldError('email', 'L\'email est requis');
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      formErrorHandling.setFieldError('email', 'Format d\'email invalide');
+      isValid = false;
+    }
+
+    if (!formData.subject.trim()) {
+      formErrorHandling.setFieldError('subject', 'Le sujet est requis');
+      isValid = false;
+    }
+
+    if (!formData.message.trim()) {
+      formErrorHandling.setFieldError('message', 'Le message est requis');
+      isValid = false;
+    } else if (formData.message.trim().length < 10) {
+      formErrorHandling.setFieldError('message', 'Le message doit contenir au moins 10 caractères');
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
+  /**
+   * Handles form submission with validation and error handling
    * @param e - Form submit event
    */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    
+    if (!validateForm()) {
+      return;
+    }
 
-    // Simulate form submission (replace with actual implementation)
-    try {
-      // Here you would typically send the form data to your backend
+    const result = await submitOperation.execute(async () => {
+      // Simulate form submission (replace with actual API call)
       await new Promise(resolve => setTimeout(resolve, 1000));
       
+      // Simulate potential errors for testing
+      if (Math.random() < 0.1) {
+        throw new Error('Erreur de réseau lors de l\'envoi du message');
+      }
+      
+      return { success: true };
+    });
+
+    if (result) {
       toast({
         title: "Message envoyé !",
         description: "Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.",
       });
       
-      // Reset form
+      // Reset form on success
       setFormData({
         name: "",
         email: "",
         subject: "",
         message: ""
       });
-    } catch (error) {
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+      formErrorHandling.clearAllErrors();
     }
   };
 
@@ -206,7 +257,11 @@ const Contact = () => {
                         onChange={handleInputChange}
                         required
                         placeholder="Votre nom"
+                        className={formErrorHandling.getFieldError('name') ? 'border-red-500' : ''}
                       />
+                      {formErrorHandling.getFieldError('name') && (
+                        <p className="text-sm text-red-600">{formErrorHandling.getFieldError('name')}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email *</Label>
@@ -218,7 +273,11 @@ const Contact = () => {
                         onChange={handleInputChange}
                         required
                         placeholder="votre.email@exemple.com"
+                        className={formErrorHandling.getFieldError('email') ? 'border-red-500' : ''}
                       />
+                      {formErrorHandling.getFieldError('email') && (
+                        <p className="text-sm text-red-600">{formErrorHandling.getFieldError('email')}</p>
+                      )}
                     </div>
                   </div>
                   
@@ -232,7 +291,11 @@ const Contact = () => {
                       onChange={handleInputChange}
                       required
                       placeholder="Sujet de votre message"
+                      className={formErrorHandling.getFieldError('subject') ? 'border-red-500' : ''}
                     />
+                    {formErrorHandling.getFieldError('subject') && (
+                      <p className="text-sm text-red-600">{formErrorHandling.getFieldError('subject')}</p>
+                    )}
                   </div>
                   
                   <div className="space-y-2">
@@ -245,17 +308,21 @@ const Contact = () => {
                       required
                       placeholder="Votre message..."
                       rows={6}
+                      className={formErrorHandling.getFieldError('message') ? 'border-red-500' : ''}
                     />
+                    {formErrorHandling.getFieldError('message') && (
+                      <p className="text-sm text-red-600">{formErrorHandling.getFieldError('message')}</p>
+                    )}
                   </div>
                   
                   <Button 
                     type="submit" 
                     className="w-full" 
-                    disabled={isSubmitting}
+                    disabled={submitOperation.isLoading}
                   >
-                    {isSubmitting ? (
+                    {submitOperation.isLoading ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        <LoadingSpinner size="sm" className="mr-2" />
                         Envoi en cours...
                       </>
                     ) : (
@@ -265,6 +332,28 @@ const Contact = () => {
                       </>
                     )}
                   </Button>
+                  
+                  {/* Display general form errors */}
+                  {formErrorHandling.hasGeneralError && (
+                    <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                      <p className="text-sm text-red-600">{formErrorHandling.generalError}</p>
+                    </div>
+                  )}
+                  
+                  {/* Display retry option if there's an error */}
+                  {submitOperation.hasError && submitOperation.canRetry && (
+                    <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                      <p className="text-sm text-yellow-800 mb-2">Une erreur s'est produite lors de l'envoi.</p>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => handleSubmit({ preventDefault: () => {} } as React.FormEvent)}
+                        className="text-yellow-800 border-yellow-300 hover:bg-yellow-100"
+                      >
+                        Réessayer ({submitOperation.retryCount}/{3})
+                      </Button>
+                    </div>
+                  )}
                 </form>
                 
                 <div className="mt-4 p-4 bg-blue-50 rounded-lg">

@@ -1,16 +1,15 @@
 import { ArrowRight } from "lucide-react";
-import DataScienceMap from "./DataScienceMap";
 import UnifiedHeroSection from "@/components/ui/unified-hero-section";
 
 const Hero = () => {
   return (
     <UnifiedHeroSection
       variant="home"
-      title="Explorez le monde de la Data Science"
-      description="Une plateforme éducative francophone et libre d'accès pour apprendre la data science. Développée progressivement par Geoffroy Streit, elle réunit les connaissances essentielles pour évoluer dans ce domaine passionnant."
+      title="Apprendre la Data Science Ensemble"
+      description="Un projet personnel de partage de connaissances en data science. Créé par Geoffroy Streit, actuellement en reconversion professionnelle, ce site rassemble mes apprentissages et découvertes dans ce domaine fascinant."
       alert={{
-        message: "🚧 Projet en cours de développement",
-        details: "En tant qu'apprenant, compiler ces cours m'aide à mieux synthétiser, retenir et mettre en application mes connaissances tout en les rendant accessibles à la communauté.",
+        message: "📚 Projet d'apprentissage partagé",
+        details: "En tant qu'apprenant en reconversion, je partage ici mes notes, synthèses et projets pour aider d'autres personnes dans leur parcours d'apprentissage de la data science.",
         variant: "info"
       }}
       actions={[
@@ -26,8 +25,7 @@ const Hero = () => {
           variant: "outline"
         }
       ]}
-      sideContent={<DataScienceMap />}
-      layout="split"
+      layout="centered"
       decorative={true}
     />
   );

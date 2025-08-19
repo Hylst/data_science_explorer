@@ -1,9 +1,9 @@
 
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CourseEquation from "@/components/courses/CourseEquation";
 import CourseHighlight from "@/components/courses/CourseHighlight";
+import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { Brain, Camera, Music, Smartphone } from "lucide-react";
 
 const ApplicationsSection = () => {
@@ -158,7 +158,7 @@ const ApplicationsSection = () => {
           
           <div className="bg-gray-50 p-4 rounded-lg">
             <h4 className="font-semibold mb-2">Matrice des notes (R) :</h4>
-            <div className="overflow-x-auto">
+            <ResponsiveTable stickyHeader={true}>
               <table className="text-sm border-collapse border border-gray-300">
                 <thead>
                   <tr>
@@ -193,7 +193,7 @@ const ApplicationsSection = () => {
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </ResponsiveTable>
             
             <div className="mt-4 bg-blue-100 p-3 rounded">
               <p className="text-sm">

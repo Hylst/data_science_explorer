@@ -1,17 +1,31 @@
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import CourseEquation from "@/components/courses/CourseEquation";
 import CourseHighlight from "@/components/courses/CourseHighlight";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, AreaChart, Area } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
 import { TrendingUp, BarChart3, AlertCircle, Target, Zap } from "lucide-react";
+
+// Type definitions for better TypeScript support
+interface EquipeData {
+  data: number[];
+  moyenne: number;
+  ecartType: number;
+  couleur: string;
+  interpretation: string;
+}
+
+interface Scenario {
+  title: string;
+  description: string;
+  equipes: Record<string, EquipeData>;
+}
 
 const DispersionSection = () => {
   const [selectedScenario, setSelectedScenario] = useState("entreprise");
 
-  const scenarios = {
+  const scenarios: Record<string, Scenario> = {
     entreprise: {
       title: "🏢 Performances d'équipes",
       description: "Productivité de 3 équipes sur 6 mois",
@@ -105,8 +119,8 @@ const DispersionSection = () => {
     cv: (equipe.ecartType / equipe.moyenne * 100).toFixed(1)
   }));
 
-  const timeSeriesData = currentScenario.equipes[Object.keys(currentScenario.equipes)[0]].data.map((_, index) => {
-    const point: any = { periode: `P${index + 1}` };
+  const timeSeriesData = currentScenario.equipes[Object.keys(currentScenario.equipes)[0]].data.map((_, index: number) => {
+    const point: Record<string, string | number> = { periode: `P${index + 1}` };
     Object.entries(currentScenario.equipes).forEach(([nom, equipe]) => {
       point[nom] = equipe.data[index];
     });

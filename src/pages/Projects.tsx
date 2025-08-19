@@ -15,7 +15,7 @@ import { useSectionTracker } from "@/hooks/use-section-tracker";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+
 import { 
   Rocket, 
   Target, 
@@ -39,7 +39,7 @@ const Projects = () => {
     level: "all",
     category: "all",
     duration: "all",
-    technologies: [],
+    technologies: [] as string[],
     status: "all"
   });
   
@@ -50,7 +50,14 @@ const Projects = () => {
     onSectionChange: () => {} 
   });
 
-  const handleSearchChange = (filters: any) => {
+  const handleSearchChange = (filters: {
+    query: string;
+    level: string;
+    category: string;
+    duration: string;
+    technologies: string[];
+    status: string;
+  }) => {
     setSearchFilters(filters);
     if (filters.query) {
       setActiveFilter(filters.query.toLowerCase());
