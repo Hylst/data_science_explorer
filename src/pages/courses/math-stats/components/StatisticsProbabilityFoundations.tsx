@@ -1,9 +1,7 @@
 
-import React from "react";
 import { Target, BarChart3, TrendingUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CourseEquation from "@/components/courses/CourseEquation";
-import CourseHighlight from "@/components/courses/CourseHighlight";
 
 const StatisticsProbabilityFoundations = () => {
   const descriptiveStats = [
@@ -69,6 +67,54 @@ const StatisticsProbabilityFoundations = () => {
         "Additivité"
       ],
       applications: ["Nombre de visiteurs/heure", "Pannes système", "Emails reçus"]
+    },
+    {
+      name: "Distribution Exponentielle",
+      symbol: "Exp(λ)",
+      formula: "f(x) = \\lambda e^{-\\lambda x}, \\quad x \\geq 0",
+      properties: [
+        "Temps d'attente entre événements",
+        "Propriété d'absence de mémoire",
+        "Moyenne = 1/λ, Variance = 1/λ²",
+        "Queue lourde à droite"
+      ],
+      applications: ["Durée de vie composants", "Temps entre pannes", "Temps de service"]
+    },
+    {
+      name: "Distribution Uniforme",
+      symbol: "U(a, b)",
+      formula: "f(x) = \\frac{1}{b-a}, \\quad a \\leq x \\leq b",
+      properties: [
+        "Probabilité constante sur [a,b]",
+        "Moyenne = (a+b)/2",
+        "Variance = (b-a)²/12",
+        "Maximum d'entropie pour support borné"
+      ],
+      applications: ["Génération nombres aléatoires", "Modélisation d'incertitude", "Monte Carlo"]
+    },
+    {
+      name: "Distribution Chi-carré",
+      symbol: "χ²(k)",
+      formula: "f(x) = \\frac{1}{2^{k/2}\\Gamma(k/2)} x^{k/2-1} e^{-x/2}",
+      properties: [
+        "k degrés de liberté",
+        "Somme de k variables N(0,1)²",
+        "Moyenne = k, Variance = 2k",
+        "Asymétrique, queue droite"
+      ],
+      applications: ["Tests d'indépendance", "Tests d'ajustement", "Intervalles de confiance pour variance"]
+    },
+    {
+      name: "Distribution t de Student",
+      symbol: "t(ν)",
+      formula: "f(x) = \\frac{\\Gamma(\\frac{\\nu+1}{2})}{\\sqrt{\\nu\\pi}\\Gamma(\\frac{\\nu}{2})} \\left(1+\\frac{x^2}{\\nu}\\right)^{-\\frac{\\nu+1}{2}}",
+      properties: [
+        "ν degrés de liberté",
+        "Symétrique, queues plus lourdes que normale",
+        "Converge vers N(0,1) quand ν → ∞",
+        "Variance = ν/(ν-2) pour ν > 2"
+      ],
+      applications: ["Tests sur moyennes (σ inconnu)", "Intervalles de confiance", "Régression linéaire"]
     }
   ];
 

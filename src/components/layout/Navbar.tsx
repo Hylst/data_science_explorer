@@ -22,9 +22,9 @@ const Navbar = () => {
       name: "Fondamentaux", 
       path: "/fundamentals",
       subItems: [
-        { name: "Traiter les données", path: "/fundamentals/data-preparation" },
         { name: "Maths & Stats", path: "/fundamentals/math-stats" },
         { name: "Programmation", path: "/fundamentals/programming" },
+        { name: "Traiter les données", path: "/fundamentals/data-preparation" },
         { name: "Bases de données", path: "/fundamentals/databases" }
       ]
     },

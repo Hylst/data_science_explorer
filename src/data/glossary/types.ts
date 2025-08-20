@@ -3,11 +3,24 @@
  * Provides strong typing for all glossary-related data structures
  */
 
+/**
+ * Enhanced GlossaryEntry interface combining best of both systems
+ */
 export interface GlossaryEntry {
   term: string;
   description: string;
+  shortDefinition?: string; // For backward compatibility
+  longDefinition?: string;
   category: GlossaryCategory;
   icon: string;
+  examples?: string[];
+  relatedTerms?: string[];
+  source?: string;
+  sourceUrl?: string;
+  domain?: string;
+  level?: 'beginner' | 'intermediate' | 'advanced';
+  synonyms?: string[];
+  englishTerm?: string;
 }
 
 /**

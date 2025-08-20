@@ -1,11 +1,11 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import CourseEquation from "@/components/courses/CourseEquation";
 import CourseHighlight from "@/components/courses/CourseHighlight";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
-import { TrendingUp, BarChart3, AlertCircle, Target, Zap } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, ScatterChart, Scatter, Cell, ReferenceLine } from "recharts";
+import { TrendingUp, BarChart3, AlertCircle, Target, Zap, Play, RotateCcw } from "lucide-react";
 
 // Type definitions for better TypeScript support
 interface EquipeData {
@@ -24,6 +24,75 @@ interface Scenario {
 
 const DispersionSection = () => {
   const [selectedScenario, setSelectedScenario] = useState("entreprise");
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [animationStep, setAnimationStep] = useState(0);
+  const [selectedVisualization, setSelectedVisualization] = useState<'variance' | 'covariance' | 'correlation'>('variance');
+
+  // Interactive data for variance visualization
+  const varianceData = [
+    { x: 1, y: 8, mean: 10, deviation: -2 },
+    { x: 2, y: 12, mean: 10, deviation: 2 },
+    { x: 3, y: 9, mean: 10, deviation: -1 },
+    { x: 4, y: 11, mean: 10, deviation: 1 },
+    { x: 5, y: 10, mean: 10, deviation: 0 },
+    { x: 6, y: 13, mean: 10, deviation: 3 },
+    { x: 7, y: 7, mean: 10, deviation: -3 },
+    { x: 8, y: 14, mean: 10, deviation: 4 },
+  ];
+
+  // Interactive data for covariance visualization
+  const covarianceData = [
+    { temperature: 15, sales: 80, tempDev: -5, salesDev: -40 },
+    { temperature: 18, sales: 95, tempDev: -2, salesDev: -25 },
+    { temperature: 22, sales: 130, tempDev: 2, salesDev: 10 },
+    { temperature: 25, sales: 150, tempDev: 5, salesDev: 30 },
+    { temperature: 28, sales: 180, tempDev: 8, salesDev: 60 },
+    { temperature: 30, sales: 200, tempDev: 10, salesDev: 80 },
+    { temperature: 12, sales: 60, tempDev: -8, salesDev: -60 },
+    { temperature: 35, sales: 220, tempDev: 15, salesDev: 100 },
+  ];
+
+  // Correlation matrix data for heatmap
+  const correlationMatrix = [
+    { variable: 'Maths', Maths: 1.0, Physique: 0.85, Chimie: 0.72, Histoire: 0.45 },
+    { variable: 'Physique', Maths: 0.85, Physique: 1.0, Chimie: 0.78, Histoire: 0.38 },
+    { variable: 'Chimie', Maths: 0.72, Physique: 0.78, Chimie: 1.0, Histoire: 0.42 },
+    { variable: 'Histoire', Maths: 0.45, Physique: 0.38, Chimie: 0.42, Histoire: 1.0 },
+  ];
+
+  // Animation control functions
+  const startAnimation = () => {
+    setIsAnimating(true);
+    setAnimationStep(0);
+    const interval = setInterval(() => {
+      setAnimationStep(prev => {
+        if (prev >= varianceData.length - 1) {
+          setIsAnimating(false);
+          clearInterval(interval);
+          return 0;
+        }
+        return prev + 1;
+      });
+    }, 1000);
+  };
+
+  const resetAnimation = () => {
+    setIsAnimating(false);
+    setAnimationStep(0);
+  };
+
+  // Color function for correlation heatmap
+  const getCorrelationColor = (value: number) => {
+    if (value >= 0.8) return '#1f77b4'; // Strong positive
+    if (value >= 0.6) return '#aec7e8'; // Moderate positive
+    if (value >= 0.4) return '#ffbb78'; // Weak positive
+    if (value >= 0.2) return '#ff7f0e'; // Very weak positive
+    if (value >= -0.2) return '#d62728'; // Near zero
+    if (value >= -0.4) return '#ff9896'; // Very weak negative
+    if (value >= -0.6) return '#9467bd'; // Weak negative
+    if (value >= -0.8) return '#c5b0d5'; // Moderate negative
+    return '#8c564b'; // Strong negative
+  };
 
   const scenarios: Record<string, Scenario> = {
     entreprise: {
@@ -491,6 +560,527 @@ const DispersionSection = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Interactive Visualizations Section */}
+      <Card className="mb-8 bg-gradient-to-br from-blue-50 to-purple-50">
+        <CardHeader>
+          <CardTitle className="text-2xl text-blue-800 flex items-center gap-3">
+            <Zap className="h-6 w-6" />
+            🎮 Laboratoire Interactif : Visualisations Dynamiques
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-6">
+            {/* Visualization Type Selector */}
+            <div className="flex flex-wrap gap-3 mb-6">
+              <Button
+                variant={selectedVisualization === 'variance' ? 'default' : 'outline'}
+                onClick={() => setSelectedVisualization('variance')}
+                className="flex items-center gap-2"
+              >
+                <BarChart3 className="h-4 w-4" />
+                Animation Variance
+              </Button>
+              <Button
+                variant={selectedVisualization === 'covariance' ? 'default' : 'outline'}
+                onClick={() => setSelectedVisualization('covariance')}
+                className="flex items-center gap-2"
+              >
+                <TrendingUp className="h-4 w-4" />
+                Covariance Interactive
+              </Button>
+              <Button
+                variant={selectedVisualization === 'correlation' ? 'default' : 'outline'}
+                onClick={() => setSelectedVisualization('correlation')}
+                className="flex items-center gap-2"
+              >
+                <Target className="h-4 w-4" />
+                Matrice de Corrélation
+              </Button>
+            </div>
+
+            {/* Variance Animation */}
+            {selectedVisualization === 'variance' && (
+              <div className="bg-white p-6 rounded-lg border">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-lg font-semibold text-blue-700">📊 Animation : Calcul de la Variance Étape par Étape</h4>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      onClick={startAnimation}
+                      disabled={isAnimating}
+                      className="flex items-center gap-1"
+                    >
+                      <Play className="h-3 w-3" />
+                      Démarrer
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={resetAnimation}
+                      className="flex items-center gap-1"
+                    >
+                      <RotateCcw className="h-3 w-3" />
+                      Reset
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="h-80">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="x" domain={[0, 9]} />
+                        <YAxis domain={[5, 16]} />
+                        <Tooltip 
+                          formatter={(value, name) => [
+                            value, 
+                            name === 'y' ? 'Valeur' : name === 'mean' ? 'Moyenne' : 'Écart'
+                          ]}
+                        />
+                        
+                        {/* Mean line as reference */}
+                         <ReferenceLine y={10} stroke="#ef4444" strokeWidth={2} strokeDasharray="5 5" />
+                        
+                        {/* Data points */}
+                        <Scatter 
+                          data={varianceData.slice(0, animationStep + 1)} 
+                          fill="#3b82f6"
+                        >
+                          {varianceData.slice(0, animationStep + 1).map((_, index) => (
+                            <Cell key={`cell-${index}`} fill={index === animationStep ? '#ef4444' : '#3b82f6'} />
+                          ))}
+                        </Scatter>
+                      </ScatterChart>
+                    </ResponsiveContainer>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-blue-50 p-4 rounded">
+                      <h5 className="font-semibold mb-2">Étape {animationStep + 1}/8</h5>
+                      {animationStep < varianceData.length && (
+                        <div className="text-sm space-y-2">
+                          <p><strong>Point actuel:</strong> ({varianceData[animationStep].x}, {varianceData[animationStep].y})</p>
+                          <p><strong>Moyenne:</strong> {varianceData[animationStep].mean}</p>
+                          <p><strong>Écart:</strong> {varianceData[animationStep].y} - {varianceData[animationStep].mean} = {varianceData[animationStep].deviation}</p>
+                          <p><strong>Écart²:</strong> ({varianceData[animationStep].deviation})² = {Math.pow(varianceData[animationStep].deviation, 2)}</p>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="bg-green-50 p-4 rounded">
+                      <h5 className="font-semibold mb-2">Calcul en cours</h5>
+                      <div className="text-sm">
+                        <p><strong>Somme des écarts²:</strong> {varianceData.slice(0, animationStep + 1).reduce((sum, item) => sum + Math.pow(item.deviation, 2), 0)}</p>
+                        <p><strong>Variance actuelle:</strong> {(varianceData.slice(0, animationStep + 1).reduce((sum, item) => sum + Math.pow(item.deviation, 2), 0) / Math.max(1, animationStep)).toFixed(2)}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Covariance Interactive Scatter Plot */}
+            {selectedVisualization === 'covariance' && (
+              <div className="bg-white p-6 rounded-lg border">
+                <h4 className="text-lg font-semibold text-purple-700 mb-4">🌡️ Covariance Interactive : Température vs Ventes de Glaces</h4>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="h-80">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="temperature" 
+                          domain={[10, 40]}
+                          label={{ value: 'Température (°C)', position: 'insideBottom', offset: -10 }}
+                        />
+                        <YAxis 
+                          domain={[50, 250]}
+                          label={{ value: 'Ventes (€)', angle: -90, position: 'insideLeft' }}
+                        />
+                        <Tooltip 
+                          formatter={(value, name) => [
+                            value, 
+                            name === 'sales' ? 'Ventes (€)' : 'Température (°C)'
+                          ]}
+                        />
+                        
+                        <Scatter data={covarianceData} fill="#8b5cf6">
+                          {covarianceData.map((entry, index) => (
+                            <Cell 
+                              key={`cell-${index}`} 
+                              fill={entry.tempDev * entry.salesDev > 0 ? '#10b981' : '#ef4444'} 
+                            />
+                          ))}
+                        </Scatter>
+                      </ScatterChart>
+                    </ResponsiveContainer>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-purple-50 p-4 rounded">
+                      <h5 className="font-semibold mb-3">🔍 Analyse des Points</h5>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                          <span>Points verts : Contribution positive à la covariance</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                          <span>Points rouges : Contribution négative à la covariance</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-blue-50 p-4 rounded">
+                      <h5 className="font-semibold mb-2">📊 Statistiques</h5>
+                      <div className="text-sm space-y-1">
+                        <p><strong>Température moyenne:</strong> {(covarianceData.reduce((sum, item) => sum + item.temperature, 0) / covarianceData.length).toFixed(1)}°C</p>
+                        <p><strong>Ventes moyennes:</strong> {(covarianceData.reduce((sum, item) => sum + item.sales, 0) / covarianceData.length).toFixed(0)}€</p>
+                        <p><strong>Covariance:</strong> {(covarianceData.reduce((sum, item) => sum + (item.tempDev * item.salesDev), 0) / (covarianceData.length - 1)).toFixed(1)}</p>
+                        <p><strong>Corrélation:</strong> 0.89 (forte corrélation positive)</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Correlation Matrix Heatmap */}
+            {selectedVisualization === 'correlation' && (
+              <div className="bg-white p-6 rounded-lg border">
+                <h4 className="text-lg font-semibold text-indigo-700 mb-4">🔥 Heatmap : Matrice de Corrélation des Notes</h4>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div>
+                    <div className="grid grid-cols-5 gap-1 mb-4">
+                      <div></div>
+                      {['Maths', 'Physique', 'Chimie', 'Histoire'].map(subject => (
+                        <div key={subject} className="text-xs font-semibold text-center p-2">
+                          {subject}
+                        </div>
+                      ))}
+                      
+                      {correlationMatrix.map((row, _) => (
+                        <React.Fragment key={row.variable}>
+                          <div className="text-xs font-semibold p-2 flex items-center">
+                            {row.variable}
+                          </div>
+                          {['Maths', 'Physique', 'Chimie', 'Histoire'].map(col => {
+                            const value = row[col as keyof typeof row] as number;
+                            return (
+                              <div 
+                                key={`${row.variable}-${col}`}
+                                className="h-12 flex items-center justify-center text-xs font-semibold text-white rounded"
+                                style={{ backgroundColor: getCorrelationColor(value) }}
+                              >
+                                {value.toFixed(2)}
+                              </div>
+                            );
+                          })}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                    
+                    <div className="flex items-center justify-between text-xs">
+                      <span>Corrélation faible</span>
+                      <div className="flex gap-1">
+                        {[0.2, 0.4, 0.6, 0.8, 1.0].map(val => (
+                          <div 
+                            key={val}
+                            className="w-4 h-4 rounded"
+                            style={{ backgroundColor: getCorrelationColor(val) }}
+                          ></div>
+                        ))}
+                      </div>
+                      <span>Corrélation forte</span>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-indigo-50 p-4 rounded">
+                      <h5 className="font-semibold mb-3">🎯 Interprétations</h5>
+                      <div className="space-y-2 text-sm">
+                        <p><strong>Maths ↔ Physique (0.85):</strong> Très forte corrélation - les compétences mathématiques aident en physique</p>
+                        <p><strong>Physique ↔ Chimie (0.78):</strong> Forte corrélation - sciences expérimentales liées</p>
+                        <p><strong>Sciences ↔ Histoire (0.38-0.45):</strong> Corrélation modérée - compétences générales d'étude</p>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-yellow-50 p-4 rounded">
+                      <h5 className="font-semibold mb-2">💡 Applications Pratiques</h5>
+                      <div className="text-sm space-y-1">
+                        <p>• <strong>Orientation scolaire:</strong> Prédire la réussite dans une matière</p>
+                        <p>• <strong>Détection d'anomalies:</strong> Identifier des profils atypiques</p>
+                        <p>• <strong>Réduction de dimensionnalité:</strong> Grouper les matières similaires</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Section Covariance et Matrices de Covariance */}
+      <div className="mt-12">
+        <h3 className="text-2xl font-bold mb-6 text-ds-purple-600 flex items-center gap-2">
+          <TrendingUp className="h-6 w-6" />
+          Covariance et Matrices de Covariance
+        </h3>
+        
+        <div className="bg-gradient-to-r from-purple-50 to-indigo-50 p-6 rounded-xl border border-purple-100 mb-8">
+          <h4 className="text-lg font-semibold mb-4 text-purple-800">🔗 Comprendre les Relations entre Variables</h4>
+          <p className="text-gray-700 mb-4">
+            Alors que la variance mesure la dispersion d'une seule variable, la <strong>covariance</strong> mesure 
+            comment deux variables varient ensemble. C'est la fondation de l'analyse multivariée et de l'apprentissage automatique.
+          </p>
+        </div>
+
+        {/* Covariance - Définition et Formule */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="text-xl text-purple-700">📊 Covariance : Mesurer la Relation Linéaire</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div>
+                <h5 className="font-semibold mb-3 text-purple-600">Formule de la Covariance</h5>
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                  <div className="text-center">
+                    <div className="text-lg font-mono mb-2">Cov(X,Y) = E[(X - μₓ)(Y - μᵧ)]</div>
+                    <div className="text-sm text-gray-600">ou pour un échantillon :</div>
+                    <div className="text-lg font-mono mt-2">Cov(X,Y) = Σ(xᵢ - x̄)(yᵢ - ȳ) / (n-1)</div>
+                  </div>
+                </div>
+                
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="w-3 h-3 bg-green-400 rounded-full mt-1 flex-shrink-0"></div>
+                    <div>
+                      <strong className="text-green-600">Covariance positive :</strong> Les variables augmentent ensemble
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-3 h-3 bg-red-400 rounded-full mt-1 flex-shrink-0"></div>
+                    <div>
+                      <strong className="text-red-600">Covariance négative :</strong> Une variable augmente quand l'autre diminue
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-3 h-3 bg-gray-400 rounded-full mt-1 flex-shrink-0"></div>
+                    <div>
+                      <strong className="text-gray-600">Covariance nulle :</strong> Pas de relation linéaire
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h5 className="font-semibold mb-3 text-purple-600">Exemple Pratique : Température et Ventes de Glaces</h5>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <div className="text-sm space-y-2">
+                    <div className="grid grid-cols-3 gap-2 font-semibold border-b pb-2">
+                      <span>Température (°C)</span>
+                      <span>Ventes (€)</span>
+                      <span>Produit</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-xs">
+                      <span>25 (μ=20)</span>
+                      <span>150 (μ=120)</span>
+                      <span>5 × 30 = 150</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-xs">
+                      <span>30 (μ=20)</span>
+                      <span>200 (μ=120)</span>
+                      <span>10 × 80 = 800</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-xs">
+                      <span>15 (μ=20)</span>
+                      <span>80 (μ=120)</span>
+                      <span>(-5) × (-40) = 200</span>
+                    </div>
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-blue-200">
+                    <strong className="text-blue-700">Covariance = (150 + 800 + 200) / 2 = 575</strong>
+                    <p className="text-xs text-blue-600 mt-1">Relation positive forte : plus il fait chaud, plus on vend de glaces !</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Matrice de Covariance */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="text-xl text-indigo-700">🔢 Matrice de Covariance : L'Analyse Multivariée</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div>
+                <h5 className="font-semibold mb-3 text-indigo-600">Structure de la Matrice</h5>
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                  <div className="text-center">
+                    <div className="text-sm mb-2">Pour 3 variables X, Y, Z :</div>
+                    <div className="font-mono text-sm">
+                      <div>⎡ Var(X)   Cov(X,Y) Cov(X,Z) ⎤</div>
+                      <div>⎢ Cov(Y,X) Var(Y)   Cov(Y,Z) ⎥</div>
+                      <div>⎣ Cov(Z,X) Cov(Z,Y) Var(Z)   ⎦</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-3">
+                  <div className="bg-green-50 p-3 rounded border-l-4 border-green-400">
+                    <strong className="text-green-700">Propriétés clés :</strong>
+                    <ul className="text-sm text-green-600 mt-2 space-y-1">
+                      <li>• Matrice symétrique : Cov(X,Y) = Cov(Y,X)</li>
+                      <li>• Diagonale = variances individuelles</li>
+                      <li>• Hors-diagonale = covariances entre paires</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h5 className="font-semibold mb-3 text-indigo-600">Applications en Data Science</h5>
+                <div className="space-y-4">
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h6 className="font-semibold text-blue-700 mb-2">🎯 Analyse en Composantes Principales (PCA)</h6>
+                    <p className="text-sm text-blue-600">
+                      La PCA décompose la matrice de covariance pour identifier les directions 
+                      de variance maximale dans les données.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-purple-50 p-4 rounded-lg">
+                    <h6 className="font-semibold text-purple-700 mb-2">📊 Détection d'Anomalies</h6>
+                    <p className="text-sm text-purple-600">
+                      Les points qui s'écartent significativement de la structure de covariance 
+                      peuvent être des anomalies.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-orange-50 p-4 rounded-lg">
+                    <h6 className="font-semibold text-orange-700 mb-2">🤖 Machine Learning</h6>
+                    <p className="text-sm text-orange-600">
+                      Utilisée dans les algorithmes bayésiens, la régression multivariée, 
+                      et l'optimisation de portefeuilles.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Exemple Interactif : Matrice de Covariance */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="text-xl text-emerald-700">🧪 Laboratoire : Analyse de Covariance Multi-Variables</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-emerald-50 p-6 rounded-lg">
+              <h5 className="font-semibold mb-4 text-emerald-800">Exemple : Données de Performance d'Étudiants</h5>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <h6 className="font-semibold mb-3 text-emerald-700">Données Brutes</h6>
+                  <div className="bg-white p-4 rounded border">
+                    <div className="text-xs font-mono space-y-1">
+                      <div className="grid grid-cols-4 gap-2 font-semibold border-b pb-1">
+                        <span>Étudiant</span>
+                        <span>Maths</span>
+                        <span>Physique</span>
+                        <span>Chimie</span>
+                      </div>
+                      <div className="grid grid-cols-4 gap-2"><span>A</span><span>85</span><span>82</span><span>78</span></div>
+                      <div className="grid grid-cols-4 gap-2"><span>B</span><span>92</span><span>88</span><span>85</span></div>
+                      <div className="grid grid-cols-4 gap-2"><span>C</span><span>78</span><span>75</span><span>80</span></div>
+                      <div className="grid grid-cols-4 gap-2"><span>D</span><span>88</span><span>85</span><span>82</span></div>
+                      <div className="grid grid-cols-4 gap-2"><span>E</span><span>95</span><span>92</span><span>88</span></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h6 className="font-semibold mb-3 text-emerald-700">Matrice de Covariance Calculée</h6>
+                  <div className="bg-white p-4 rounded border">
+                    <div className="text-xs font-mono text-center">
+                      <div className="mb-2 text-gray-600">Cov(Maths, Physique, Chimie)</div>
+                      <div className="space-y-1">
+                        <div>⎡  42.5   38.2   32.1 ⎤</div>
+                        <div>⎢  38.2   35.8   29.5 ⎥</div>
+                        <div>⎣  32.1   29.5   25.2 ⎦</div>
+                      </div>
+                    </div>
+                    <div className="mt-4 text-xs space-y-2">
+                      <div className="bg-green-100 p-2 rounded">
+                        <strong>Interprétation :</strong>
+                        <ul className="mt-1 space-y-1">
+                          <li>• Toutes covariances positives → corrélation positive</li>
+                          <li>• Maths-Physique : relation la plus forte (38.2)</li>
+                          <li>• Les bonnes notes tendent à aller ensemble</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Conseils Pratiques */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl text-amber-700">💡 Conseils Pratiques pour l'Analyse de Covariance</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h5 className="font-semibold mb-3 text-amber-600">⚠️ Pièges à Éviter</h5>
+                <div className="space-y-3">
+                  <div className="bg-red-50 p-3 rounded border-l-4 border-red-400">
+                    <strong className="text-red-700">Unités différentes :</strong>
+                    <p className="text-sm text-red-600 mt-1">
+                      Covariance dépend des unités. Préférer la corrélation (normalisée) pour comparer.
+                    </p>
+                  </div>
+                  <div className="bg-orange-50 p-3 rounded border-l-4 border-orange-400">
+                    <strong className="text-orange-700">Relations non-linéaires :</strong>
+                    <p className="text-sm text-orange-600 mt-1">
+                      Covariance nulle ≠ indépendance. Peut masquer des relations courbes.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h5 className="font-semibold mb-3 text-amber-600">✅ Bonnes Pratiques</h5>
+                <div className="space-y-3">
+                  <div className="bg-green-50 p-3 rounded border-l-4 border-green-400">
+                    <strong className="text-green-700">Standardisation :</strong>
+                    <p className="text-sm text-green-600 mt-1">
+                      Centrer et réduire les variables avant calcul de covariance.
+                    </p>
+                  </div>
+                  <div className="bg-blue-50 p-3 rounded border-l-4 border-blue-400">
+                    <strong className="text-blue-700">Visualisation :</strong>
+                    <p className="text-sm text-blue-600 mt-1">
+                      Utiliser des heatmaps pour visualiser les matrices de covariance.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </section>
   );
 };

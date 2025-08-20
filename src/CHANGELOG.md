@@ -70,6 +70,19 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Correction des imports d'icônes Lucide (remplacement de InfoCircle par Info et AlertCircle par AlertTriangle)
 - Correction du lien "Accéder au cours complet" pour le cours d'introduction aux mathématiques
 
+### Corrigé (suite)
+- Résolution de 84+ erreurs TypeScript dans les composants de théorie des probabilités
+- Correction des imports React et d'icônes inutilisés
+- Correction des props de type CourseHighlight (passage de valeurs invalides à "concept")
+- Correction des props de type fill pour les graphiques Bar de Recharts
+- Ajout des imports manquants (AlertTriangle) dans ConditionalProbabilitySection
+- Correction des props manquantes (title) dans les composants CourseHighlight
+- Suppression des variables et fonctions inutilisées
+- Correction de l'erreur de syntaxe JSX avec le caractère '>' dans ConditionalProbabilitySection
+- Suppression des imports inutilisés (PieChart, Pie, Cell) dans BayesTheoremSection
+- Suppression des imports inutilisés (Badge, TrendingUp) dans ProbabilityDistributionsSection
+- Vérification complète avec zéro erreur de compilation TypeScript
+
 ### En cours de développement
 - Intégration avec Supabase pour l'authentification et la base de données
 - Pages de contenu détaillées pour chaque section thématique

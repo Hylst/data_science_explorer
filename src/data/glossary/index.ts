@@ -10,6 +10,7 @@ import { deepLearningTerms } from './deep-learning';
 import { nlpTerms } from './nlp';
 import { mlopsTerms } from './mlops';
 import { evaluationTerms } from './evaluation';
+import { GlossaryCategory } from './types';
 
 // Export types and constants
 export * from './types';
@@ -37,7 +38,7 @@ export {
 };
 
 // Utility functions for working with glossary terms
-export const getTermsByCategory = (category: string) => {
+export const getTermsByCategory = (category: GlossaryCategory) => {
   return glossaryTerms.filter(term => term.category === category);
 };
 

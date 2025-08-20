@@ -75,6 +75,17 @@ const Fundamentals = () => {
           </Link>
 
           <Link 
+            to="/fundamentals/data-preparation" 
+            className="flex items-center gap-3 p-4 bg-orange-50 rounded-lg border border-orange-100 hover:border-orange-300 transition-all"
+          >
+            <Database className="h-6 w-6 text-orange-600" />
+            <div>
+              <h3 className="font-semibold">Traiter les données</h3>
+              <p className="text-sm text-muted-foreground">Nettoyage, transformation et préparation</p>
+            </div>
+          </Link>
+
+          <Link 
             to="/fundamentals/databases" 
             className="flex items-center gap-3 p-4 bg-emerald-50 rounded-lg border border-emerald-100 hover:border-emerald-300 transition-all"
           >

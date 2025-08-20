@@ -1,26 +1,114 @@
 
-import { Target, TrendingUp, BarChart3, Zap } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Target, TrendingUp, BarChart3, Zap, Calculator, Dice6, Clock, DollarSign } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import CourseEquation from "@/components/courses/CourseEquation";
 import CourseHighlight from "@/components/courses/CourseHighlight";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Area, AreaChart, ScatterChart, Scatter } from "recharts";
 
+/**
+ * Composant pour la section Variables Aléatoires
+ * Présente les concepts avec des exemples interactifs et des visualisations dynamiques
+ */
 const RandomVariables = () => {
-  const notificationData = [
-    { notifications: 0, probability: 0.05 },
-    { notifications: 1, probability: 0.15 },
-    { notifications: 2, probability: 0.25 },
-    { notifications: 3, probability: 0.30 },
-    { notifications: 4, probability: 0.15 },
-    { notifications: 5, probability: 0.10 }
+  const [selectedExample, setSelectedExample] = useState<'notifications' | 'temperature' | 'sales'>('notifications');
+  const [lambdaParam, setLambdaParam] = useState([3]);
+  const [muParam, setMuParam] = useState([25]);
+  const [sigmaParam, setSigmaParam] = useState([5]);
+
+  // Données pour les notifications (distribution de Poisson)
+  const notificationData = useMemo(() => {
+    const lambda = lambdaParam[0];
+    const data = [];
+    for (let k = 0; k <= 10; k++) {
+      const probability = (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial(k);
+      data.push({ notifications: k, probability: probability.toFixed(4) });
+    }
+    return data;
+  }, [lambdaParam]);
+
+  // Données pour la température (distribution normale)
+  const temperatureData = useMemo(() => {
+    const mu = muParam[0];
+    const sigma = sigmaParam[0];
+    return Array.from({ length: 100 }, (_, i) => {
+      const temp = mu - 3*sigma + i * (6*sigma/99);
+      const probability = (1/(sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((temp - mu)/sigma, 2));
+      return { 
+        temperature: temp.toFixed(1), 
+        probability: probability.toFixed(4),
+        cumulative: normalCDF(temp, mu, sigma).toFixed(4)
+      };
+    });
+  }, [muParam, sigmaParam]);
+
+  // Données pour les ventes (exemple mixte)
+  const salesData = [
+    { day: 'Lun', sales: 45, type: 'Faible' },
+    { day: 'Mar', sales: 52, type: 'Faible' },
+    { day: 'Mer', sales: 48, type: 'Faible' },
+    { day: 'Jeu', sales: 67, type: 'Moyen' },
+    { day: 'Ven', sales: 89, type: 'Élevé' },
+    { day: 'Sam', sales: 134, type: 'Très élevé' },
+    { day: 'Dim', sales: 98, type: 'Élevé' }
   ];
 
-  const temperatureData = Array.from({ length: 50 }, (_, i) => {
-    const temp = 15 + i * 0.4; // Température de 15°C à 35°C
-    const probability = Math.exp(-Math.pow(temp - 25, 2) / 50) / Math.sqrt(2 * Math.PI * 25);
-    return { temperature: temp.toFixed(1), probability: (probability * 10).toFixed(4) };
-  });
+  /**
+   * Calcule la factorielle d'un nombre
+   */
+  function factorial(n: number): number {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);
+  }
+
+  /**
+   * Approximation de la fonction de répartition normale
+   */
+  function normalCDF(x: number, mu: number, sigma: number): number {
+    const z = (x - mu) / sigma;
+    return 0.5 * (1 + erf(z / Math.sqrt(2)));
+  }
+
+  /**
+   * Approximation de la fonction d'erreur
+   */
+  function erf(x: number): number {
+    const a1 =  0.254829592;
+    const a2 = -0.284496736;
+    const a3 =  1.421413741;
+    const a4 = -1.453152027;
+    const a5 =  1.061405429;
+    const p  =  0.3275911;
+    
+    const sign = x >= 0 ? 1 : -1;
+    x = Math.abs(x);
+    
+    const t = 1.0 / (1.0 + p * x);
+    const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+    
+    return sign * y;
+  }
+
+  /**
+   * Calcule les statistiques descriptives
+   */
+  const calculateStats = (data: number[]) => {
+    const n = data.length;
+    const mean = data.reduce((sum, x) => sum + x, 0) / n;
+    const variance = data.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) / n;
+    const stdDev = Math.sqrt(variance);
+    const sortedData = [...data].sort((a, b) => a - b);
+    const median = n % 2 === 0 
+      ? (sortedData[n/2 - 1] + sortedData[n/2]) / 2 
+      : sortedData[Math.floor(n/2)];
+    
+    return { mean, variance, stdDev, median, min: Math.min(...data), max: Math.max(...data) };
+  };
+
+  const salesStats = calculateStats(salesData.map(d => d.sales));
 
   return (
     <section id="random-variables" className="mb-16">
@@ -46,6 +134,34 @@ const RandomVariables = () => {
               <strong>🎯 Pourquoi c'est génial ?</strong> Une fois que le hasard devient des nombres, 
               on peut faire des calculs, des graphiques, des prédictions... Bref, de la vraie Data Science !
             </p>
+          </div>
+          
+          {/* Sélecteur d'exemples interactifs */}
+          <div className="flex flex-wrap gap-2 mt-6">
+            <Button 
+              variant={selectedExample === 'notifications' ? 'default' : 'outline'}
+              onClick={() => setSelectedExample('notifications')}
+              className="flex items-center gap-2"
+            >
+              <Zap className="h-4 w-4" />
+              Notifications
+            </Button>
+            <Button 
+              variant={selectedExample === 'temperature' ? 'default' : 'outline'}
+              onClick={() => setSelectedExample('temperature')}
+              className="flex items-center gap-2"
+            >
+              <TrendingUp className="h-4 w-4" />
+              Température
+            </Button>
+            <Button 
+              variant={selectedExample === 'sales' ? 'default' : 'outline'}
+              onClick={() => setSelectedExample('sales')}
+              className="flex items-center gap-2"
+            >
+              <DollarSign className="h-4 w-4" />
+              Ventes
+            </Button>
           </div>
         </div>
       </div>
@@ -76,6 +192,25 @@ const RandomVariables = () => {
                   </div>
                 </div>
               </CourseHighlight>
+
+              {/* Contrôle interactif pour lambda */}
+              <div className="bg-white p-4 rounded-lg border">
+                <div className="flex items-center gap-4 mb-3">
+                  <label className="text-sm font-medium">Paramètre λ (moyenne) :</label>
+                  <span className="text-lg font-bold text-purple-600">{lambdaParam[0]}</span>
+                </div>
+                <Slider
+                  value={lambdaParam}
+                  onValueChange={setLambdaParam}
+                  max={8}
+                  min={1}
+                  step={0.5}
+                  className="w-full"
+                />
+                <p className="text-xs text-gray-600 mt-2">
+                  Ajustez λ pour voir comment la distribution change
+                </p>
+              </div>
 
               <div className="h-48">
                 <ResponsiveContainer width="100%" height="100%">
@@ -134,15 +269,50 @@ const RandomVariables = () => {
                 </div>
               </CourseHighlight>
 
+              {/* Contrôles interactifs pour μ et σ */}
+              <div className="bg-white p-4 rounded-lg border space-y-4">
+                <div>
+                  <div className="flex items-center gap-4 mb-2">
+                    <label className="text-sm font-medium">Moyenne μ :</label>
+                    <span className="text-lg font-bold text-orange-600">{muParam[0]}°C</span>
+                  </div>
+                  <Slider
+                    value={muParam}
+                    onValueChange={setMuParam}
+                    max={35}
+                    min={15}
+                    step={1}
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <div className="flex items-center gap-4 mb-2">
+                    <label className="text-sm font-medium">Écart-type σ :</label>
+                    <span className="text-lg font-bold text-orange-600">{sigmaParam[0]}°C</span>
+                  </div>
+                  <Slider
+                    value={sigmaParam}
+                    onValueChange={setSigmaParam}
+                    max={10}
+                    min={1}
+                    step={0.5}
+                    className="w-full"
+                  />
+                </div>
+                <p className="text-xs text-gray-600">
+                  Modifiez μ et σ pour voir l'impact sur la distribution normale
+                </p>
+              </div>
+
               <div className="h-48">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={temperatureData}>
+                  <AreaChart data={temperatureData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="temperature" />
                     <YAxis />
                     <Tooltip formatter={(value) => [value, 'Densité']} />
-                    <Line type="monotone" dataKey="probability" stroke="#F97316" strokeWidth={2} dot={false} />
-                  </LineChart>
+                    <Area type="monotone" dataKey="probability" stroke="#F97316" fill="#FED7AA" strokeWidth={2} />
+                  </AreaChart>
                 </ResponsiveContainer>
               </div>
               
@@ -239,106 +409,172 @@ const RandomVariables = () => {
         </CardContent>
       </Card>
 
+      {/* Exemple interactif basé sur la sélection */}
+      {selectedExample === 'sales' && (
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <DollarSign className="h-5 w-5" />
+              📊 Analyse des ventes hebdomadaires
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div>
+                <h4 className="font-semibold mb-3">Données de ventes</h4>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={salesData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="day" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="sales" fill="#10B981" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-3">Statistiques calculées</h4>
+                <div className="space-y-3">
+                  <div className="bg-blue-50 p-3 rounded flex justify-between">
+                    <span>Moyenne :</span>
+                    <span className="font-bold">{salesStats.mean.toFixed(1)} €</span>
+                  </div>
+                  <div className="bg-green-50 p-3 rounded flex justify-between">
+                    <span>Médiane :</span>
+                    <span className="font-bold">{salesStats.median.toFixed(1)} €</span>
+                  </div>
+                  <div className="bg-purple-50 p-3 rounded flex justify-between">
+                    <span>Écart-type :</span>
+                    <span className="font-bold">{salesStats.stdDev.toFixed(1)} €</span>
+                  </div>
+                  <div className="bg-orange-50 p-3 rounded flex justify-between">
+                    <span>Min - Max :</span>
+                    <span className="font-bold">{salesStats.min} - {salesStats.max} €</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Applications en Data Science */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calculator className="h-5 w-5" />
+            🔬 Applications en Data Science
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <h4 className="font-semibold text-lg">Machine Learning</h4>
+              <div className="space-y-3">
+                <div className="bg-blue-50 p-3 rounded">
+                  <h5 className="font-medium">Classification</h5>
+                  <p className="text-sm text-gray-600">Les variables aléatoires modélisent l'incertitude des prédictions</p>
+                </div>
+                <div className="bg-green-50 p-3 rounded">
+                  <h5 className="font-medium">Régression</h5>
+                  <p className="text-sm text-gray-600">Estimation des intervalles de confiance</p>
+                </div>
+                <div className="bg-purple-50 p-3 rounded">
+                  <h5 className="font-medium">Clustering</h5>
+                  <p className="text-sm text-gray-600">Modélisation de la variabilité des groupes</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <h4 className="font-semibold text-lg">Analyse de données</h4>
+              <div className="space-y-3">
+                <div className="bg-orange-50 p-3 rounded">
+                  <h5 className="font-medium">A/B Testing</h5>
+                  <p className="text-sm text-gray-600">Comparaison statistique de variantes</p>
+                </div>
+                <div className="bg-red-50 p-3 rounded">
+                  <h5 className="font-medium">Détection d'anomalies</h5>
+                  <p className="text-sm text-gray-600">Identification des valeurs aberrantes</p>
+                </div>
+                <div className="bg-yellow-50 p-3 rounded">
+                  <h5 className="font-medium">Prévisions</h5>
+                  <p className="text-sm text-gray-600">Modélisation de l'incertitude future</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Exercice pratique interactif */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5" />
-            💪 Exercice pratique : Temps d'attente au drive
+            <Dice6 className="h-5 w-5" />
+            🎯 Exercice Interactif : Simulation Monte Carlo
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
-            <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
-              <h4 className="font-semibold mb-2">🚗 Situation :</h4>
-              <p className="text-sm">
-                Vous étudiez les temps d'attente dans un drive McDonald's. Soit T = "temps d'attente en minutes".
-                D'après vos observations, T suit approximativement une distribution avec :
-              </p>
-              <ul className="text-sm mt-2 space-y-1">
-                <li>• Temps moyen : E[T] = 4 minutes</li>
-                <li>• Écart-type : σ(T) = 2 minutes</li>
-                <li>• Temps minimum possible : 1 minute</li>
-                <li>• 90% des clients attendent moins de 7 minutes</li>
-              </ul>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="font-semibold mb-3">🎯 Questions d'analyse :</h4>
-                <div className="space-y-3 text-sm">
-                  <div className="bg-blue-50 p-3 rounded">
-                    <strong>Q1 :</strong> Que signifie concrètement E[T] = 4 minutes ?
-                    <details className="mt-2">
-                      <summary className="cursor-pointer text-blue-600 text-xs">👆 Réponse</summary>
-                      <p className="text-xs mt-1">
-                        Si vous venez de nombreuses fois, votre temps d'attente moyen sera proche de 4 minutes. 
-                        Certaines fois ce sera 2 min, d'autres fois 6 min, mais la moyenne tend vers 4.
-                      </p>
-                    </details>
-                  </div>
-                  
-                  <div className="bg-green-50 p-3 rounded">
-                    <strong>Q2 :</strong> Un écart-type de 2 minutes, c'est beaucoup ou peu ?
-                    <details className="mt-2">
-                      <summary className="cursor-pointer text-green-600 text-xs">👆 Analyse</summary>
-                      <p className="text-xs mt-1">
-                        C'est relativement élevé ! Cela signifie une grande variabilité. La plupart des temps 
-                        seront entre 2 et 6 minutes (E[T] ± σ), mais il peut y avoir des attentes surprenantes.
-                      </p>
-                    </details>
-                  </div>
-                  
-                  <div className="bg-purple-50 p-3 rounded">
-                    <strong>Q3 :</strong> Comment interpréter "90% des clients attendent moins de 7 min" ?
-                    <details className="mt-2">
-                      <summary className="cursor-pointer text-purple-600 text-xs">👆 Interprétation</summary>
-                      <p className="text-xs mt-1">
-                        C'est F(7) = 0.90. Cela signifie que 7 minutes est le 90e percentile. 
-                        Seulement 10% des clients ont la malchance d'attendre plus de 7 minutes.
-                      </p>
-                    </details>
-                  </div>
+            <p className="text-gray-700">
+              Simulons le lancement de deux dés et analysons la distribution de leur somme.
+            </p>
+            
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg">
+              <h4 className="font-semibold mb-4">Résultats théoriques vs simulés</h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div className="bg-white p-3 rounded shadow">
+                  <div className="text-2xl font-bold text-blue-600">7</div>
+                  <div className="text-sm text-gray-600">Somme la plus probable</div>
                 </div>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-3">🔧 Applications business :</h4>
-                <div className="space-y-3 text-sm">
-                  <div className="bg-red-50 p-3 rounded border-l-2 border-red-300">
-                    <strong>📊 Objectif qualité :</strong>
-                    <p className="text-xs mt-1">
-                      "95% des clients doivent être servis en moins de 6 minutes"
-                      <br/>→ Il faut réduire la variance (écart-type) !
-                    </p>
-                  </div>
-                  
-                  <div className="bg-blue-50 p-3 rounded border-l-2 border-blue-300">
-                    <strong>💰 Dimensionnement :</strong>
-                    <p className="text-xs mt-1">
-                      Combien de bornes de commande installer ? 
-                      <br/>→ Utiliser E[T] et la loi des files d'attente
-                    </p>
-                  </div>
-                  
-                  <div className="bg-green-50 p-3 rounded border-l-2 border-green-300">
-                    <strong>📱 Communication client :</strong>
-                    <p className="text-xs mt-1">
-                      "Temps d'attente estimé : 4 ± 2 minutes"
-                      <br/>→ Gérer les attentes des clients
-                    </p>
-                  </div>
+                <div className="bg-white p-3 rounded shadow">
+                  <div className="text-2xl font-bold text-green-600">16.67%</div>
+                  <div className="text-sm text-gray-600">Probabilité de 7</div>
+                </div>
+                <div className="bg-white p-3 rounded shadow">
+                  <div className="text-2xl font-bold text-purple-600">7</div>
+                  <div className="text-sm text-gray-600">Espérance</div>
+                </div>
+                <div className="bg-white p-3 rounded shadow">
+                  <div className="text-2xl font-bold text-orange-600">2.42</div>
+                  <div className="text-sm text-gray-600">Écart-type</div>
                 </div>
               </div>
             </div>
-
-            <div className="bg-indigo-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-indigo-700 mb-2">🎓 Points clés à retenir :</h4>
-              <ul className="text-sm space-y-1">
-                <li>• Les variables aléatoires transforment des situations réelles en modèles mathématiques</li>
-                <li>• L'espérance donne la tendance centrale, la variance mesure l'incertitude</li>
-                <li>• Ces mesures permettent de prendre des décisions business éclairées</li>
-                <li>• En Data Science, on modélise presque tout avec des variables aléatoires !</li>
+            
+            <div className="bg-yellow-50 p-4 rounded-lg">
+              <h4 className="font-semibold mb-2">💡 Concepts clés à retenir :</h4>
+              <ul className="space-y-2 text-sm">
+                <li>• <strong>Loi des grands nombres :</strong> Plus on simule, plus on se rapproche de la théorie</li>
+                <li>• <strong>Convergence :</strong> Les résultats se stabilisent avec le nombre d'essais</li>
+                <li>• <strong>Variabilité :</strong> Chaque simulation donne des résultats légèrement différents</li>
+                <li>• <strong>Distribution :</strong> La forme de la courbe révèle les propriétés de la variable</li>
               </ul>
+            </div>
+            
+            <div className="bg-green-50 p-4 rounded-lg">
+              <h4 className="font-semibold mb-2">🚀 Applications pratiques :</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h5 className="font-medium">Finance</h5>
+                  <p className="text-sm text-gray-600">Évaluation des risques d'investissement</p>
+                </div>
+                <div>
+                  <h5 className="font-medium">Ingénierie</h5>
+                  <p className="text-sm text-gray-600">Tests de fiabilité des systèmes</p>
+                </div>
+                <div>
+                  <h5 className="font-medium">Marketing</h5>
+                  <p className="text-sm text-gray-600">Prédiction du comportement client</p>
+                </div>
+                <div>
+                  <h5 className="font-medium">Santé</h5>
+                  <p className="text-sm text-gray-600">Modélisation épidémiologique</p>
+                </div>
+              </div>
             </div>
           </div>
         </CardContent>

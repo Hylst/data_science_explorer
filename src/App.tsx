@@ -94,7 +94,14 @@ const App = () => (
               <Route path="/fundamentals/programming" element={<Programming />} />
               <Route path="/fundamentals/databases" element={<Databases />} />
               <Route path="/machine-learning" element={<MachineLearning />} />
-              <Route path="/machine-learning/supervised" element={<SupervisedLearning />} />
+              // Replace current mixed structure with:
+              <Route path="/courses/fundamentals/math-stats" element={<MathStats />} />
+              <Route path="/courses/fundamentals/programming" element={<Programming />} />
+              <Route path="/courses/machine-learning/supervised" element={<SupervisedLearning />} />
+              
+              // Maintain ALL legacy redirects
+              <Route path="/fundamentals/math-stats" element={<Navigate to="/courses/fundamentals/math-stats" replace />} />
+              <Route path="/machine-learning/supervised" element={<Navigate to="/courses/machine-learning/supervised" replace />} />
               <Route path="/machine-learning/unsupervised" element={<UnsupervisedLearning />} />
               <Route path="/machine-learning/reinforcement" element={<ReinforcementLearning />} />
               <Route path="/tools" element={<Tools />} />

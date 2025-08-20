@@ -1,11 +1,11 @@
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import CourseEquation from "@/components/courses/CourseEquation";
 import CourseHighlight from "@/components/courses/CourseHighlight";
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, ReferenceLine } from "recharts";
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { TrendingUp, AlertTriangle, Eye, Zap, Heart, Users } from "lucide-react";
 
 const CorrelationSection = () => {
@@ -15,7 +15,7 @@ const CorrelationSection = () => {
     height_weight: {
       title: "📏 Taille vs Poids",
       description: "Relation entre la taille (cm) et le poids (kg) chez 50 personnes",
-      data: Array.from({ length: 50 }, (_, i) => {
+      data: Array.from({ length: 50 }, () => {
         const height = 160 + Math.random() * 40;
         const weight = 0.8 * height - 80 + Math.random() * 15;
         return { x: height.toFixed(0), y: weight.toFixed(0) };
@@ -27,7 +27,7 @@ const CorrelationSection = () => {
     temperature_sales: {
       title: "🌡️ Température vs Ventes de glaces",
       description: "Température (°C) et ventes quotidiennes de glaces (€)",
-      data: Array.from({ length: 30 }, (_, i) => {
+      data: Array.from({ length: 30 }, () => {
         const temp = 15 + Math.random() * 20;
         const sales = 2 * temp + Math.random() * 30 + 20;
         return { x: temp.toFixed(1), y: sales.toFixed(0) };
@@ -39,7 +39,7 @@ const CorrelationSection = () => {
     study_tv: {
       title: "📚 Heures d'étude vs Heures de TV",
       description: "Heures d'étude par semaine vs Heures de télévision",
-      data: Array.from({ length: 40 }, (_, i) => {
+      data: Array.from({ length: 40 }, () => {
         const study = 5 + Math.random() * 25;
         const tv = 35 - 0.7 * study + Math.random() * 8;
         return { x: study.toFixed(1), y: Math.max(0, tv).toFixed(1) };
@@ -376,6 +376,195 @@ const CorrelationSection = () => {
                 </div>
               </div>
             </CourseHighlight>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Matrices de Covariance */}
+      <Card>
+        <CardHeader>
+          <CardTitle>🔢 Matrices de Covariance : L'Algèbre de la Dépendance</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-6">
+            <CourseHighlight title="🎯 Qu'est-ce qu'une matrice de covariance ?" type="concept">
+              <p className="mb-4">
+                Une matrice de covariance est une matrice carrée qui contient les covariances entre toutes les paires de variables d'un dataset multidimensionnel. 
+                Elle généralise le concept de variance à plusieurs dimensions.
+              </p>
+              
+              <div className="bg-blue-50 p-4 rounded-lg mb-4">
+                <h5 className="font-semibold mb-2">📐 Structure mathématique</h5>
+                <CourseEquation latex="\\Sigma = \\begin{pmatrix} \\sigma_{11} & \\sigma_{12} & \\cdots & \\sigma_{1n} \\\\ \\sigma_{21} & \\sigma_{22} & \\cdots & \\sigma_{2n} \\\\ \\vdots & \\vdots & \\ddots & \\vdots \\\\ \\sigma_{n1} & \\sigma_{n2} & \\cdots & \\sigma_{nn} \\end{pmatrix}" />
+              </div>
+            </CourseHighlight>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div className="bg-green-50 p-4 rounded-lg">
+              <h5 className="font-semibold mb-3 text-green-700">✨ Propriétés fondamentales</h5>
+              <ul className="space-y-2 text-sm">
+                <li>• <strong>Symétrique :</strong> Σᵢⱼ = Σⱼᵢ</li>
+                <li>• <strong>Semi-définie positive :</strong> toutes les valeurs propres ≥ 0</li>
+                <li>• <strong>Diagonale :</strong> contient les variances des variables</li>
+                <li>• <strong>Hors-diagonale :</strong> contient les covariances</li>
+                <li>• <strong>Déterminant :</strong> mesure le "volume" de dispersion</li>
+              </ul>
+            </div>
+
+            <div className="bg-orange-50 p-4 rounded-lg">
+              <h5 className="font-semibold mb-3 text-orange-700">🔍 Exemple concret : 3 variables</h5>
+              <div className="text-sm space-y-2">
+                <p><strong>Variables :</strong> Taille, Poids, Âge</p>
+                <div className="bg-white p-3 rounded border font-mono text-xs">
+                  <div>Σ = [  25.0   12.5    8.2  ]</div>
+                  <div>    [ 12.5   16.0    6.1  ]</div>
+                  <div>    [  8.2    6.1   49.0  ]</div>
+                </div>
+                <p className="text-xs">
+                  • Var(Taille) = 25.0<br/>
+                  • Cov(Taille,Poids) = 12.5<br/>
+                  • Corrélation positive entre toutes
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Valeurs propres et vecteurs propres */}
+          <div className="mb-6">
+            <CourseHighlight title="🎭 Valeurs propres et Vecteurs propres : Les Directions Principales" type="concept">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <h5 className="font-semibold mb-3">🔢 Décomposition spectrale</h5>
+                  <CourseEquation latex="\\Sigma \\mathbf{v} = \\lambda \\mathbf{v}" />
+                  <div className="mt-3 text-sm space-y-2">
+                    <p><strong>Valeurs propres (λ) :</strong></p>
+                    <ul className="ml-4 space-y-1">
+                      <li>• Mesurent la variance dans chaque direction principale</li>
+                      <li>• Ordonnées par importance décroissante</li>
+                      <li>• Somme = trace de la matrice</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div>
+                  <h5 className="font-semibold mb-3">📐 Vecteurs propres</h5>
+                  <div className="text-sm space-y-2">
+                    <p><strong>Directions principales :</strong></p>
+                    <ul className="ml-4 space-y-1">
+                      <li>• Définissent les axes de variation maximale</li>
+                      <li>• Orthogonaux entre eux</li>
+                      <li>• Normalisés (longueur = 1)</li>
+                      <li>• Base pour la transformation PCA</li>
+                    </ul>
+                    
+                    <div className="bg-blue-100 p-3 rounded mt-3">
+                      <p className="text-xs font-semibold">💡 Intuition géométrique</p>
+                      <p className="text-xs">Les vecteurs propres montrent les "directions naturelles" de dispersion des données, comme les axes d'une ellipse.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CourseHighlight>
+          </div>
+
+          {/* Connexion avec PCA */}
+          <div className="mb-6">
+            <CourseHighlight title="🔗 Connexion avec l'Analyse en Composantes Principales (PCA)" type="example">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-purple-50 p-4 rounded-lg">
+                  <h5 className="font-semibold mb-3 text-purple-700">🎯 PCA = Diagonalisation de Σ</h5>
+                  <div className="text-sm space-y-2">
+                    <CourseEquation latex="\\Sigma = P \\Lambda P^T" />
+                    <p><strong>Étapes PCA :</strong></p>
+                    <ol className="ml-4 space-y-1">
+                      <li>1. Calculer la matrice de covariance Σ</li>
+                      <li>2. Trouver valeurs/vecteurs propres</li>
+                      <li>3. Trier par valeurs propres décroissantes</li>
+                      <li>4. Projeter les données sur les nouveaux axes</li>
+                    </ol>
+                  </div>
+                </div>
+
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <h5 className="font-semibold mb-3 text-green-700">📊 Réduction de dimensionnalité</h5>
+                  <div className="text-sm space-y-2">
+                    <p><strong>Variance expliquée :</strong></p>
+                    <CourseEquation latex="\\text{Variance expliquée} = \\frac{\\lambda_i}{\\sum_{j=1}^n \\lambda_j}" />
+                    
+                    <div className="bg-white p-3 rounded border mt-3">
+                      <p className="text-xs font-semibold mb-1">Exemple : 3D → 2D</p>
+                      <div className="text-xs space-y-1">
+                        <div>λ₁ = 15.2 (76% variance)</div>
+                        <div>λ₂ = 3.8 (19% variance)</div>
+                        <div>λ₃ = 1.0 (5% variance)</div>
+                        <div className="font-semibold text-green-600">→ Garder PC1 + PC2 = 95% info</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CourseHighlight>
+          </div>
+
+          {/* Applications pratiques */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h6 className="font-semibold mb-2 text-blue-700">🤖 Machine Learning</h6>
+              <ul className="text-xs space-y-1">
+                <li>• Feature selection</li>
+                <li>• Détection d'anomalies</li>
+                <li>• Preprocessing des données</li>
+                <li>• Régularisation</li>
+              </ul>
+            </div>
+
+            <div className="bg-green-50 p-4 rounded-lg">
+              <h6 className="font-semibold mb-2 text-green-700">📈 Finance</h6>
+              <ul className="text-xs space-y-1">
+                <li>• Gestion de portefeuille</li>
+                <li>• Mesure du risque</li>
+                <li>• Optimisation de Markowitz</li>
+                <li>• Value at Risk (VaR)</li>
+              </ul>
+            </div>
+
+            <div className="bg-purple-50 p-4 rounded-lg">
+              <h6 className="font-semibold mb-2 text-purple-700">🔬 Sciences</h6>
+              <ul className="text-xs space-y-1">
+                <li>• Analyse multivariée</li>
+                <li>• Contrôle qualité</li>
+                <li>• Bioinformatique</li>
+                <li>• Traitement d'images</li>
+              </ul>
+            </div>
+
+            <div className="bg-orange-50 p-4 rounded-lg">
+              <h6 className="font-semibold mb-2 text-orange-700">📊 Business Intelligence</h6>
+              <ul className="text-xs space-y-1">
+                <li>• Segmentation client</li>
+                <li>• Analyse des KPIs</li>
+                <li>• Recommandations</li>
+                <li>• Prédiction de tendances</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+              <div className="flex items-start">
+                <AlertTriangle className="h-5 w-5 text-yellow-400 mt-0.5 mr-3" />
+                <div>
+                  <h5 className="font-semibold text-yellow-800 mb-2">⚠️ Points d'attention pratiques</h5>
+                  <ul className="text-sm text-yellow-700 space-y-1">
+                    <li>• <strong>Conditionnement :</strong> Matrice mal conditionnée → instabilité numérique</li>
+                    <li>• <strong>Singularité :</strong> Déterminant = 0 → variables linéairement dépendantes</li>
+                    <li>• <strong>Échelle :</strong> Normaliser les variables avant calcul</li>
+                    <li>• <strong>Outliers :</strong> Peuvent dominer la structure de covariance</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
