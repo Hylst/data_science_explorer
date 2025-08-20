@@ -1,25 +1,94 @@
 
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Code, Play, Target, Trophy, Lightbulb } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { CheckCircle, Code, Play, Target, Trophy, Lightbulb, Clock, Star, Award, Zap } from "lucide-react";
 import CourseHighlight from "@/components/courses/CourseHighlight";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+/**
+ * Enhanced PracticalExercises component with modern ES6 features
+ * Provides interactive coding challenges with performance tracking
+ */
 const PracticalExercises = () => {
+  // Enhanced state management with performance tracking
   const [completedExercises, setCompletedExercises] = useState<Set<string>>(new Set());
   const [activeExercise, setActiveExercise] = useState<string | null>(null);
+  const [exerciseTimers, setExerciseTimers] = useState<Map<string, number>>(new Map());
+  const [currentTab, setCurrentTab] = useState<string>('beginner');
+  const [userProgress, setUserProgress] = useState({
+    totalExercises: 0,
+    completedCount: 0,
+    averageTime: 0,
+    skillsAcquired: new Set<string>()
+  });
+  
+  // Performance optimization with refs
+  const timerRefs = useRef<Map<string, NodeJS.Timeout>>(new Map());
+  const startTimes = useRef<Map<string, number>>(new Map());
 
-  const toggleExercise = (exerciseId: string) => {
-    setActiveExercise(activeExercise === exerciseId ? null : exerciseId);
-  };
+  // Optimized toggle function with useCallback
+  const toggleExercise = useCallback((exerciseId: string) => {
+    setActiveExercise(prev => {
+      const newActive = prev === exerciseId ? null : exerciseId;
+      
+      // Start timer when opening exercise
+      if (newActive && !startTimes.current.has(exerciseId)) {
+        startTimes.current.set(exerciseId, Date.now());
+      }
+      
+      return newActive;
+    });
+  }, []);
 
-  const markCompleted = (exerciseId: string) => {
+  // Enhanced completion tracking with performance metrics
+  const markCompleted = useCallback((exerciseId: string, skills: string[] = []) => {
+    const completionTime = startTimes.current.has(exerciseId) 
+      ? Date.now() - startTimes.current.get(exerciseId)!
+      : 0;
+    
     setCompletedExercises(prev => new Set([...prev, exerciseId]));
-  };
+    setExerciseTimers(prev => new Map([...prev, [exerciseId, completionTime]]));
+    
+    // Update user progress
+    setUserProgress(prev => ({
+      ...prev,
+      completedCount: prev.completedCount + 1,
+      averageTime: prev.completedCount > 0 
+        ? (prev.averageTime * prev.completedCount + completionTime) / (prev.completedCount + 1)
+        : completionTime,
+      skillsAcquired: new Set([...prev.skillsAcquired, ...skills])
+    }));
+    
+    // Clear timer
+    startTimes.current.delete(exerciseId);
+  }, []);
 
-  const ExerciseCard = ({ 
+  // Calculate progress statistics
+  const progressStats = useMemo(() => {
+    const totalExercises = 12; // Updated total count
+    const completionRate = (completedExercises.size / totalExercises) * 100;
+    const averageTimeMinutes = userProgress.averageTime / (1000 * 60);
+    
+    return {
+      completionRate,
+      averageTimeMinutes,
+      skillsCount: userProgress.skillsAcquired.size,
+      level: completionRate >= 80 ? 'Expert' : completionRate >= 50 ? 'Intermediate' : 'Beginner'
+    };
+  }, [completedExercises.size, userProgress]);
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      timerRefs.current.forEach(timer => clearTimeout(timer));
+    };
+  }, []);
+
+  // Enhanced ExerciseCard with performance tracking and modern features
+  const ExerciseCard = useCallback(({ 
     id, 
     title, 
     difficulty, 
@@ -27,7 +96,9 @@ const PracticalExercises = () => {
     description, 
     hints, 
     solution, 
-    skills 
+    skills,
+    category = 'general',
+    points = 10
   }: {
     id: string;
     title: string;
@@ -37,29 +108,59 @@ const PracticalExercises = () => {
     hints: string[];
     solution: string;
     skills: string[];
+    category?: string;
+    points?: number;
   }) => {
     const isCompleted = completedExercises.has(id);
     const isActive = activeExercise === id;
+    const completionTime = exerciseTimers.get(id);
+    const isCurrentlyActive = startTimes.current.has(id);
 
     const difficultyColors = {
-      'Débutant': 'bg-green-100 text-green-800',
-      'Intermédiaire': 'bg-yellow-100 text-yellow-800',
-      'Avancé': 'bg-red-100 text-red-800'
+      'Débutant': 'bg-green-100 text-green-800 border-green-300',
+      'Intermédiaire': 'bg-yellow-100 text-yellow-800 border-yellow-300',
+      'Avancé': 'bg-red-100 text-red-800 border-red-300'
+    };
+
+    const difficultyIcons = {
+      'Débutant': <Star className="h-4 w-4" />,
+      'Intermédiaire': <Zap className="h-4 w-4" />,
+      'Avancé': <Award className="h-4 w-4" />
     };
 
     return (
-      <Card className={`border-l-4 ${isCompleted ? 'border-l-green-500 bg-green-50' : 'border-l-blue-500'}`}>
+      <Card className={`border-l-4 transition-all duration-300 hover:shadow-lg ${
+        isCompleted 
+          ? 'border-l-green-500 bg-gradient-to-r from-green-50 to-green-100' 
+          : isCurrentlyActive
+          ? 'border-l-orange-500 bg-gradient-to-r from-orange-50 to-yellow-50'
+          : 'border-l-blue-500 hover:border-l-blue-600'
+      }`}>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               {isCompleted && <CheckCircle className="h-5 w-5 text-green-600" />}
-              <span>{title}</span>
+              {isCurrentlyActive && <Clock className="h-5 w-5 text-orange-500 animate-pulse" />}
+              <span className={isCompleted ? 'text-green-700' : ''}>{title}</span>
             </div>
-            <div className="flex gap-2">
-              <Badge className={difficultyColors[difficulty]}>{difficulty}</Badge>
-              <Badge variant="outline">{duration}</Badge>
+            <div className="flex gap-2 items-center">
+              <Badge className={`${difficultyColors[difficulty]} flex items-center gap-1`}>
+                {difficultyIcons[difficulty]}
+                {difficulty}
+              </Badge>
+              <Badge variant="outline" className="flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                {duration}
+              </Badge>
+              <Badge variant="secondary">{points} pts</Badge>
             </div>
           </CardTitle>
+          {completionTime && (
+            <div className="text-sm text-green-600 flex items-center gap-1">
+              <Trophy className="h-4 w-4" />
+              Terminé en {Math.round(completionTime / (1000 * 60))} min
+            </div>
+          )}
         </CardHeader>
         <CardContent>
           <p className="mb-4">{description}</p>
@@ -95,10 +196,11 @@ const PracticalExercises = () => {
             </Button>
 
             <Button 
-              onClick={() => markCompleted(id)}
+              onClick={() => markCompleted(id, skills)}
               size="sm"
               variant={isCompleted ? "default" : "outline"}
               className="mr-2"
+              disabled={isCompleted}
             >
               {isCompleted ? "✅ Terminé" : "Marquer comme terminé"}
             </Button>
@@ -128,11 +230,73 @@ const PracticalExercises = () => {
         </CardContent>
       </Card>
     );
-  };
+  }, [completedExercises, activeExercise, exerciseTimers, markCompleted, toggleExercise]);
+
+  // Progress Dashboard Component
+  const ProgressDashboard = useMemo(() => (
+    <Card className="mb-6 bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Trophy className="h-6 w-6 text-yellow-500" />
+          Tableau de Bord - Votre Progression
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+            <div className="text-2xl font-bold text-blue-600">{completedExercises.size}</div>
+            <div className="text-sm text-gray-600">Exercices terminés</div>
+          </div>
+          <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+            <div className="text-2xl font-bold text-green-600">{progressStats.level}</div>
+            <div className="text-sm text-gray-600">Niveau actuel</div>
+          </div>
+          <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+            <div className="text-2xl font-bold text-purple-600">{progressStats.skillsCount}</div>
+            <div className="text-sm text-gray-600">Compétences acquises</div>
+          </div>
+          <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+            <div className="text-2xl font-bold text-orange-600">
+              {progressStats.averageTimeMinutes > 0 ? Math.round(progressStats.averageTimeMinutes) : 0}min
+            </div>
+            <div className="text-sm text-gray-600">Temps moyen</div>
+          </div>
+        </div>
+        
+        <div className="space-y-2">
+          <div className="flex justify-between text-sm">
+            <span>Progression globale</span>
+            <span>{Math.round(progressStats.completionRate)}%</span>
+          </div>
+          <Progress value={progressStats.completionRate} className="h-3" />
+        </div>
+        
+        {progressStats.completionRate >= 100 && (
+          <div className="mt-4 p-4 bg-gradient-to-r from-green-100 to-blue-100 rounded-lg border border-green-200">
+            <div className="flex items-center gap-2 text-green-700 font-semibold">
+              <Award className="h-5 w-5" />
+              🎉 Félicitations ! Vous avez terminé tous les exercices !
+            </div>
+            <p className="text-sm text-green-600 mt-1">
+              Vous maîtrisez maintenant les concepts fondamentaux de la programmation pour la data science.
+            </p>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  ), [completedExercises.size, progressStats]);
 
   return (
     <section id="practical-exercises" className="mb-16">
-      <h2 className="text-3xl font-bold mb-8">🏋️‍♀️ Exercices Pratiques : Musclez vos Compétences !</h2>
+      <div className="mb-8">
+        <h2 className="text-3xl font-bold mb-4">🏋️‍♀️ Exercices Pratiques : Musclez vos Compétences !</h2>
+        <p className="text-lg text-gray-600 mb-6">
+          Développez vos compétences avec des défis pratiques et des projets concrets. 
+          Chaque exercice est conçu pour renforcer votre maîtrise de la programmation data science.
+        </p>
+      </div>
+      
+      {ProgressDashboard}
       
       <CourseHighlight title="🎯 Philosophie : Apprendre en Faisant" type="concept">
         <p className="mb-3">
@@ -206,6 +370,208 @@ def calculer_roi_marketing():
 
 # Exécution
 calculer_roi_marketing()`}
+          />
+          
+          <ExerciseCard 
+            id="ex5"
+            title="🤖 Chatbot Intelligent pour Support Client"
+            difficulty="Intermédiaire"
+            duration="90 min"
+            category="AI & NLP"
+            points={200}
+            description="Développez un chatbot intelligent capable de comprendre les questions clients et de fournir des réponses automatisées avec apprentissage."
+            skills={["NLP", "Classes", "Machine Learning", "Regex", "JSON"]}
+            hints={[
+              "Utilisez des expressions régulières pour identifier les intentions",
+              "Implémentez un système de scoring pour les réponses",
+              "Créez une base de connaissances extensible",
+              "Ajoutez un mécanisme d'apprentissage des nouvelles questions"
+            ]}
+            solution={`# Chatbot Intelligent pour Support Client
+import re
+import json
+from datetime import datetime
+from collections import defaultdict
+
+class ChatbotSupport:
+    def __init__(self):
+        self.base_connaissances = {
+            'salutations': {
+                'patterns': [r'bonjour', r'salut', r'hello', r'bonsoir'],
+                'responses': [
+                    "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
+                    "Salut ! Je suis là pour répondre à vos questions.",
+                    "Hello ! En quoi puis-je vous être utile ?"
+                ]
+            },
+            'commande': {
+                'patterns': [r'commande', r'livraison', r'expédition', r'suivi'],
+                'responses': [
+                    "Pour suivre votre commande, utilisez le numéro de suivi dans votre email de confirmation.",
+                    "Les délais de livraison sont généralement de 2-5 jours ouvrés.",
+                    "Vous pouvez modifier votre commande dans les 2h suivant la validation."
+                ]
+            },
+            'retour': {
+                'patterns': [r'retour', r'remboursement', r'échange', r'garantie'],
+                'responses': [
+                    "Vous avez 30 jours pour retourner un article non satisfaisant.",
+                    "Pour un retour, connectez-vous à votre compte et suivez la procédure.",
+                    "Les frais de retour sont gratuits pour les articles défectueux."
+                ]
+            },
+            'paiement': {
+                'patterns': [r'paiement', r'carte', r'paypal', r'facture'],
+                'responses': [
+                    "Nous acceptons les cartes Visa, Mastercard et PayPal.",
+                    "Vos informations de paiement sont sécurisées par cryptage SSL.",
+                    "Vous recevrez votre facture par email après validation."
+                ]
+            }
+        }
+        
+        self.historique_conversations = []
+        self.questions_non_resolues = []
+        self.statistiques = defaultdict(int)
+    
+    def analyser_intention(self, message):
+        """Analyse l'intention de l'utilisateur basée sur le message"""
+        message_lower = message.lower()
+        scores = {}
+        
+        for intention, data in self.base_connaissances.items():
+            score = 0
+            for pattern in data['patterns']:
+                if re.search(pattern, message_lower):
+                    score += 1
+            
+            if score > 0:
+                scores[intention] = score
+        
+        # Retourne l'intention avec le meilleur score
+        if scores:
+            return max(scores, key=scores.get)
+        return None
+    
+    def generer_reponse(self, message, utilisateur_id=None):
+        """Génère une réponse basée sur l'analyse du message"""
+        intention = self.analyser_intention(message)
+        
+        # Enregistre la conversation
+        conversation = {
+            'timestamp': datetime.now(),
+            'utilisateur_id': utilisateur_id,
+            'message': message,
+            'intention': intention
+        }
+        
+        if intention:
+            import random
+            reponse = random.choice(self.base_connaissances[intention]['responses'])
+            conversation['reponse'] = reponse
+            conversation['resolu'] = True
+            self.statistiques[intention] += 1
+        else:
+            reponse = self.gerer_question_inconnue(message)
+            conversation['reponse'] = reponse
+            conversation['resolu'] = False
+            self.questions_non_resolues.append({
+                'message': message,
+                'timestamp': datetime.now(),
+                'utilisateur_id': utilisateur_id
+            })
+        
+        self.historique_conversations.append(conversation)
+        return reponse
+    
+    def gerer_question_inconnue(self, message):
+        """Gère les questions non reconnues"""
+        responses_generiques = [
+            "Je ne suis pas sûr de comprendre votre question. Pouvez-vous la reformuler ?",
+            "Cette question nécessite l'intervention d'un agent. Je vous mets en relation.",
+            "Désolé, je n'ai pas d'information sur ce sujet. Un conseiller va vous contacter."
+        ]
+        
+        import random
+        return random.choice(responses_generiques)
+    
+    def apprendre_nouvelle_reponse(self, message, intention, nouvelle_reponse):
+        """Permet d'ajouter de nouvelles réponses à la base de connaissances"""
+        if intention not in self.base_connaissances:
+            self.base_connaissances[intention] = {
+                'patterns': [],
+                'responses': []
+            }
+        
+        # Ajoute des mots-clés du message comme patterns
+        mots_cles = re.findall(r'\\b\\w+\\b', message.lower())
+        for mot in mots_cles:
+            if len(mot) > 3:  # Ignore les mots trop courts
+                pattern = f'\\\\b{re.escape(mot)}\\\\b'
+                if pattern not in self.base_connaissances[intention]['patterns']:
+                    self.base_connaissances[intention]['patterns'].append(pattern)
+        
+        # Ajoute la nouvelle réponse
+        if nouvelle_reponse not in self.base_connaissances[intention]['responses']:
+            self.base_connaissances[intention]['responses'].append(nouvelle_reponse)
+    
+    def generer_rapport_performance(self):
+        """Génère un rapport de performance du chatbot"""
+        total_conversations = len(self.historique_conversations)
+        conversations_resolues = sum(1 for conv in self.historique_conversations if conv.get('resolu', False))
+        
+        taux_resolution = (conversations_resolues / total_conversations * 100) if total_conversations > 0 else 0
+        
+        rapport = f"""
+🤖 RAPPORT DE PERFORMANCE CHATBOT
+{'='*45}
+
+📊 STATISTIQUES GÉNÉRALES:
+• Total conversations: {total_conversations}
+• Conversations résolues: {conversations_resolues}
+• Taux de résolution: {taux_resolution:.1f}%
+• Questions non résolues: {len(self.questions_non_resolues)}
+
+🏆 INTENTIONS LES PLUS FRÉQUENTES:
+"""
+        
+        for intention, count in sorted(self.statistiques.items(), key=lambda x: x[1], reverse=True):
+            rapport += f"  • {intention.capitalize()}: {count} fois\\n"
+        
+        if self.questions_non_resolues:
+            rapport += f"\\n❓ QUESTIONS NON RÉSOLUES RÉCENTES:\\n"
+            for q in self.questions_non_resolues[-5:]:
+                rapport += f"  • {q['message'][:50]}...\\n"
+        
+        return rapport
+
+# Exemple d'utilisation
+chatbot = ChatbotSupport()
+
+# Simulation de conversations
+conversations_test = [
+    "Bonjour, j'ai un problème avec ma commande",
+    "Comment puis-je retourner un article ?",
+    "Quels sont vos moyens de paiement ?",
+    "Où est ma livraison ?",
+    "Je veux un remboursement",
+    "Comment contacter le service client ?"
+]
+
+print("🤖 SIMULATION DE CONVERSATIONS:\\n")
+for i, message in enumerate(conversations_test, 1):
+    print(f"👤 Utilisateur {i}: {message}")
+    reponse = chatbot.generer_reponse(message, f"user_{i}")
+    print(f"🤖 Chatbot: {reponse}\\n")
+
+# Apprentissage d'une nouvelle réponse
+chatbot.apprendre_nouvelle_reponse(
+    "Comment contacter le service client ?",
+    "contact",
+    "Vous pouvez nous contacter par email à support@exemple.com ou par téléphone au 01 23 45 67 89."
+)
+
+print(chatbot.generer_rapport_performance())`}
           />
 
           <ExerciseCard 

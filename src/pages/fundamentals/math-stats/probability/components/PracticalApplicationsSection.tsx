@@ -305,7 +305,7 @@ const PracticalApplicationsSection = () => {
                   </div>
                 </div>
                 
-                {riskData.map((scenario, index) => (
+                {riskData.map((scenario) => (
                   <div key={scenario.scenario} className="bg-gray-50 p-3 rounded flex justify-between items-center">
                     <div>
                       <span className="font-medium">{scenario.scenario}</span>
@@ -421,7 +421,7 @@ const PracticalApplicationsSection = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <CourseHighlight title="Points Clés" type="tip">
+            <CourseHighlight title="Points Clés" type="info">
               Les probabilités permettent de transformer l'incertitude en décisions quantifiées et optimisées.
             </CourseHighlight>
             

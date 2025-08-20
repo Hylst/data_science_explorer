@@ -1,13 +1,92 @@
 
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, BookOpen, Video, Code, Users, Star } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { ExternalLink, BookOpen, Video, Code, Users, Star, Search, Filter, Clock, TrendingUp, Award, Bookmark, BookmarkCheck } from "lucide-react";
 import CourseHighlight from "@/components/courses/CourseHighlight";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+/**
+ * Enhanced ResourcesSection component with modern React features
+ * Provides curated learning resources with filtering, bookmarking, and progress tracking
+ */
 const ResourcesSection = () => {
-  const ressources = {
+  // State management for enhanced functionality
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [bookmarkedResources, setBookmarkedResources] = useState<Set<string>>(new Set());
+  const [completedResources, setCompletedResources] = useState<Set<string>>(new Set());
+  // const [activeTab, setActiveTab] = useState('livres'); // Removed unused variable
+  const [userLevel, setUserLevel] = useState('debutant');
+
+  // Load saved data from localStorage on component mount
+  useEffect(() => {
+    const savedBookmarks = localStorage.getItem('ds-bookmarks');
+    const savedCompleted = localStorage.getItem('ds-completed');
+    const savedLevel = localStorage.getItem('ds-user-level');
+    
+    if (savedBookmarks) {
+      setBookmarkedResources(new Set(JSON.parse(savedBookmarks)));
+    }
+    if (savedCompleted) {
+      setCompletedResources(new Set(JSON.parse(savedCompleted)));
+    }
+    if (savedLevel) {
+      setUserLevel(savedLevel);
+    }
+  }, []);
+
+  // Save data to localStorage when state changes
+  useEffect(() => {
+    localStorage.setItem('ds-bookmarks', JSON.stringify([...bookmarkedResources]));
+  }, [bookmarkedResources]);
+
+  useEffect(() => {
+    localStorage.setItem('ds-completed', JSON.stringify([...completedResources]));
+  }, [completedResources]);
+
+  useEffect(() => {
+    localStorage.setItem('ds-user-level', userLevel);
+  }, [userLevel]);
+
+  // Enhanced bookmark functionality
+  const toggleBookmark = useCallback((resourceId: string) => {
+    setBookmarkedResources(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(resourceId)) {
+        newSet.delete(resourceId);
+      } else {
+        newSet.add(resourceId);
+      }
+      return newSet;
+    });
+  }, []);
+
+  // Mark resource as completed
+  const markCompleted = useCallback((resourceId: string) => {
+    setCompletedResources(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(resourceId)) {
+        newSet.delete(resourceId);
+      } else {
+        newSet.add(resourceId);
+      }
+      return newSet;
+    });
+   }, []);
+
+
+
+  const ressources: {
+    livres: BookResource[];
+    plateformes: PlatformResource[];
+    youtube: YoutubeResource[];
+    communautes: CommunityResource[];
+  } = {
     livres: [
       {
         title: "Python for Data Analysis",
@@ -48,6 +127,26 @@ const ResourcesSection = () => {
         url: "https://www.oreilly.com/library/view/sql-for-data/9781119669364/",
         rating: 4,
         specialite: ["SQL", "Bases de données", "Analytics"]
+      },
+      {
+        title: "The Elements of Statistical Learning",
+        auteur: "Hastie, Tibshirani, Friedman",
+        niveau: "Avancé",
+        prix: "Gratuit en ligne",
+        description: "Référence académique complète sur l'apprentissage statistique et le machine learning",
+        url: "https://web.stanford.edu/~hastie/ElemStatLearn/",
+        rating: 5,
+        specialite: ["Machine Learning", "Statistiques", "Théorie"]
+      },
+      {
+        title: "Deep Learning",
+        auteur: "Ian Goodfellow, Yoshua Bengio, Aaron Courville",
+        niveau: "Avancé",
+        prix: "Gratuit en ligne",
+        description: "LA bible du deep learning par les pionniers du domaine",
+        url: "https://www.deeplearningbook.org/",
+        rating: 5,
+        specialite: ["Deep Learning", "Neural Networks", "AI"]
       }
     ],
     plateformes: [
@@ -90,6 +189,36 @@ const ResourcesSection = () => {
         url: "https://www.fast.ai/",
         rating: 5,
         specialites: ["Deep Learning", "Computer Vision", "NLP"]
+      },
+      {
+        nom: "Udacity Data Science Nanodegree",
+        type: "Projet-centré",
+        prix: "399€/mois",
+        description: "Programme intensif avec projets réels et mentorat personnalisé",
+        avantages: ["Projets portfolio", "Mentorat 1-to-1", "Révision de code", "Garantie emploi"],
+        url: "https://www.udacity.com/course/data-scientist-nanodegree--nd025",
+        rating: 4,
+        specialites: ["Python", "Machine Learning", "Deep Learning", "Projets"]
+      },
+      {
+        nom: "edX MicroMasters",
+        type: "Universitaire",
+        prix: "300-1500€",
+        description: "Programmes de niveau master par MIT, Harvard, UC San Diego",
+        avantages: ["Crédits universitaires", "Reconnaissance académique", "Projets recherche"],
+        url: "https://www.edx.org/micromasters",
+        rating: 5,
+        specialites: ["Statistiques", "Machine Learning", "Big Data", "Analytics"]
+      },
+      {
+        nom: "Pluralsight",
+        type: "Technique",
+        prix: "29€/mois",
+        description: "Plateforme technique avec skill assessments et learning paths",
+        avantages: ["Tests de compétences", "Parcours personnalisés", "Labs pratiques"],
+        url: "https://www.pluralsight.com/browse/data-professional",
+        rating: 4,
+        specialites: ["Python", "R", "SQL", "Cloud", "Big Data"]
       }
     ],
     youtube: [
@@ -124,6 +253,30 @@ const ResourcesSection = () => {
         subscribers: "200K",
         mustWatch: ["Pandas tricks", "Machine Learning", "Data cleaning"],
         url: "https://www.youtube.com/user/dataschool"
+      },
+      {
+        chaine: "Two Minute Papers",
+        specialite: "AI Research",
+        description: "Résumés accessibles des derniers papers en IA et ML",
+        subscribers: "1.3M",
+        mustWatch: ["GPT Evolution", "Computer Vision Breakthroughs", "AI Art Generation"],
+        url: "https://www.youtube.com/user/keeroyz"
+      },
+      {
+        chaine: "Sentdex",
+        specialite: "Python & ML pratique",
+        description: "Tutoriels Python avancés avec applications ML et finance",
+        subscribers: "1.1M",
+        mustWatch: ["Python ML Tutorial", "Algorithmic Trading", "Neural Networks"],
+        url: "https://www.youtube.com/user/sentdex"
+      },
+      {
+        chaine: "Ken Jee",
+        specialite: "Carrière Data Science",
+        description: "Conseils carrière, portfolio building et industry insights",
+        subscribers: "400K",
+        mustWatch: ["Data Science Portfolio", "Interview Prep", "Industry Trends"],
+        url: "https://www.youtube.com/c/KenJee1"
       }
     ],
     communautes: [
@@ -158,33 +311,170 @@ const ResourcesSection = () => {
         pourquoi: "Veille technologique, opportunités carrière",
         membres: "700K+",
         url: "https://www.datasciencecentral.com/"
+      },
+      {
+        nom: "GitHub",
+        type: "Code & Portfolio",
+        description: "Plateforme essentielle pour vos projets et contributions open source",
+        pourquoi: "Portfolio visible, collaboration, apprentissage par l'exemple",
+        membres: "100M+",
+        url: "https://github.com/topics/data-science"
+      },
+      {
+        nom: "Towards Data Science (Medium)",
+        type: "Blog",
+        description: "Publication Medium de référence avec articles d'experts",
+        pourquoi: "Tutorials avancés, case studies, tendances industry",
+        membres: "600K+",
+        url: "https://towardsdatascience.com/"
+      },
+      {
+        nom: "Discord - Data Science Community",
+        type: "Chat temps réel",
+        description: "Communauté active pour discussions instantanées et aide",
+        pourquoi: "Support rapide, networking, study groups",
+        membres: "50K+",
+        url: "https://discord.gg/data-science"
+      },
+      {
+        nom: "LinkedIn Data Science Groups",
+        type: "Professionnel",
+        description: "Networking professionnel et opportunités carrière",
+        pourquoi: "Job opportunities, industry connections, thought leadership",
+        membres: "2M+",
+        url: "https://www.linkedin.com/groups/"
       }
     ]
   };
 
-  // Interface for resource object structure
-  interface Resource {
-    title?: string;
-    nom?: string;
-    chaine?: string;
+  // Filter resources based on search term and category
+  const filterResources = useCallback((resources: Resource[], type: string) => {
+    return resources.filter(resource => {
+      // Get title based on resource type
+      const getResourceTitle = (res: Resource): string => {
+        if (isBookResource(res)) return res.title;
+        if (isPlatformResource(res) || isCommunityResource(res)) return res.nom;
+        if (isYoutubeResource(res)) return res.chaine;
+        return '';
+      };
+
+      // Get specialties based on resource type
+      const getResourceSpecialties = (res: Resource): string[] => {
+        if (isBookResource(res)) return res.specialite;
+        if (isPlatformResource(res)) return res.specialites;
+        if (isYoutubeResource(res)) return [res.specialite];
+        if (isCommunityResource(res)) return res.tags || [];
+        return [];
+      };
+
+      const searchMatch = searchTerm === '' || 
+        getResourceTitle(resource).toLowerCase().includes(searchTerm.toLowerCase()) ||
+        resource.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        getResourceSpecialties(resource).some((s: string) => s.toLowerCase().includes(searchTerm.toLowerCase()));
+      
+      const categoryMatch = selectedCategory === 'all' || 
+        selectedCategory === 'bookmarked' && bookmarkedResources.has(`${type}-${resources.indexOf(resource)}`) ||
+        selectedCategory === 'completed' && completedResources.has(`${type}-${resources.indexOf(resource)}`) ||
+        selectedCategory === 'free' && ((isBookResource(resource) || isPlatformResource(resource)) && 
+          (resource.prix === 'Gratuit' || resource.prix === 'Gratuit en ligne')) ||
+        selectedCategory === 'beginner' && (isBookResource(resource) && 
+          (resource.niveau === 'Débutant' || resource.niveau === 'Débutant-Intermédiaire')) ||
+        selectedCategory === 'advanced' && (isBookResource(resource) && 
+          (resource.niveau === 'Avancé' || resource.niveau === 'Intermédiaire-Avancé'));
+      
+      return searchMatch && categoryMatch;
+    });
+  }, [searchTerm, selectedCategory, bookmarkedResources, completedResources]);
+
+  // Calculate progress statistics
+  const progressStats = useMemo(() => {
+    const totalResources = ressources.livres.length + ressources.plateformes.length + 
+                          ressources.youtube.length + ressources.communautes.length;
+    const completedCount = completedResources.size;
+    const bookmarkedCount = bookmarkedResources.size;
+    const progressPercentage = totalResources > 0 ? (completedCount / totalResources) * 100 : 0;
+    
+    return {
+      total: totalResources,
+      completed: completedCount,
+      bookmarked: bookmarkedCount,
+      percentage: Math.round(progressPercentage)
+    };
+  }, [ressources, completedResources.size, bookmarkedResources.size]);
+
+  // Enhanced interfaces for different resource types
+  interface BookResource {
+    title: string;
+    auteur: string;
+    niveau: string;
+    prix: string;
     description: string;
     url: string;
-    auteur?: string;
-    rating?: number;
-    niveau?: string;
-    prix?: string;
-    specialite?: string[] | string;
-    specialites?: string[];
-    avantages?: string[];
-    mustWatch?: string[];
-    subscribers?: string;
+    rating: number;
+    specialite: string[];
+  }
+
+  interface PlatformResource {
+    nom: string;
+    type: string;
+    prix: string;
+    description: string;
+    avantages: string[];
+    url: string;
+    rating: number;
+    specialites: string[];
+  }
+
+  interface YoutubeResource {
+    chaine: string;
+    specialite: string;
+    description: string;
+    subscribers: string;
+    mustWatch: string[];
+    url: string;
+  }
+
+  interface CommunityResource {
+    nom: string;
+    type: string;
+    description: string;
+    pourquoi: string;
+    url: string;
+    tags?: string[];
     membres?: string;
-    type?: string;
-    pourquoi?: string;
     competitions?: string;
   }
 
-  const ResourceCard = ({ ressource, type }: { ressource: Resource, type: string }) => {
+  // Union type for all resources
+  type Resource = BookResource | PlatformResource | YoutubeResource | CommunityResource;
+
+  // Type guard functions
+  const isBookResource = (resource: Resource): resource is BookResource => {
+    return 'title' in resource && 'auteur' in resource;
+  };
+
+  const isPlatformResource = (resource: Resource): resource is PlatformResource => {
+    return 'nom' in resource && 'avantages' in resource;
+  };
+
+  const isYoutubeResource = (resource: Resource): resource is YoutubeResource => {
+    return 'chaine' in resource && 'subscribers' in resource;
+  };
+
+  const isCommunityResource = (resource: Resource): resource is CommunityResource => {
+    return 'nom' in resource && 'pourquoi' in resource;
+  };
+
+  // Enhanced ResourceCard component with modern features
+  const ResourceCard = React.memo(({ ressource, type, index }: { ressource: Resource, type: string, index: number }) => {
+    const resourceId = `${type}-${index}`;
+    const isBookmarked = bookmarkedResources.has(resourceId);
+    const isCompleted = completedResources.has(resourceId);
+    
+    // Handler functions for bookmark and completion
+    const handleBookmark = () => toggleBookmark(resourceId);
+    const handleComplete = () => markCompleted(resourceId);
+    
     const getTypeIcon = () => {
       switch (type) {
         case 'livre': return <BookOpen className="h-5 w-5" />;
@@ -195,44 +485,90 @@ const ResourcesSection = () => {
       }
     };
 
-    // Helper function to get specialties array, handling both specialite and specialites
-    const getSpecialties = () => {
-      if (Array.isArray(ressource.specialite)) {
-        return ressource.specialite;
-      }
-      if (Array.isArray(ressource.specialites)) {
-        return ressource.specialites;
-      }
+    const specialties = (() => {
+      if (isBookResource(ressource)) return ressource.specialite;
+      if (isPlatformResource(ressource)) return ressource.specialites;
+      if (isYoutubeResource(ressource)) return [ressource.specialite];
+      if (isCommunityResource(ressource)) return ressource.tags || [];
       return [];
-    };
-
-    const specialties = getSpecialties();
+    })();
 
     return (
-      <Card className="h-full hover:shadow-lg transition-all duration-300">
-        <CardHeader>
+      <Card className={`h-full hover:shadow-lg transition-all duration-300 relative ${
+        isCompleted ? 'ring-2 ring-green-200 bg-green-50/30' : ''
+      } ${
+        isBookmarked ? 'ring-2 ring-blue-200 bg-blue-50/30' : ''
+      }`}>
+        {/* Completion and bookmark indicators */}
+        <div className="absolute top-2 right-2 flex gap-1">
+          <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleBookmark}
+                className="h-8 w-8 p-0 hover:bg-blue-100"
+              >
+                {isBookmarked ? (
+                  <BookmarkCheck className="h-4 w-4 text-blue-600" />
+                ) : (
+                  <Bookmark className="h-4 w-4 text-gray-400" />
+                )}
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleComplete}
+                className="h-8 w-8 p-0 hover:bg-green-100"
+              >
+                {isCompleted ? (
+                  <Award className="h-4 w-4 text-green-600" />
+                ) : (
+                  <Clock className="h-4 w-4 text-gray-400" />
+                )}
+              </Button>
+        </div>
+
+        <CardHeader className="pr-20">
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               {getTypeIcon()}
-              <span className="text-lg">{ressource.title || ressource.nom || ressource.chaine}</span>
+              <span className="text-lg">
+                {isBookResource(ressource) ? ressource.title :
+                 isPlatformResource(ressource) || isCommunityResource(ressource) ? ressource.nom :
+                 isYoutubeResource(ressource) ? ressource.chaine : 'Resource'}
+              </span>
             </div>
-            {ressource.rating && (
+            {(isBookResource(ressource) || isPlatformResource(ressource)) && ressource.rating && (
               <div className="flex items-center gap-1">
                 <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                 <span className="text-sm font-semibold">{ressource.rating}</span>
               </div>
             )}
           </CardTitle>
-          {ressource.auteur && (
+          {isBookResource(ressource) && ressource.auteur && (
             <p className="text-sm text-gray-600">par {ressource.auteur}</p>
+          )}
+          {isCompleted && (
+            <Badge className="bg-green-100 text-green-800 w-fit">
+              ✅ Terminé
+            </Badge>
           )}
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm">{ressource.description}</p>
           
-          {ressource.niveau && (
+          {isBookResource(ressource) && ressource.niveau && (
             <div className="flex items-center gap-2">
               <Badge variant="outline">{ressource.niveau}</Badge>
+              {ressource.prix && (
+                <Badge className={ressource.prix === "Gratuit" || ressource.prix === "Gratuit en ligne" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}>
+                  {ressource.prix}
+                </Badge>
+              )}
+            </div>
+          )}
+          {isPlatformResource(ressource) && (
+            <div className="flex items-center gap-2">
+              <Badge variant="outline">{ressource.type}</Badge>
               {ressource.prix && (
                 <Badge className={ressource.prix === "Gratuit" || ressource.prix === "Gratuit en ligne" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}>
                   {ressource.prix}
@@ -252,7 +588,7 @@ const ResourcesSection = () => {
             </div>
           )}
 
-          {ressource.avantages && Array.isArray(ressource.avantages) && (
+          {isPlatformResource(ressource) && ressource.avantages && Array.isArray(ressource.avantages) && (
             <div className="space-y-2">
               <p className="text-sm font-semibold">Avantages :</p>
               <ul className="text-xs space-y-1">
@@ -263,7 +599,7 @@ const ResourcesSection = () => {
             </div>
           )}
 
-          {ressource.mustWatch && Array.isArray(ressource.mustWatch) && (
+          {isYoutubeResource(ressource) && ressource.mustWatch && Array.isArray(ressource.mustWatch) && (
             <div className="space-y-2">
               <p className="text-sm font-semibold">À regarder absolument :</p>
               <ul className="text-xs space-y-1">
@@ -274,34 +610,182 @@ const ResourcesSection = () => {
             </div>
           )}
 
-          {ressource.subscribers && (
+          {isYoutubeResource(ressource) && ressource.subscribers && (
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Users className="h-4 w-4" />
               <span>{ressource.subscribers} abonnés</span>
             </div>
           )}
 
-          {ressource.membres && (
+          {isCommunityResource(ressource) && ressource.membres && (
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Users className="h-4 w-4" />
               <span>{ressource.membres} membres</span>
             </div>
           )}
 
-          <Button asChild className="w-full mt-auto">
-            <a href={ressource.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-              <ExternalLink className="h-4 w-4" />
-              Accéder à la ressource
-            </a>
-          </Button>
+          <div className="flex gap-2 mt-auto">
+            <Button asChild className="flex-1">
+              <a href={ressource.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                <ExternalLink className="h-4 w-4" />
+                Accéder
+              </a>
+            </Button>
+            {!isCompleted && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => markCompleted(resourceId)}
+                className="px-3"
+              >
+                <Award className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
         </CardContent>
       </Card>
     );
-  };
+  });
+
+  // Progress Dashboard Component
+  const ProgressDashboard = React.memo(() => (
+    <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-xl font-bold text-indigo-900">📊 Votre Progression d'Apprentissage</h3>
+        <Select value={userLevel} onValueChange={setUserLevel}>
+          <SelectTrigger className="w-40">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="debutant">🌱 Débutant</SelectItem>
+            <SelectItem value="intermediaire">🚀 Intermédiaire</SelectItem>
+            <SelectItem value="avance">⭐ Avancé</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-2 mb-2">
+            <Award className="h-5 w-5 text-green-600" />
+            <span className="font-semibold">Terminées</span>
+          </div>
+          <div className="text-2xl font-bold text-green-600">{progressStats.completed}</div>
+          <div className="text-sm text-gray-600">sur {progressStats.total} ressources</div>
+        </div>
+        
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-2 mb-2">
+            <Bookmark className="h-5 w-5 text-blue-600" />
+            <span className="font-semibold">Sauvegardées</span>
+          </div>
+          <div className="text-2xl font-bold text-blue-600">{progressStats.bookmarked}</div>
+          <div className="text-sm text-gray-600">ressources bookmarkées</div>
+        </div>
+        
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingUp className="h-5 w-5 text-purple-600" />
+            <span className="font-semibold">Progression</span>
+          </div>
+          <div className="text-2xl font-bold text-purple-600">{progressStats.percentage}%</div>
+          <Progress value={progressStats.percentage} className="mt-2" />
+        </div>
+        
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-2 mb-2">
+            <Star className="h-5 w-5 text-yellow-600" />
+            <span className="font-semibold">Niveau</span>
+          </div>
+          <div className="text-lg font-bold text-yellow-600 capitalize">{userLevel}</div>
+          <div className="text-sm text-gray-600">
+            {userLevel === 'debutant' && 'Continuez comme ça!'}
+            {userLevel === 'intermediaire' && 'Bon rythme!'}
+            {userLevel === 'avance' && 'Expert en devenir!'}
+          </div>
+        </div>
+      </div>
+      
+      {progressStats.percentage === 100 && (
+        <div className="bg-gradient-to-r from-green-100 to-emerald-100 p-4 rounded-lg border border-green-200">
+          <div className="flex items-center gap-2 text-green-800">
+            <Award className="h-6 w-6" />
+            <span className="font-bold text-lg">🎉 Félicitations! Vous avez exploré toutes les ressources!</span>
+          </div>
+          <p className="text-green-700 mt-2">Vous êtes maintenant prêt(e) à devenir mentor pour d'autres apprenants!</p>
+        </div>
+      )}
+    </div>
+  ));
+
+  // Search and Filter Controls
+  const SearchAndFilters = React.memo(() => (
+    <div className="mb-6 space-y-4">
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            placeholder="Rechercher par nom, description, ou technologie..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        
+        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <SelectTrigger className="w-full md:w-48">
+            <Filter className="h-4 w-4 mr-2" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">🌐 Toutes les ressources</SelectItem>
+            <SelectItem value="bookmarked">🔖 Sauvegardées</SelectItem>
+            <SelectItem value="completed">✅ Terminées</SelectItem>
+            <SelectItem value="free">🆓 Gratuites</SelectItem>
+            <SelectItem value="beginner">🌱 Débutant</SelectItem>
+            <SelectItem value="advanced">⭐ Avancé</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      
+      {(searchTerm || selectedCategory !== 'all') && (
+        <div className="flex items-center gap-2 text-sm text-gray-600">
+          <Filter className="h-4 w-4" />
+          <span>Filtres actifs:</span>
+          {searchTerm && (
+            <Badge variant="secondary">Recherche: "{searchTerm}"</Badge>
+          )}
+          {selectedCategory !== 'all' && (
+            <Badge variant="secondary">
+              {selectedCategory === 'bookmarked' && '🔖 Sauvegardées'}
+              {selectedCategory === 'completed' && '✅ Terminées'}
+              {selectedCategory === 'free' && '🆓 Gratuites'}
+              {selectedCategory === 'beginner' && '🌱 Débutant'}
+              {selectedCategory === 'advanced' && '⭐ Avancé'}
+            </Badge>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setSearchTerm('');
+              setSelectedCategory('all');
+            }}
+            className="text-xs"
+          >
+            Effacer les filtres
+          </Button>
+        </div>
+      )}
+    </div>
+  ));
 
   return (
     <section id="resources" className="mb-16">
       <h2 className="text-3xl font-bold mb-8">📚 Ressources d'Apprentissage : Votre Bibliothèque de Croissance</h2>
+      
+      <ProgressDashboard />
+      <SearchAndFilters />
       
       <CourseHighlight title="🎯 Comment utiliser ces ressources efficacement ?" type="concept">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -341,11 +825,25 @@ const ResourcesSection = () => {
               Sélection des ouvrages les plus recommandés par la communauté data science mondiale.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {ressources.livres.map((livre, index) => (
-              <ResourceCard key={index} ressource={livre} type="livre" />
-            ))}
-          </div>
+          {(() => {
+            const filteredBooks = filterResources(ressources.livres as Resource[], 'livre');
+            return (
+              <>
+                {filteredBooks.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <BookOpen className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>Aucun livre ne correspond à vos critères de recherche.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {filteredBooks.map((livre, index) => (
+                      <ResourceCard key={`livre-${index}`} ressource={livre} type="livre" index={ressources.livres.indexOf(livre)} />
+                    ))}
+                  </div>
+                )}
+              </>
+            );
+          })()}
           
           <CourseHighlight title="💡 Conseil de lecture" type="info">
             <p className="mb-2">
@@ -365,11 +863,25 @@ const ResourcesSection = () => {
               Comparaison des meilleures plateformes pour apprendre la data science en ligne.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {ressources.plateformes.map((plateforme, index) => (
-              <ResourceCard key={index} ressource={plateforme} type="plateforme" />
-            ))}
-          </div>
+          {(() => {
+            const filteredPlatforms = filterResources(ressources.plateformes as Resource[], 'plateforme');
+            return (
+              <>
+                {filteredPlatforms.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <Video className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>Aucune plateforme ne correspond à vos critères de recherche.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {filteredPlatforms.map((plateforme, index) => (
+                      <ResourceCard key={`plateforme-${index}`} ressource={plateforme} type="plateforme" index={ressources.plateformes.indexOf(plateforme)} />
+                    ))}
+                  </div>
+                )}
+              </>
+            );
+          })()}
 
           <div className="mt-8 p-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border border-green-200">
             <h4 className="font-semibold mb-3">🎯 Guide de choix de plateforme</h4>
@@ -395,11 +907,25 @@ const ResourcesSection = () => {
               Les créateurs qui expliquent le mieux les concepts de data science.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {ressources.youtube.map((chaine, index) => (
-              <ResourceCard key={index} ressource={chaine} type="youtube" />
-            ))}
-          </div>
+          {(() => {
+            const filteredYoutube = filterResources(ressources.youtube as Resource[], 'youtube');
+            return (
+              <>
+                {filteredYoutube.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <Video className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>Aucune chaîne YouTube ne correspond à vos critères de recherche.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {filteredYoutube.map((chaine, index) => (
+                      <ResourceCard key={`youtube-${index}`} ressource={chaine} type="youtube" index={ressources.youtube.indexOf(chaine)} />
+                    ))}
+                  </div>
+                )}
+              </>
+            );
+          })()}
 
           <CourseHighlight title="📺 Stratégie YouTube efficace" type="example">
             <div className="space-y-3">
@@ -424,11 +950,25 @@ const ResourcesSection = () => {
               Rejoignez la conversation mondiale de la data science et accélérez votre apprentissage.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {ressources.communautes.map((communaute, index) => (
-              <ResourceCard key={index} ressource={communaute} type="communaute" />
-            ))}
-          </div>
+          {(() => {
+            const filteredCommunities = filterResources(ressources.communautes as Resource[], 'communaute');
+            return (
+              <>
+                {filteredCommunities.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>Aucune communauté ne correspond à vos critères de recherche.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {filteredCommunities.map((communaute, index) => (
+                      <ResourceCard key={`communaute-${index}`} ressource={communaute} type="communaute" index={ressources.communautes.indexOf(communaute)} />
+                    ))}
+                  </div>
+                )}
+              </>
+            );
+          })()}
 
           <div className="mt-8 space-y-6">
             <CourseHighlight title="🤝 Comment bien utiliser les communautés" type="info">

@@ -3,7 +3,7 @@ import Layout from "@/components/layout/Layout";
 import UnifiedHeroSection from "@/components/ui/unified-hero-section";
 import ProgrammingSection from "@/components/fundamentals/ProgrammingSection";
 import { createStandardSidebar } from "@/components/layout/StandardSidebar";
-import { Code, BookOpen, Cpu, Database, Zap, Users } from "lucide-react";
+import { Code, BookOpen, Cpu, Database, Zap, Users, Rocket, Trophy, Terminal } from "lucide-react";
 
 const Programming = () => {
   const sidebar = createStandardSidebar({
@@ -28,6 +28,21 @@ const Programming = () => {
         title: "Exercices pratiques",
         href: "#practical-exercises",
         icon: <Zap className="h-4 w-4" />
+      },
+      {
+        title: "Concepts avancés",
+        href: "#advanced-concepts",
+        icon: <Rocket className="h-4 w-4" />
+      },
+      {
+        title: "Défis interactifs",
+        href: "#interactive-challenges",
+        icon: <Trophy className="h-4 w-4" />
+      },
+      {
+        title: "Éditeur de code",
+        href: "#code-editor",
+        icon: <Terminal className="h-4 w-4" />
       },
       {
         title: "Ressources et communautés",
