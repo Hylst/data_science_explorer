@@ -40,6 +40,7 @@ const Navbar = () => {
     { name: "Outils", path: "/tools" },
     { name: "Projets", path: "/projects" },
     { name: "Ressources", path: "/resources" },
+    { name: "Quizz", path: "/quiz" },
     { name: "Communauté", path: "/community" },
     { name: "Blog", path: "/blog" },
     { name: "Glossaire", path: "/glossary" },

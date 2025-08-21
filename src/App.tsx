@@ -18,6 +18,8 @@ const MachineLearning = lazy(() => import("./pages/MachineLearning"));
 const Tools = lazy(() => import("./pages/Tools"));
 const Projects = lazy(() => import("./pages/Projects"));
 const Resources = lazy(() => import("./pages/Resources"));
+const Quiz = lazy(() => import("./pages/Quiz"));
+const QuizCategory = lazy(() => import("./pages/QuizCategory"));
 const Community = lazy(() => import("./pages/Community"));
 const Blog = lazy(() => import("./pages/Blog"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -107,6 +109,8 @@ const App = () => (
               <Route path="/tools" element={<Tools />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/resources" element={<Resources />} />
+              <Route path="/quiz" element={<Quiz />} />
+              <Route path="/quiz/:categoryId" element={<QuizCategory />} />
               <Route path="/community" element={<Community />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<Blog />} />
