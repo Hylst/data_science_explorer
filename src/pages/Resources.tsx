@@ -8,9 +8,11 @@ import CoursesSection from "@/components/resources/CoursesSection";
 import WebsitesSection from "@/components/resources/WebsitesSection";
 import VideosSection from "@/components/resources/VideosSection";
 import InitiationCoursesSection from "@/components/resources/InitiationCoursesSection";
+
 import UnifiedHeroSection from "@/components/ui/unified-hero-section";
 import { useSectionTracker } from "@/hooks/use-section-tracker";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
+
 
 type SectionType = "initiation-courses" | "books" | "courses" | "websites" | "videos";
 

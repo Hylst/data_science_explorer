@@ -5,7 +5,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { 
   QuizCategory, 
-  QuizQuestion, 
   QuizAnswer, 
   QuizAttempt, 
   QuizResults, 
@@ -20,8 +19,8 @@ import { quizCategories, getQuizCategoryById, getRandomQuestions } from '../data
  */
 export const useQuizCategories = () => {
   const [categories] = useState<QuizCategory[]>(quizCategories);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading] = useState(false);
+  const [error] = useState<string | null>(null);
 
   const getCategoryById = useCallback((id: string) => {
     return getQuizCategoryById(id);

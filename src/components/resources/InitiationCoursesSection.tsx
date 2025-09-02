@@ -40,7 +40,7 @@ const InitiationCoursesSection = () => {
           description: "Les bases mathématiques nécessaires : ensembles, fonctions, calcul différentiel et intégral.",
           level: "Débutant",
           duration: "4 semaines",
-          link: "/courses/fondations-mathematiques-et-logiques/math-intro"
+          link: "/courses/math-stats/math-intro"
         },
         {
           id: "proba-stat",
@@ -48,7 +48,7 @@ const InitiationCoursesSection = () => {
           description: "Comprendre les concepts de probabilité, distributions, tests statistiques et intervalles de confiance.",
           level: "Débutant",
           duration: "5 semaines",
-          link: "#"
+          link: "/fundamentals/math-stats/probability-theory"
         },
         {
           id: "algebra",
@@ -56,7 +56,7 @@ const InitiationCoursesSection = () => {
           description: "Manipuler les vecteurs, matrices et comprendre les transformations linéaires.",
           level: "Intermédiaire",
           duration: "6 semaines",
-          link: "#"
+          link: "/fundamentals/math-stats/linear-algebra"
         },
         {
           id: "logic",
@@ -64,7 +64,7 @@ const InitiationCoursesSection = () => {
           description: "Les fondements de la logique, raisonnement déductif et inductif, formalisation des problèmes.",
           level: "Intermédiaire",
           duration: "4 semaines",
-          link: "#"
+          link: "/fundamentals/math-stats"
         }
       ]
     },
@@ -80,7 +80,7 @@ const InitiationCoursesSection = () => {
           description: "Structures de données, fonctions et bibliothèques pour la manipulation de données.",
           level: "Débutant",
           duration: "6 semaines",
-          link: "#"
+          link: "/courses/programming/python-basics"
         },
         {
           id: "python-adv",
@@ -88,7 +88,7 @@ const InitiationCoursesSection = () => {
           description: "Optimisation, programmation fonctionnelle et orientée objet pour l'analyse de données.",
           level: "Intermédiaire",
           duration: "5 semaines",
-          link: "#"
+          link: "/fundamentals/programming"
         },
         {
           id: "algorithms",
@@ -96,15 +96,15 @@ const InitiationCoursesSection = () => {
           description: "Complexité algorithmique, structures de données efficaces et algorithmes fondamentaux.",
           level: "Intermédiaire",
           duration: "8 semaines",
-          link: "#"
+          link: "/fundamentals/programming"
         },
         {
           id: "big-data",
           title: "Programmation pour le Big Data",
-          description: "Traitement distribué avec Spark, Hadoop et outils de calcul parallèle.",
+          description: "Spark, Hadoop et outils de traitement distribué pour les gros volumes de données.",
           level: "Avancé",
-          duration: "7 semaines",
-          link: "#"
+          duration: "10 semaines",
+          link: "/fundamentals/databases"
         }
       ]
     },
@@ -120,7 +120,7 @@ const InitiationCoursesSection = () => {
           description: "Conception, requêtes et optimisation de bases de données SQL.",
           level: "Débutant",
           duration: "4 semaines",
-          link: "#"
+          link: "/courses/databases/database-fundamentals"
         },
         {
           id: "nosql",
@@ -128,7 +128,7 @@ const InitiationCoursesSection = () => {
           description: "MongoDB, Cassandra, Redis et autres bases de données non-relationnelles.",
           level: "Intermédiaire",
           duration: "5 semaines",
-          link: "#"
+          link: "/fundamentals/databases"
         },
         {
           id: "data-warehouse",
@@ -136,7 +136,7 @@ const InitiationCoursesSection = () => {
           description: "Conception d'entrepôts de données et processus d'extraction, transformation et chargement.",
           level: "Intermédiaire",
           duration: "6 semaines",
-          link: "#"
+          link: "/fundamentals/databases"
         },
         {
           id: "data-lake",
@@ -144,7 +144,7 @@ const InitiationCoursesSection = () => {
           description: "Conception de lacs de données et architectures modernes pour le stockage massif.",
           level: "Avancé",
           duration: "5 semaines",
-          link: "#"
+          link: "/fundamentals/databases"
         }
       ]
     },
@@ -160,7 +160,7 @@ const InitiationCoursesSection = () => {
           description: "Apprentissage supervisé, non supervisé, évaluation et sélection de modèles.",
           level: "Débutant",
           duration: "8 semaines",
-          link: "#"
+          link: "/courses/machine-learning/supervised-learning"
         },
         {
           id: "deep-learning",
@@ -168,7 +168,7 @@ const InitiationCoursesSection = () => {
           description: "Architectures de réseaux, CNN, RNN, techniques d'optimisation.",
           level: "Intermédiaire",
           duration: "10 semaines",
-          link: "#"
+          link: "/fundamentals/machine-learning"
         },
         {
           id: "nlp",
@@ -176,7 +176,7 @@ const InitiationCoursesSection = () => {
           description: "Techniques d'analyse et de génération de texte, modèles de langage.",
           level: "Intermédiaire",
           duration: "7 semaines",
-          link: "#"
+          link: "/courses/nlp/natural-language-processing"
         },
         {
           id: "cv",
@@ -184,7 +184,23 @@ const InitiationCoursesSection = () => {
           description: "Traitement d'images, détection d'objets, segmentation et reconnaissance.",
           level: "Avancé",
           duration: "8 semaines",
-          link: "#"
+          link: "/fundamentals/machine-learning"
+        },
+        {
+          id: "ml-models",
+          title: "Modèles ML & IA",
+          description: "Guide complet des algorithmes de Machine Learning : supervisé, non-supervisé, deep learning et sélection de modèles.",
+          level: "Intermédiaire",
+          duration: "6 semaines",
+          link: "/courses/machine-learning/ml-models-guide"
+        },
+        {
+          id: "transformers",
+          title: "Transformers et Attention",
+          description: "Architecture Transformer, mécanismes d'attention, BERT, GPT et applications modernes du NLP.",
+          level: "Avancé",
+          duration: "8 semaines",
+          link: "/courses/machine-learning/transformers"
         }
       ]
     },
@@ -200,7 +216,7 @@ const InitiationCoursesSection = () => {
           description: "Théories visuelles, perception humaine et bonnes pratiques de visualisation.",
           level: "Débutant",
           duration: "3 semaines",
-          link: "#"
+          link: "/courses/dataviz/data-visualization"
         },
         {
           id: "dataviz-tools",
@@ -208,7 +224,7 @@ const InitiationCoursesSection = () => {
           description: "Maîtrise de Matplotlib, Seaborn, Plotly et Tableau.",
           level: "Débutant",
           duration: "5 semaines",
-          link: "#"
+          link: "/courses/dataviz/data-visualization"
         },
         {
           id: "interactive-viz",
@@ -216,7 +232,7 @@ const InitiationCoursesSection = () => {
           description: "Création de visualisations interactives avec D3.js, Dash et Streamlit.",
           level: "Intermédiaire",
           duration: "6 semaines",
-          link: "#"
+          link: "/courses/dataviz/data-visualization"
         },
         {
           id: "storytelling",
@@ -224,14 +240,13 @@ const InitiationCoursesSection = () => {
           description: "L'art de communiquer des insights à travers des narrations visuelles.",
           level: "Intermédiaire",
           duration: "4 semaines",
-          link: "#"
+          link: "/courses/dataviz/data-visualization"
         }
       ]
     }
   ];
 
-  // Find selected category
-  const activeCategory = categories.find(cat => cat.id === activeTab);
+
 
   return (
     <section className="mb-16">

@@ -34,9 +34,8 @@ const Programming = lazy(() => import("./pages/fundamentals/Programming"));
 const Databases = lazy(() => import("./pages/fundamentals/Databases"));
 const DataPreparationRefactored = lazy(() => import("./pages/fundamentals/DataPreparationRefactored"));
 
-// Lazy load course imports
-const MathIntroCourse = lazy(() => import("./pages/courses/math-stats/math-intro"));
-const IntegralCalculusCourse = lazy(() => import("./pages/courses/math-stats/integral-calculus"));
+// Course routing component
+import CourseRouter from './components/routing/CourseRouter';
 
 // Lazy load math-stats subpages
 const ProbabilityTheory = lazy(() => import("./pages/fundamentals/math-stats/ProbabilityTheory"));
@@ -53,12 +52,6 @@ const ReinforcementLearning = lazy(() => import("./pages/machine-learning/Reinfo
 
 // Lazy load Course pages
 const CoursesIndex = lazy(() => import("./pages/courses/CoursesIndex"));
-const PythonBasics = lazy(() => import("./pages/courses/programming/PythonBasics"));
-const AppliedStatistics = lazy(() => import("./pages/courses/statistics/AppliedStatistics"));
-const SupervisedLearningCourse = lazy(() => import("./pages/courses/machine-learning/SupervisedLearningCourse"));
-const DatabaseFundamentals = lazy(() => import("./pages/courses/databases/DatabaseFundamentals"));
-const DataVisualization = lazy(() => import("./pages/courses/dataviz/DataVisualization"));
-const NaturalLanguageProcessing = lazy(() => import("./pages/courses/nlp/NaturalLanguageProcessing"));
 const DataVisualizationTools = lazy(() => import("./pages/tools/DataVisualization"));
 
 const queryClient = new QueryClient();
@@ -120,21 +113,12 @@ const App = () => (
               <Route path="/terms" element={<TermsOfService />} />
               <Route path="/contact" element={<Contact />} />
               
-              {/* Normalized Course Routes */}
+              {/* Course pages */}
               <Route path="/courses" element={<CoursesIndex />} />
-              <Route path="/courses/programming/python-basics" element={<PythonBasics />} />
-              <Route path="/courses/statistics/applied-statistics" element={<AppliedStatistics />} />
-              <Route path="/courses/machine-learning/supervised-learning" element={<SupervisedLearningCourse />} />
-              <Route path="/courses/databases/database-fundamentals" element={<DatabaseFundamentals />} />
-              <Route path="/courses/dataviz/data-visualization" element={<DataVisualization />} />
-              <Route path="/courses/nlp/natural-language-processing" element={<NaturalLanguageProcessing />} />
+              <Route path="/courses/*" element={<CourseRouter />} />
               
               {/* Tools Routes */}
               <Route path="/tools/visualization" element={<DataVisualizationTools />} />
-              
-              {/* Legacy course routes - keep for compatibility */}
-              <Route path="/courses/fondations-mathematiques-et-logiques/math-intro" element={<MathIntroCourse />} />
-              <Route path="/courses/math-stats/integral-calculus" element={<IntegralCalculusCourse />} />
               
               {/* Legacy routes redirects */}
               <Route path="/course/python-basics" element={<Navigate to="/courses/programming/python-basics" replace />} />
@@ -148,6 +132,13 @@ const App = () => (
               <Route path="/programming/python" element={<Navigate to="/courses/programming/python-basics" replace />} />
               <Route path="/statistics/applied" element={<Navigate to="/courses/statistics/applied-statistics" replace />} />
               <Route path="/ml/supervised" element={<Navigate to="/courses/machine-learning/supervised-learning" replace />} />
+              
+              {/* Course category redirects */}
+              <Route path="/courses/fondations-mathematiques-et-logiques" element={<Navigate to="/fundamentals/math-stats" replace />} />
+              <Route path="/courses/programmation-et-algorithmes" element={<Navigate to="/fundamentals/programming" replace />} />
+              <Route path="/courses/bases-de-donnees-et-stockage" element={<Navigate to="/fundamentals/databases" replace />} />
+              <Route path="/courses/machine-learning-et-ia" element={<Navigate to="/machine-learning" replace />} />
+              <Route path="/courses/visualisation-de-donnees" element={<Navigate to="/courses/dataviz/data-visualization" replace />} />
               
               <Route path="*" element={<NotFound />} />
               </Routes>
